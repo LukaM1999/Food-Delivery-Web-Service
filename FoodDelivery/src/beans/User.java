@@ -2,6 +2,10 @@ package beans;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 public class User {
 
 	private String username;
@@ -9,8 +13,12 @@ public class User {
 	private String name;
 	private String surname;
 	private String gender;
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy.")
 	private Date dateOfBirth;
 	private Role role;
+	
+	public User() {}
 	
 	public User(String username, String password, String name, String surname, String gender, Date dateOfBirth,
 			Role role) {

@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Pocetna stranica</title>
+	<script src="jquery-3.3.1.min.js"></script>
+	<script src="js/vue.js"></script>
+	<script src="js/axios.js"></script>
+	<script src="js/vuejs-datepicker.min.js"></script>
+	<script src="js/moment.min.js"></script>
+	<script src="js/vue-router.js"></script>
+	<script src="js/toast.js"></script>
+</head>
+
+<body>
+	<h1 style="color: blue;">Pocetna stranica</h1>
+	<div id="registration">
+		<form>
+			<table>
+				<tr>
+					<td style="font-weight: bold;">Korisnicko ime</td>
+					<td><input type="text" name="brojOglasa" required pattern="[0-9]{4}/[0-9]{3}"></td>
+				</tr>
+				<tr>
+					<td style="font-weight: bold;">Lozinka</td>
+					<td><input type="text" name="naslovOglasa" required></td>
+				</tr>
+				<tr>
+					<td style="font-weight: bold;">Ime</td>
+					<td><input type="text" name="vlasnik" required></td>
+				</tr>
+				<tr>
+					<td style="font-weight: bold;">Prezime</td>
+					<td><input type="text" name="brojTelefona" required></td>
+				</tr>
+				<tr>
+					<td style="font-weight: bold;">Pol</td>
+					<td>
+						<select name="pol">
+							<option value="m">Musko</option>
+							<option value="f">Zensko</option>
+							<option value="o">Ostalo</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td style="font-weight: bold;">Datum rodjenja</td>
+					<td><input type="date" name="cena" required="required"></td>
+				</tr>
+			</table>
+		</form>
+		<table>
+			<tbody>
+				<tr style="text-align: center;">
+					<td colspan="2">
+						<button id="posalji">
+							Posalji
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+
+</html>
