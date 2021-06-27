@@ -7,5 +7,14 @@
 		"gender": "MALE",
 		"dateOfBirth": "11.03.1987.",
 		"role": "CUSTOMER"
+	},
+	{
+		"username": "lukam1999",
+		"password": "luka",
+		"name": "Luka",
+		"surname": "Miletic",
+		"gender": "MALE",
+		"dateOfBirth": "21.09.1999.",
+		"role": "CUSTOMER"
 	}
 ]

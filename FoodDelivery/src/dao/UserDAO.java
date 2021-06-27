@@ -44,4 +44,18 @@ public class UserDAO {
 	public void serialize() throws JsonGenerationException, JsonMappingException, IOException {
 		new ObjectMapper().writeValue(new File(path), users);
 	}
+	
+	public boolean alreadyRegistered(User user) {
+		for (User u: users) {
+			if (u.getUsername().equals(user.getUsername())) return true;
+		}
+		return false;
+	}
+	
+	public boolean addUser(User user) throws JsonGenerationException, JsonMappingException, IOException {
+		if (alreadyRegistered(user)) return false;
+		users.add(user);
+		serialize();
+		return true;
+	}
 }
