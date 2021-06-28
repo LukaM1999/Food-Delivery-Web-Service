@@ -47,7 +47,6 @@ public class FoodDeliveryService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public User registerCustomer(User customer) {
-		System.out.println("USO");
 		UserDAO dao = (UserDAO) ctx.getAttribute("users");
 		try {
 			if (dao.addUser(customer)) {
