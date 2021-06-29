@@ -15,17 +15,18 @@ import javax.ws.rs.core.MediaType;
 
 import beans.User;
 import dao.UserDAO;
+import dto.LoginDTO;
 
 
 
 
-@Path("/food")
-public class FoodDeliveryService {
+@Path("/user")
+public class UserService {
 
 	@Context
 	ServletContext ctx;
 	
-	public FoodDeliveryService() {}
+	public UserService() {}
 	
 	@PostConstruct
 	public void init() {
@@ -35,11 +36,20 @@ public class FoodDeliveryService {
 	}
 	
 	@GET
-	@Path("/Users")
+	@Path("/users")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<User> dobaviOglase() throws IOException {
 		UserDAO dao = (UserDAO) ctx.getAttribute("users");
 		return dao.deserialize();
+	}
+	
+	@POST
+	@Path("/find")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public User find(LoginDTO dto) throws IOException {
+		UserDAO dao = (UserDAO) ctx.getAttribute("users");
+		return dao.findUser(dto);
 	}
 	
 	@POST

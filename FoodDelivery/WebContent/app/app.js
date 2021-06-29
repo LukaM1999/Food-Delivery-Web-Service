@@ -1,8 +1,10 @@
+const login = { template: '<login></login>' }
 const registration = { template: '<registration></registration>' }
 
 var app = new Vue({
 	el: "#app",
 	components: {
-		'registration': registration
+		'login': login,
+		'registration': registration,
 	}
 });

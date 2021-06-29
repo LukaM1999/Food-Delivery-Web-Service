@@ -26,7 +26,7 @@ Vue.component("registration", {
 				role: this.role
 			}
 			axios
-			.post('rest/food/register', customer)
+			.post('rest/user/register', customer)
 			.then(response => {
 				if (response.data) this.alert = this.name + " " + this.surname + " uspesno registrovan!";
 				else this.alert = "Vec postoji korisnik sa korisnickim imenom: " + this.username;
@@ -39,7 +39,7 @@ Vue.component("registration", {
 	<div>
 		<button type="button" class="btn btn-primary btn-lg" style="position: absolute; top: 8px; right: 16px;" data-bs-toggle="modal" data-bs-target="#myModal">Registrujte se</button>
 		<div class="modal fade" role="dialog" id="myModal">
-			<div class="modal-dialog">
+			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
 					<div class="modal-header">
           				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -54,7 +54,7 @@ Vue.component("registration", {
 								</tr>
 								<tr>
 									<td style="font-weight: bold;">Lozinka</td>
-									<td><input type="text" name="password" v-model="password" required></td>
+									<td><input type="password" name="password" v-model="password" required></td>
 								</tr>
 								<tr>
 									<td style="font-weight: bold;">Ime</td>

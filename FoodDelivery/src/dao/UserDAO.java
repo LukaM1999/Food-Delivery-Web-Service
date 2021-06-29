@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import beans.User;
+import dto.LoginDTO;
 
 public class UserDAO {
 
@@ -57,5 +58,13 @@ public class UserDAO {
 		users.add(user);
 		serialize();
 		return true;
+	}
+	
+	public User findUser(LoginDTO dto) {
+		for(User u: users) {
+			if (u.getUsername().equals(dto.username) && u.getPassword().equals(dto.password))
+				return u;
+		}
+		return null;
 	}
 }
