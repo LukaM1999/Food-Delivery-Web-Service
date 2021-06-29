@@ -1,6 +1,6 @@
 Vue.component("login", {
-	
-	data: function(){
+
+	data: function () {
 		return {
 			usernameLogin: '',
 			passwordLogin: '',
@@ -9,24 +9,34 @@ Vue.component("login", {
 		}
 	},
 
+	mounted() {
+		this.$route.meta.isAuthenticated = false;
+	},
+
 	methods: {
-		userLogin: function(){
+		userLogin: function () {
 			var loginDto = {
 				username: this.usernameLogin,
 				password: this.passwordLogin,
 			}
 			axios
-			.post('rest/user/find', loginDto)
-			.then(response => {
-				if (response.data) this.alertLogin = "Uspesno ste se prijavili!";
-				else this.alertLogin = "Pogresno uneseno korisnicko ime/lozinka";
-				$('#loginAlert').fadeIn(300).delay(5000).fadeOut(300);
-			})
+				.post('rest/user/find', loginDto)
+				.then(response => {
+					if (response.data) {
+						this.$route.meta.isAuthenticated = true;
+						this.$router.push('/' + this.usernameLogin);
+					}
+					else {
+						this.alertLogin = "Pogresno uneseno korisnicko ime/lozinka";
+						$('#loginAlert').fadeIn(300).delay(5000).fadeOut(300);
+					}
+				})
 		},
 	},
 
 	template: `
 	<div>
+	<registration></registration>
 		<button type="button" class="btn btn-info btn-lg" style="position: absolute; top: 8px; right: 190px;" data-bs-toggle="modal" data-bs-target="#loginModal">Prijavi se</button>
 		<div class="modal fade" role="dialog" id="loginModal">
 			<div class="modal-dialog modal-dialog-centered">
@@ -48,7 +58,7 @@ Vue.component("login", {
 								</tr>
 								<tr>
 									<td colspan="2" align="center">
-										<button type="submit" class="btn btn-primary" style="margin-top: 10%;" id="login">
+										<button type="submit" class="btn btn-primary" data-bs-dismiss="modal" style="margin-top: 10%;" :disabled="!usernameLogin || !passwordLogin" id="login">
 											Prijavi se
 										</button>
 									</td>
