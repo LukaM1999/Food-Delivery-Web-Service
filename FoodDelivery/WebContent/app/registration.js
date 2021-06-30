@@ -88,13 +88,13 @@ Vue.component("registration", {
 								</tr>
 							</table>
 						</form>
-						<div class="alert alert-warning fixed-bottom" style="display:none;" role="alert"
-							id="registrationAlert">
-							<p>{{alert}}</p>
-						</div>
 					</div>
 				</div>
 			</div>
+		</div>
+		<div class="alert alert-warning fixed-bottom" style="display:none;" role="alert"
+			id="registrationAlert">
+			<p>{{alert}}</p>
 		</div>
 	</div>
 	`

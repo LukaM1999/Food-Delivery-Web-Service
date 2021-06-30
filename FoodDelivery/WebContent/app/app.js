@@ -1,7 +1,6 @@
 const login = {
 	template: '<login></login>',
 	beforeRouteLeave(to, from, next) {
-		alert(to.name + " " + from.meta.isAuthenticated);
 		if (to.name !== 'login' && !from.meta.isAuthenticated) next(false);
 		else next();
 	},
@@ -27,4 +26,7 @@ const router = new VueRouter({
 var app = new Vue({
 	router,
 	el: "#app",
+	data: {
+		user: null,
+	},
 });
