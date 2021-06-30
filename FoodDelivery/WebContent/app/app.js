@@ -1,7 +1,7 @@
 const login = {
 	template: '<login></login>',
 	beforeRouteLeave(to, from, next) {
-		if (to.name !== 'login' && !from.meta.isAuthenticated) next(false);
+		if (to.name !== 'login' && this.$root.$data.user.username !== to.params.username) next(false);
 		else next();
 	},
 }
@@ -13,7 +13,7 @@ const routes = [
 		path: '/',
 		name: 'login',
 		component: login,
-		meta: { isAuthenticated: false }
+		/* meta: { isAuthenticated: false } */
 	},
 	{ path: '/:username', component: userPage }
 ]

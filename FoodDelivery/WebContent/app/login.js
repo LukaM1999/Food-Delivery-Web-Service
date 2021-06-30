@@ -10,8 +10,8 @@ Vue.component("login", {
 	},
 
 	mounted() {
-		this.$route.meta.isAuthenticated = false;
-	},
+/* 		this.$route.meta.isAuthenticated = false;
+ */	},
 
 	methods: {
 		userLogin: function () {
@@ -23,8 +23,13 @@ Vue.component("login", {
 				.post('rest/user/find', loginDto)
 				.then(response => {
 					if (response.data) {
-						this.$route.meta.isAuthenticated = true;
-						this.$router.push('/' + this.usernameLogin);
+						axios
+							.get('rest/user/getUser/' + loginDto.username)
+							.then(response => {
+								this.$root.$data.user = response.data
+								this.$router.push('/' + this.usernameLogin)
+							});
+						/* this.$route.meta.isAuthenticated = true; */						
 					}
 					else {
 						this.alertLogin = "Pogresno uneseno korisnicko ime/lozinka";

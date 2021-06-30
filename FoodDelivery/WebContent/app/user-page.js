@@ -7,7 +7,7 @@ Vue.component("userPage", {
 	
 	data: function(){
 		return {
-			user: null,
+			user: this.$root.$data.user,
 		}
 	},
 
@@ -16,15 +16,6 @@ Vue.component("userPage", {
 		'customerPage': customerPage,
 		'delivererPage': delivererPage,
 		'managerPage': managerPage,
-	},
-
-	mounted(){
-		axios
-		.get('rest/user/getUser/' + this.$route.params.username)
-		.then(response => {
-			this.user = response.data
-			this.$root.$data.user = response.data
-		});
 	},
 
 	template: `
