@@ -14,7 +14,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import beans.Customer;
+import beans.Deliverer;
+import beans.Manager;
 import beans.User;
+import dao.AdminDAO;
+import dao.CustomerDAO;
+import dao.DelivererDAO;
+import dao.ManagerDAO;
 import dao.UserDAO;
 import dto.LoginDTO;
 
@@ -30,17 +37,53 @@ public class UserService {
 	public UserService() {}
 	
 	@PostConstruct
-	public void init() {
+	public void init() throws IOException {
 		if (ctx.getAttribute("users") == null) {
 			ctx.setAttribute("users", new UserDAO());
+		}
+		if (ctx.getAttribute("customers") == null) {
+			ctx.setAttribute("customers", new CustomerDAO());
+		}
+		if (ctx.getAttribute("deliverers") == null) {
+			ctx.setAttribute("deliverers", new DelivererDAO());
+		}
+		if (ctx.getAttribute("managers") == null) {
+			ctx.setAttribute("managers", new ManagerDAO());
+		}
+		if (ctx.getAttribute("admins") == null) {
+			ctx.setAttribute("admins", new AdminDAO());
 		}
 	}
 	
 	@GET
-	@Path("/users")
+	@Path("/getAllCustomers")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<User> dobaviOglase() throws IOException {
-		UserDAO dao = (UserDAO) ctx.getAttribute("users");
+	public ArrayList<Customer> getAllCustomers() throws IOException {
+		CustomerDAO dao = (CustomerDAO) ctx.getAttribute("customers");
+		return dao.deserialize();
+	}
+	
+	@GET
+	@Path("/getAllDeliverers")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Deliverer> getAllDeliverers() throws IOException {
+		DelivererDAO dao = (DelivererDAO) ctx.getAttribute("deliverers");
+		return dao.deserialize();
+	}
+	
+	@GET
+	@Path("/getAllManagers")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Manager> getAllManagers() throws IOException {
+		ManagerDAO dao = (ManagerDAO) ctx.getAttribute("managers");
+		return dao.deserialize();
+	}
+	
+	@GET
+	@Path("/getAllAdmins")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<User> getAllAdmins() throws IOException {
+		AdminDAO dao = (AdminDAO) ctx.getAttribute("admins");
 		return dao.deserialize();
 	}
 	

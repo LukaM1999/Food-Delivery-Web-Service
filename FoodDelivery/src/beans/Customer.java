@@ -18,6 +18,8 @@ public class Customer extends User {
 		this.points = points;
 		this.type = type;
 	}
+	
+	public Customer() {}
 
 	public ArrayList<Order> getOrders() {
 		return orders;

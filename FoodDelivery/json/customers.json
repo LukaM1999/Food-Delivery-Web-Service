@@ -1,0 +1,19 @@
+[
+	{
+		"username": "lukam1999",
+		"password": "luka",
+		"name": "Luka",
+		"surname": "Miletic",
+		"gender": "MALE",
+		"dateOfBirth": "21.09.1999.",
+		"role": "CUSTOMER",
+		"orders": [],
+		"cart": null,
+		"points": 0,
+		"type": {
+			"typeName": "Bronze",
+			"discount": 0,
+			"pointsRequired": 3000
+		}
+	}
+]

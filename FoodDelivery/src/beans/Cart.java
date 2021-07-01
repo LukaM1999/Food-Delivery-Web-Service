@@ -2,8 +2,16 @@ package beans;
 
 import java.util.HashMap;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import utilities.ArticleSerializer;
+import utilities.ArticleDeserializer;
+
 public class Cart {
 
+	@JsonSerialize(keyUsing = ArticleSerializer.class)
+	@JsonDeserialize(keyUsing = ArticleDeserializer.class)
 	public HashMap<Article, Integer> articles = new HashMap<Article, Integer>();
 	public User cartOwner;
 	public double price;

@@ -3,8 +3,6 @@ package beans;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class User {
 
@@ -87,6 +85,5 @@ public class User {
 	public void setRole(Role role) {
 		this.role = role;
 	}
-	
 	
 }

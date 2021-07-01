@@ -4,14 +4,10 @@ Vue.component("login", {
 		return {
 			usernameLogin: '',
 			passwordLogin: '',
-
+			
 			alertLogin: '',
 		}
 	},
-
-	mounted() {
-/* 		this.$route.meta.isAuthenticated = false;
- */	},
 
 	methods: {
 		userLogin: function () {
@@ -28,9 +24,7 @@ Vue.component("login", {
 							.then(response => {
 								this.$root.$data.user = response.data
 								this.$router.push('/' + this.usernameLogin)
-							});
-						/* this.$route.meta.isAuthenticated = true; */						
-					}
+							});					}
 					else {
 						this.alertLogin = "Pogresno uneseno korisnicko ime/lozinka";
 						$('#loginAlert').fadeIn(300).delay(5000).fadeOut(300);

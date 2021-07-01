@@ -1,22 +1,26 @@
 package beans;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Deliverer extends User {
 
-	private Order order;
+	private ArrayList<Order> orders = new ArrayList<Order>();
 	
 	public Deliverer(String username, String password, String name, String surname, String gender, Date dateOfBirth,
-			Role role, Order order) {
+			Role role) {
 		super(username, password, name, surname, gender, dateOfBirth, role);
-		this.order = order;
+	}
+	
+	public Deliverer() {
+		// TODO Auto-generated constructor stub
 	}
 
-	public Order getOrder() {
-		return order;
+	public ArrayList<Order> getOrders() {
+		return orders;
 	}
 
-	public void setOrder(Order order) {
-		this.order = order;
+	public void setOrder(ArrayList<Order> orders) {
+		this.orders = orders;
 	}
 }
