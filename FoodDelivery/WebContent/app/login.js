@@ -35,8 +35,9 @@ Vue.component("login", {
 
 	template: `
 	<div>
+	<restaurants></restaurants>
 	<registration></registration>
-		<button type="button" class="btn btn-info btn-lg" style="position: absolute; top: 8px; right: 190px;" data-bs-toggle="modal" data-bs-target="#loginModal">Prijavi se</button>
+		<button type="button" class="btn btn-info btn-lg" style="position: absolute; top: 8px; right: 250px;" data-bs-toggle="modal" data-bs-target="#loginModal">Prijavi se</button>
 		<div class="modal fade" role="dialog" id="loginModal">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">

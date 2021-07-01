@@ -7,6 +7,7 @@ const login = {
 }
 const registration = { template: '<registration></registration>' }
 const userPage = { template: '<userPage></userPage>' }
+const mainPage = { template: '<mainPage></mainPage>' }
 
 const routes = [
 	{
@@ -15,7 +16,10 @@ const routes = [
 		component: login,
 		/* meta: { isAuthenticated: false } */
 	},
-	{ path: '/:username', component: userPage }
+	{
+		path: '/:username',
+		component: userPage
+	}
 ]
 
 const router = new VueRouter({
