@@ -23,6 +23,10 @@ public class Restaurant {
 		this.logo = logo;
 	}
 
+	public Restaurant() {
+		// TODO Auto-generated constructor stub
+	}
+	
 	public String getName() {
 		return name;
 	}

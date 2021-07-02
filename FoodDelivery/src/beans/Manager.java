@@ -11,6 +11,9 @@ public class Manager extends User {
 		super(username, password, name, surname, gender, dateOfBirth, role);
 		this.restaurant = restaurant;
 	}
+	
+	public Manager() {
+	}
 
 	public Restaurant getRestaurant() {
 		return restaurant;

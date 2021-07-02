@@ -29,7 +29,6 @@ public class AdminDAO {
 	}
 
 	public ArrayList<User> deserialize() throws IOException {
-		System.out.println(new File(".").getCanonicalPath());
 		CollectionType typeReference = TypeFactory.defaultInstance().constructCollectionType(ArrayList.class,
 				User.class);
 		admins = new ObjectMapper().readValue(new String(Files.readAllBytes(Paths.get(path))), typeReference);

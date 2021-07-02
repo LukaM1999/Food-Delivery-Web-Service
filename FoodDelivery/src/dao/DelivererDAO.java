@@ -12,7 +12,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
+import beans.Customer;
+import beans.CustomerType;
 import beans.Deliverer;
+import beans.Order;
+import beans.User;
+import dto.LoginDTO;
 
 public class DelivererDAO {
 
@@ -29,7 +34,6 @@ public class DelivererDAO {
 	}
 
 	public ArrayList<Deliverer> deserialize() throws IOException {
-		System.out.println(new File(".").getCanonicalPath());
 		CollectionType typeReference = TypeFactory.defaultInstance().constructCollectionType(ArrayList.class,
 				Deliverer.class);
 		deliverers = new ObjectMapper().readValue(new String(Files.readAllBytes(Paths.get(path))), typeReference);
@@ -39,4 +43,29 @@ public class DelivererDAO {
 	public void serialize() throws JsonGenerationException, JsonMappingException, IOException {
 		new ObjectMapper().writeValue(new File(path), deliverers);
 	}
+	
+	public boolean addDeliverer(User deliverer) throws JsonGenerationException, JsonMappingException, IOException {
+		if (new UserDAO().alreadyRegistered(deliverer)) return false;
+		deliverers.add(new Deliverer(deliverer.getUsername(), deliverer.getPassword(), deliverer.getName(), 
+				deliverer.getSurname(), deliverer.getGender(), deliverer.getDateOfBirth(), deliverer.getRole()));
+		serialize();
+		return true;
+	}
+	
+	public Deliverer findUser(LoginDTO dto) {
+		for(Deliverer c: deliverers) {
+			if (c.getUsername().equals(dto.username) && c.getPassword().equals(dto.password))
+				return c;
+		}
+		return null;
+	}
+	
+	public Deliverer getUserById(String id) {
+		for(Deliverer c: deliverers) {
+			if(c.getUsername().equals(id)) return c;
+		}
+		return null;
+	}
+	
+	
 }

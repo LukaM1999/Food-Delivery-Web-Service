@@ -23,6 +23,10 @@ public class Article {
 		this.description = description;
 		this.image = image;
 	}
+	
+	public Article() {
+		
+	}
 
 	public String getName() {
 		return name;

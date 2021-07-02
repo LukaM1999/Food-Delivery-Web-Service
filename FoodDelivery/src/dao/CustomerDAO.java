@@ -13,6 +13,9 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import beans.Customer;
+import beans.CustomerType;
+import beans.Order;
+import beans.User;
 import dto.LoginDTO;
 
 public class CustomerDAO {
@@ -30,7 +33,6 @@ public class CustomerDAO {
 	}
 
 	public ArrayList<Customer> deserialize() throws IOException {
-		System.out.println(new File(".").getCanonicalPath());
 		CollectionType typeReference = TypeFactory.defaultInstance().constructCollectionType(ArrayList.class,
 				Customer.class);
 		customers = new ObjectMapper().readValue(new String(Files.readAllBytes(Paths.get(path))), typeReference);
@@ -41,16 +43,11 @@ public class CustomerDAO {
 		new ObjectMapper().writeValue(new File(path), customers);
 	}
 	
-	public boolean alreadyRegistered(Customer customer) {
-		for (Customer c: customers) {
-			if (c.getUsername().equals(customer.getUsername())) return true;
-		}
-		return false;
-	}
-	
-	public boolean addCustomer(Customer customer) throws JsonGenerationException, JsonMappingException, IOException {
-		if (alreadyRegistered(customer)) return false;
-		customers.add(customer);
+	public boolean addCustomer(User customer) throws JsonGenerationException, JsonMappingException, IOException {
+		if (new UserDAO().alreadyRegistered(customer)) return false;
+		customers.add(new Customer(customer.getUsername(), customer.getPassword(), customer.getName(), 
+				customer.getSurname(), customer.getGender(), customer.getDateOfBirth(), customer.getRole(), 
+				new ArrayList<Order>(), null, 0, new CustomerType("Bronze", 0, 3000)));
 		serialize();
 		return true;
 	}

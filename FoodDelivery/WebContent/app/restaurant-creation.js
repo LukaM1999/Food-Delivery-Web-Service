@@ -1,14 +1,11 @@
-Vue.component("registration", {
+Vue.component("restaurantCreation", {
 	
 	data: function(){
 		return {
-			username: '',
-			password: '',
 			name: '',
-			surname: '',
-			gender: '',
-			dateOfBirth: Date.now,
-			role: 'CUSTOMER',
+			type: '',
+			location: '',
+			logo: '',
 
 			alert: '',
 		}
@@ -16,20 +13,17 @@ Vue.component("registration", {
 
 	methods: {
 		registerCustomer: function(){
-			var customer = {
-				username: this.username,
-				password: this.password,
+			var restaurant = {
 				name: this.name,
-				surname: this.surname,
-				gender: this.gender,
-				dateOfBirth: new Date(this.dateOfBirth).format("dd.mm.yyyy."),
-				role: this.role
+				type: this.type,
+				location: this.location,
+				logo: this.logo,
 			}
 			axios
-			.post('rest/user/registerCustomer', customer)
+			.post('rest/user/register', restaurant)
 			.then(response => {
-				if (response.data) this.alert = this.name + " " + this.surname + " uspesno registrovan!";
-				else this.alert = "Vec postoji korisnik sa korisnickim imenom: " + this.username;
+				if (response.data) this.alert = "Uspesno kreiran restoran!";
+				else this.alert = "Vec postoji restoran sa imenom " + this.name;
 				$('#registrationAlert').fadeIn(300).delay(5000).fadeOut(300);
 			})
 		},
@@ -37,7 +31,7 @@ Vue.component("registration", {
 
 	template: `
 	<div>
-		<button type="button" class="btn btn-primary btn-lg" style="position: absolute; top: 8px; right: 16px;" data-bs-toggle="modal" data-bs-target="#myModal">Registrujte se</button>
+		<button type="button" class="btn btn-secondary btn-lg" data-bs-toggle="modal" data-bs-target="#myModal">Registruj korisnika</button>
 		<div class="modal fade" role="dialog" id="myModal">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
@@ -45,7 +39,7 @@ Vue.component("registration", {
           				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         			</div>
 					<div class="modal-body">
-						<h1 style="color: blue; text-align: center;">Registrujte se</h1>
+						<h1 style="color: blue; text-align: center;">Registruj korisnika</h1>
 						<form @submit.prevent="registerCustomer">
 							<table align="center">
 								<tr>
@@ -80,9 +74,18 @@ Vue.component("registration", {
 									</td>
 								</tr>
 								<tr>
+									<td style="font-weight: bold;">Uloga</td>
+									<td>
+										<select name="pol" v-model="role" required>
+											<option value="DELIVERER">Dostavljac</option>
+											<option value="MANAGER">Menadzer</option>										
+										</select>
+									</td>
+								</tr>
+								<tr>
 									<td colspan="2" align="center">
 										<button type="submit" class="btn btn-primary" style="margin-top: 10%;" id="register">
-											Registruj se
+											Potvrdi
 										</button>
 									</td>
 								</tr>
@@ -92,7 +95,7 @@ Vue.component("registration", {
 				</div>
 			</div>
 		</div>
-		<div class="alert alert-warning fixed-bottom" style="display:none; z-index: 10000;" role="alert"
+		<div class="alert alert-warning fixed-bottom z-index: 10000;" style="display:none;" role="alert"
 			id="registrationAlert">
 			<p>{{alert}}</p>
 		</div>

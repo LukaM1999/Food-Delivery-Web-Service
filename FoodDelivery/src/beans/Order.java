@@ -24,6 +24,10 @@ public class Order {
 		this.customerName = customerName;
 		this.status = status;
 	}
+	
+	public Order() {
+		// TODO Auto-generated constructor stub
+	}
 
 	public String getId() {
 		return id;

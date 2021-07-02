@@ -65,6 +65,7 @@ public class UserDAO {
 		if (alreadyRegistered(user)) return false;
 		users.add(user);
 		serialize();
+		deserialize();
 		return true;
 	}
 	

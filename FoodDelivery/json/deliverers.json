@@ -1,12 +1,12 @@
 [
-	{
-		"username": "dostavljac",
-		"password": "123",
-		"name": "Milos",
-		"surname": "Vasic",
-		"gender": "MALE",
-		"dateOfBirth": "11.03.1987.",
-		"role": "DELIVERER",
-		"orders": []
-	}
+    {
+        "username": "dostavljac",
+        "password": "123",
+        "name": "Milos",
+        "surname": "Vasic",
+        "gender": "MALE",
+        "dateOfBirth": "11.03.1987.",
+        "role": "DELIVERER",
+        "orders": []
+    }
 ]

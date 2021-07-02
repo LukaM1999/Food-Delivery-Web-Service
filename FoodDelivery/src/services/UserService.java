@@ -1,5 +1,6 @@
 package services;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -38,6 +39,7 @@ public class UserService {
 	
 	@PostConstruct
 	public void init() throws IOException {
+		System.out.println(new File(".").getCanonicalPath());
 		if (ctx.getAttribute("users") == null) {
 			ctx.setAttribute("users", new UserDAO());
 		}
@@ -97,21 +99,62 @@ public class UserService {
 	}
 	
 	@POST
-	@Path("/register")
+	@Path("/registerCustomer")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public User registerCustomer(User customer) {
-		UserDAO dao = (UserDAO) ctx.getAttribute("users");
+	public Customer registerCustomer(Customer customer) {
+		CustomerDAO dao = (CustomerDAO) ctx.getAttribute("customers");
 		try {
-			if (dao.addUser(customer)) {
-				ctx.setAttribute("users", dao);
-				return customer;}
+			if (dao.addCustomer(customer)) {
+				ctx.setAttribute("customers", dao);
+				UserDAO userDao = (UserDAO) ctx.getAttribute("users");
+				userDao.addUser(customer);
+				return dao.getUserById(customer.getUsername());}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
 	}
+	
+	@POST
+	@Path("/registerDeliverer")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Deliverer registerDeliverer(Deliverer deliverer) {
+		DelivererDAO dao = (DelivererDAO) ctx.getAttribute("deliverers");
+		try {
+			if (dao.addDeliverer(deliverer)) {
+				ctx.setAttribute("deliverers", dao);
+				UserDAO userDao = (UserDAO) ctx.getAttribute("users");
+				userDao.addUser(deliverer);
+				return dao.getUserById(deliverer.getUsername());}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	@POST
+	@Path("/registerManager")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Manager registerManager(Manager manager) {
+		ManagerDAO dao = (ManagerDAO) ctx.getAttribute("managers");
+		try {
+			if (dao.addManager(manager)) {
+				ctx.setAttribute("managers", dao);
+				UserDAO userDao = (UserDAO) ctx.getAttribute("users");
+				userDao.addUser(manager);
+				return dao.getUserById(manager.getUsername());}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	
 	@GET
 	@Path("/getUser/{id}")

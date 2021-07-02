@@ -14,6 +14,10 @@ public class Comment {
 		this.commentContent = commentContent;
 		this.rating = rating;
 	}
+	
+	public Comment() {
+		
+	}
 
 	public Customer getCommentPoster() {
 		return commentPoster;

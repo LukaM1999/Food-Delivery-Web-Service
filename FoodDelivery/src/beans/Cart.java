@@ -22,6 +22,10 @@ public class Cart {
 		this.cartOwner = cartOwner;
 		this.price = price;
 	}
+	
+	public Cart() {
+		
+	}
 
 	public HashMap<Article, Integer> getArticles() {
 		return articles;

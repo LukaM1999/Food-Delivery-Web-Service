@@ -12,6 +12,10 @@ public class Location {
 		this.latitude = latitude;
 		this.address = address;
 	}
+	
+	public Location() {
+		// TODO Auto-generated constructor stub
+	}
 
 	public float getLongitude() {
 		return longitude;

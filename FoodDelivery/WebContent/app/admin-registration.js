@@ -1,6 +1,6 @@
-Vue.component("registration", {
-	
-	data: function(){
+Vue.component("adminRegistration", {
+
+	data: function () {
 		return {
 			username: '',
 			password: '',
@@ -8,15 +8,15 @@ Vue.component("registration", {
 			surname: '',
 			gender: '',
 			dateOfBirth: Date.now,
-			role: 'CUSTOMER',
+			role: '',
 
 			alert: '',
 		}
 	},
 
 	methods: {
-		registerCustomer: function(){
-			var customer = {
+		registerCustomer: function () {
+			var user = {
 				username: this.username,
 				password: this.password,
 				name: this.name,
@@ -25,19 +25,36 @@ Vue.component("registration", {
 				dateOfBirth: new Date(this.dateOfBirth).format("dd.mm.yyyy."),
 				role: this.role
 			}
-			axios
-			.post('rest/user/registerCustomer', customer)
-			.then(response => {
-				if (response.data) this.alert = this.name + " " + this.surname + " uspesno registrovan!";
-				else this.alert = "Vec postoji korisnik sa korisnickim imenom: " + this.username;
-				$('#registrationAlert').fadeIn(300).delay(5000).fadeOut(300);
-			})
+			if (this.role === "DELIVERER") {
+				axios
+					.post('rest/user/registerDeliverer', user)
+					.then(response => {
+						if (response.data) {
+							this.alert = this.name + " " + this.surname + " uspesno registrovan!";
+							this.$parent.$data.deliverers.push(response.data);
+						}
+						else this.alert = "Vec postoji korisnik sa korisnickim imenom: " + this.username;
+						$('#registrationAlert').fadeIn(300).delay(5000).fadeOut(300);
+					})
+			}
+			else {
+				axios
+					.post('rest/user/registerManager', user)
+					.then(response => {
+						if (response.data) {
+							this.alert = this.name + " " + this.surname + " uspesno registrovan!";
+							this.$parent.$data.managers.push(response.data);
+						}
+						else this.alert = "Vec postoji korisnik sa korisnickim imenom: " + this.username;
+						$('#registrationAlert').fadeIn(300).delay(5000).fadeOut(300);
+					})
+			}
 		},
 	},
 
 	template: `
 	<div>
-		<button type="button" class="btn btn-primary btn-lg" style="position: absolute; top: 8px; right: 16px;" data-bs-toggle="modal" data-bs-target="#myModal">Registrujte se</button>
+		<button type="button" class="btn btn-secondary btn-lg" data-bs-toggle="modal" data-bs-target="#myModal">Registruj korisnika</button>
 		<div class="modal fade" role="dialog" id="myModal">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
@@ -45,7 +62,7 @@ Vue.component("registration", {
           				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         			</div>
 					<div class="modal-body">
-						<h1 style="color: blue; text-align: center;">Registrujte se</h1>
+						<h1 style="color: blue; text-align: center;">Registruj korisnika</h1>
 						<form @submit.prevent="registerCustomer">
 							<table align="center">
 								<tr>
@@ -80,9 +97,18 @@ Vue.component("registration", {
 									</td>
 								</tr>
 								<tr>
+									<td style="font-weight: bold;">Uloga</td>
+									<td>
+										<select name="pol" v-model="role" required>
+											<option value="DELIVERER">Dostavljac</option>
+											<option value="MANAGER">Menadzer</option>										
+										</select>
+									</td>
+								</tr>
+								<tr>
 									<td colspan="2" align="center">
 										<button type="submit" class="btn btn-primary" style="margin-top: 10%;" id="register">
-											Registruj se
+											Potvrdi
 										</button>
 									</td>
 								</tr>
