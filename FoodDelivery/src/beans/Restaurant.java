@@ -6,13 +6,13 @@ import java.util.ArrayList;
 public class Restaurant {
 
 	private String name;
-	private RestaurantType type;
+	private String type;
 	private ArrayList<Article> articles = new ArrayList<Article>();
 	private RestaurantStatus status;
 	private Location location;
 	private String logo;
 
-	public Restaurant(String name, RestaurantType type, ArrayList<Article> articles, RestaurantStatus status,
+	public Restaurant(String name, String type, ArrayList<Article> articles, RestaurantStatus status,
 			Location location, String logo) {
 		super();
 		this.name = name;
@@ -35,11 +35,11 @@ public class Restaurant {
 		this.name = name;
 	}
 
-	public RestaurantType getType() {
+	public String getType() {
 		return type;
 	}
 
-	public void setType(RestaurantType type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 
