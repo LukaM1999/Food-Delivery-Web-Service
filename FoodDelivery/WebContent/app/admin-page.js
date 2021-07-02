@@ -48,11 +48,12 @@ Vue.component("adminPage", {
 				</button> <a class="navbar-brand" href="http://localhost:8080/FoodDelivery/"><img src="images/quotations-button.png" width="80" height="80"></a>
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="navbar-nav">
-	
 						<li class="nav-item active" style="padding: 5px;">
 							 <admin-registration></admin-registration>
-						</li>		
-									
+						</li>						
+						<li class="nav-item active" style="padding: 5px;">
+							<restaurantCreation></restaurantCreation>
+						</li>						
 					</ul>
 				</div>
 			</nav>

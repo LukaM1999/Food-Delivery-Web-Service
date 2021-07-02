@@ -10,10 +10,10 @@ public class Restaurant {
 	private ArrayList<Article> articles = new ArrayList<Article>();
 	private RestaurantStatus status;
 	private Location location;
-	private Image logo;
+	private String logo;
 
 	public Restaurant(String name, RestaurantType type, ArrayList<Article> articles, RestaurantStatus status,
-			Location location, Image logo) {
+			Location location, String logo) {
 		super();
 		this.name = name;
 		this.type = type;
@@ -67,11 +67,11 @@ public class Restaurant {
 		this.location = location;
 	}
 
-	public Image getLogo() {
+	public String getLogo() {
 		return logo;
 	}
 
-	public void setLogo(Image logo) {
+	public void setLogo(String logo) {
 		this.logo = logo;
 	}
 

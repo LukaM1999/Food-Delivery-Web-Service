@@ -12,7 +12,7 @@ Vue.component("restaurantCreation", {
 	},
 
 	methods: {
-		registerCustomer: function(){
+		createRestaurant: function(){
 			var restaurant = {
 				name: this.name,
 				type: this.type,
@@ -20,10 +20,10 @@ Vue.component("restaurantCreation", {
 				logo: this.logo,
 			}
 			axios
-			.post('rest/user/register', restaurant)
+			.post('rest/restaurant/createRestaurant', restaurant)
 			.then(response => {
-				if (response.data) this.alert = "Uspesno kreiran restoran!";
-				else this.alert = "Vec postoji restoran sa imenom " + this.name;
+				if (response.data) this.alert = "Successfully created restaurant!";
+				else this.alert = "A restaurant with the name " + this.name + " already exists";
 				$('#registrationAlert').fadeIn(300).delay(5000).fadeOut(300);
 			})
 		},
@@ -31,7 +31,7 @@ Vue.component("restaurantCreation", {
 
 	template: `
 	<div>
-		<button type="button" class="btn btn-secondary btn-lg" data-bs-toggle="modal" data-bs-target="#myModal">Registruj korisnika</button>
+		<button type="button" class="btn btn-secondary btn-lg" data-bs-toggle="modal" data-bs-target="#myModal">Create restaurant</button>
 		<div class="modal fade" role="dialog" id="myModal">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
@@ -40,10 +40,10 @@ Vue.component("restaurantCreation", {
         			</div>
 					<div class="modal-body">
 						<h1 style="color: blue; text-align: center;">Registruj korisnika</h1>
-						<form @submit.prevent="registerCustomer">
+						<form @submit.prevent="createRestaurant">
 							<table align="center">
 								<tr>
-									<td style="font-weight: bold;">Korisnicko ime</td>
+									<td style="font-weight: bold;"></td>
 									<td><input type="text" name="username" v-model="username" required></td>
 								</tr>
 								<tr>
