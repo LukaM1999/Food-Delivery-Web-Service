@@ -1,4 +1,4 @@
-const olmap = { template: '<olmap></olmap>' }
+const googleMap = { template: '<googleMap></googleMap>' }
 
 Vue.component("restaurantCreation", {
 	
@@ -24,7 +24,7 @@ Vue.component("restaurantCreation", {
 	},
 
 	components: {
-		'olmap' : olmap,
+		'googleMap' : googleMap,
 	},
 
 	methods: {
@@ -68,7 +68,7 @@ Vue.component("restaurantCreation", {
 								</tr>
 								<tr>
 									<td style="font-weight: bold;">Location: </td>
-									<td><olmap></olmap></td>
+									<td><googleMap></googleMap></td>
 								</tr>
 								<tr>
 									<td style="font-weight: bold;">Logo: </td>
