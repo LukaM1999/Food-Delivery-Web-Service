@@ -52,7 +52,7 @@ Vue.component("restaurants", {
 										<div class="row">
 											<div class="col-lg-4 col-md-6 special-grid drinks" v-for="r in restaurants">
 												<div @click="viewRestaurant(r)" class="gallery-single fix" style="cursor: pointer; text-align:center;" >
-													<img :src="'data:image/png;base64,' + r.logo" class="img-fluid" alt="Image">
+													<img :style="[ r.status === 'CLOSED' ? {opacity:0.2} : {opacity:1} ]" :src="'data:image/png;base64,' + r.logo" class="img-fluid" alt="Image">
 													<div class="why-text">
 														<h2 style="color: white;">{{r.name}}</h2>
 														<h6 style="color: white;"><i>{{r.type}}</i></h6>
