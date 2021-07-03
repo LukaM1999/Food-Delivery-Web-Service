@@ -26,6 +26,12 @@ Vue.component("restaurants", {
 		}
 	},
 
+	methods: {
+		viewRestaurant(r){
+			this.$router.push('/restaurants/' + r.name);
+		}
+	},
+
 	template: `
 		<div class="row">
 			<div class="col-md-12">
@@ -45,7 +51,7 @@ Vue.component("restaurants", {
 									<div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
 										<div class="row">
 											<div class="col-lg-4 col-md-6 special-grid drinks" v-for="r in restaurants">
-												<div class="gallery-single fix">
+												<div @click="viewRestaurant(r)" class="gallery-single fix" style="cursor: pointer; text-align:center;" >
 													<img :src="'data:image/png;base64,' + r.logo" class="img-fluid" alt="Image">
 													<div class="why-text">
 														<h2 style="color: white;">{{r.name}}</h2>

@@ -1,3 +1,5 @@
+const olmap = { template: '<olmap></olmap>' }
+
 Vue.component("restaurantCreation", {
 	
 	data: function(){
@@ -6,9 +8,23 @@ Vue.component("restaurantCreation", {
 			type: '',
 			location: '',
 			logo: '',
+			managers: [],
 
 			alert: '',
 		}
+	},
+
+	mounted() {
+		var managers = this.$parent.$data.managers;
+		managers.forEach(element => {
+			if(element.restaurant === null){
+				this.managers.push(element);
+			}
+		});
+	},
+
+	components: {
+		'olmap' : olmap,
 	},
 
 	methods: {
@@ -31,61 +47,47 @@ Vue.component("restaurantCreation", {
 
 	template: `
 	<div>
-		<button type="button" class="btn btn-secondary btn-lg" data-bs-toggle="modal" data-bs-target="#myModal">Create restaurant</button>
-		<div class="modal fade" role="dialog" id="myModal">
+		<button type="button" class="btn btn-secondary btn-lg" data-bs-toggle="modal" data-bs-target="#restaurantModal">Create restaurant</button>
+		<div class="modal fade" role="dialog" id="restaurantModal">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
 					<div class="modal-header">
           				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         			</div>
 					<div class="modal-body">
-						<h1 style="color: blue; text-align: center;">Registruj korisnika</h1>
+						<h1 style="color: blue; text-align: center;">Create restaurant</h1>
 						<form @submit.prevent="createRestaurant">
 							<table align="center">
 								<tr>
-									<td style="font-weight: bold;"></td>
-									<td><input type="text" name="username" v-model="username" required></td>
-								</tr>
-								<tr>
-									<td style="font-weight: bold;">Lozinka</td>
-									<td><input type="password" name="password" v-model="password" required></td>
-								</tr>
-								<tr>
-									<td style="font-weight: bold;">Ime</td>
+									<td style="font-weight: bold;">Name: </td>
 									<td><input type="text" name="name" v-model="name" required></td>
 								</tr>
 								<tr>
-									<td style="font-weight: bold;">Prezime</td>
-									<td><input type="text" name="surname" v-model="surname" required></td>
+									<td style="font-weight: bold;">Type: </td>
+									<td><input type="text" name="type" v-model="type" required></td>
 								</tr>
 								<tr>
-									<td style="font-weight: bold;">Pol</td>
+									<td style="font-weight: bold;">Location: </td>
+									<td><olmap></olmap></td>
+								</tr>
+								<tr>
+									<td style="font-weight: bold;">Logo: </td>
+									<td><input type="text" name="logo" v-model="logo" required></td>
+								</tr>
+								<tr>
+									<td style="font-weight: bold;">Manager: </td>
 									<td>
-										<select name="pol" v-model="gender" required>
-											<option value="MALE">Musko</option>
-											<option value="FEMALE">Zensko</option>
-											<option value="OTHER">Ostalo</option>
-										</select>
-									</td>
-								</tr>
-								<tr>
-									<td style="font-weight: bold;">Datum rodjenja</td>
-									<td><input type="date" name="dateOfBirth" v-model="dateOfBirth" required="required">
-									</td>
-								</tr>
-								<tr>
-									<td style="font-weight: bold;">Uloga</td>
-									<td>
-										<select name="pol" v-model="role" required>
-											<option value="DELIVERER">Dostavljac</option>
-											<option value="MANAGER">Menadzer</option>										
+										<select name="manager">
+											<option v-for="m in managers" :value="m">
+												{{m.username}}
+											</option>									
 										</select>
 									</td>
 								</tr>
 								<tr>
 									<td colspan="2" align="center">
-										<button type="submit" class="btn btn-primary" style="margin-top: 10%;" id="register">
-											Potvrdi
+										<button type="submit" class="btn btn-primary" style="margin-top: 10%;">
+											Create
 										</button>
 									</td>
 								</tr>

@@ -1,6 +1,6 @@
 const login = {
 	template: '<login></login>',
-	beforeRouteLeave(to, from, next) {
+	beforeRouteUpdate(to, from, next) {
 		if (to.name !== 'login' && this.$root.$data.user.username !== to.params.username) next(false);
 		else next();
 	},
@@ -8,6 +8,8 @@ const login = {
 const registration = { template: '<registration></registration>' }
 const userPage = { template: '<userPage></userPage>' }
 const mainPage = { template: '<mainPage></mainPage>' }
+const restaurantPage = { template: '<restaurantPage></restaurantPage>' }
+
 
 const routes = [
 	{
@@ -19,6 +21,10 @@ const routes = [
 	{
 		path: '/:username',
 		component: userPage
+	},
+	{
+		path: '/restaurants/:name',
+		component: restaurantPage
 	}
 ]
 
