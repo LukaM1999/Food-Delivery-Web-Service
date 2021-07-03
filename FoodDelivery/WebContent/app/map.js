@@ -32,15 +32,29 @@ Vue.component("googleMap", {
 				if (status == google.maps.GeocoderStatus.OK) {
 					if (results[1]) {
 						alert("Location: " + results[1].formatted_address + "\r\nLatitude: " + event.latLng.lat() + "\r\nLongitude: " + event.latLng.lng());
-						let commaSplit = results[1].formatted_address.split(',');
+						let street, streetNumber, city, zipCode;
+						results[1].address_components.forEach(element => {
+							switch (element.types[0]) {
+								case 'street_number': {
+									streetNumber = element.long_name
+									break
+								}
+								case 'route': {
+									street = element.long_name;
+									break
+								}
+								case 'locality': {
+									city = element.long_name;
+									break
+								}
+								case 'postal_code': {
+									zipCode = element.long_name;
+									break
+								}
+							}
+						});
 
-						let street = commaSplit[0].replace(/[0-9]/g, '');
-						let streetSplit = commaSplit[0].split(' ');
-						let streetNumber = streetSplit[streetSplit.length - 1];
-
-						let citySplit = commaSplit[1].split(' ');
-						let zipCode = citySplit[citySplit.length - 1];
-						let city = commaSplit[1].replace(/[0-9]/g, '');
+						if (zipCode == null) zipCode = '21000';
 
 						var location = {
 							'longitude': event.latLng.lng(),
@@ -55,12 +69,13 @@ Vue.component("googleMap", {
 						this.loc = location;
 					}
 				}
+
 			});
 		});
 	},
 
 	template: `
-	<div id="map" style=" height: 400px; width: 100%;" >
+	<div id="map" style=" height: 400px; width: 400px;" >
 		
 	</div>
 	`
