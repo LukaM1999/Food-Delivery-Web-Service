@@ -4,8 +4,7 @@ Vue.component("googleMap", {
 		return {
 			map: null,
 			marker: null,
-			loc: {},
-
+			loc: null,
 		}
 	},
 
@@ -69,8 +68,8 @@ Vue.component("googleMap", {
 						this.loc = location;
 					}
 				}
-
-			});
+			}).then(this.$parent.$data.loc = this.loc);
+			//this.$emit('updateLocation', this.loc)
 		});
 	},
 

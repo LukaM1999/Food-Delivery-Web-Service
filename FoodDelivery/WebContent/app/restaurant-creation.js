@@ -1,48 +1,76 @@
 const googleMap = { template: '<googleMap></googleMap>' }
 
 Vue.component("restaurantCreation", {
-	
-	data: function(){
+
+	data: function () {
 		return {
 			name: '',
 			type: '',
-			location: '',
-			logo: '',
+			logo: 'jghkf',
+			loc: null,
 			managers: [],
+			manager: {},
 
 			alert: '',
 		}
 	},
 
 	mounted() {
-		var managers = this.$parent.$data.managers;
-		managers.forEach(element => {
-			if(element.restaurant === null){
-				this.managers.push(element);
-			}
-		});
+		axios
+			.get('rest/user/getAllManagers')
+			.then(response => {
+				var mngrs = response.data
+				mngrs.forEach(element => {
+					if (element.restaurant === null) {
+						this.managers.push(element);
+					}
+				});
+			});
 	},
 
 	components: {
-		'googleMap' : googleMap,
+		'googleMap': googleMap,
 	},
 
 	methods: {
-		createRestaurant: function(){
+		createRestaurant: function () {
 			var restaurant = {
 				name: this.name,
 				type: this.type,
-				location: this.location,
+				location: this.loc,
 				logo: this.logo,
+				status: "OPEN",
+			}
+			var dto = {
+				restaurant: restaurant,
+				manager: this.manager
 			}
 			axios
-			.post('rest/restaurant/createRestaurant', restaurant)
-			.then(response => {
-				if (response.data) this.alert = "Successfully created restaurant!";
-				else this.alert = "A restaurant with the name " + this.name + " already exists";
-				$('#registrationAlert').fadeIn(300).delay(5000).fadeOut(300);
-			})
+				.post('rest/restaurant/createRestaurant', dto)
+				.then(response => {
+					if (response.data) this.alert = "Successfully created restaurant!";
+					else this.alert = "A restaurant with the name " + this.name + " already exists";
+					$('#registrationAlert').fadeIn(300).delay(5000).fadeOut(300);
+				})
 		},
+		getImage(e) {
+			var files = e.target.files || e.dataTransfer.files;
+			if (!files.length)
+				return;
+			var file = files[0];
+			var temp;
+			var reader = new FileReader();
+			reader.onloadend = function () {
+				//console.log('RESULT', reader.result)
+				var imgType = file.type.split('/');
+				temp = reader.result.replace('data:image/' + imgType[1] + ';base64,', '');
+			}
+			reader.readAsDataURL(file);
+			this.logo = temp;
+		},
+		/* updateLocation(newLoc) {
+			this.loc = newLoc;
+		}, */
 	},
 
 	template: `
@@ -68,16 +96,16 @@ Vue.component("restaurantCreation", {
 								</tr>
 								<tr>
 									<td style="font-weight: bold;">Location: </td>
-									<td><googleMap></googleMap></td>
+									<td><googleMap :parent="_self"></googleMap></td>
 								</tr>
 								<tr>
 									<td style="font-weight: bold;">Logo: </td>
-									<td><input type="text" name="logo" v-model="logo" required></td>
+									<td><input class="btn btn-secondary" type="file" name="logo" v-on:change="getImage" accept="image/*"></td>
 								</tr>
 								<tr>
 									<td style="font-weight: bold;">Manager: </td>
 									<td>
-										<select name="manager">
+										<select name="manager" v-model="manager">
 											<option v-for="m in managers" :value="m">
 												{{m.username}}
 											</option>									

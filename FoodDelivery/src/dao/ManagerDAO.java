@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import beans.Deliverer;
 import beans.Manager;
+import beans.Restaurant;
 import beans.User;
 import dto.LoginDTO;
 
@@ -63,5 +64,16 @@ public class ManagerDAO {
 			if(c.getUsername().equals(id)) return c;
 		}
 		return null;
+	}
+	
+	public boolean assignRestaurant(Restaurant r, Manager m) throws JsonGenerationException, JsonMappingException, IOException {
+		for(Manager c: managers) {
+			if(c.getUsername().equals(m.getUsername())) {
+				c.setRestaurant(r);
+				serialize();
+				return true;
+			}
+		}
+		return false;
 	}
 }
