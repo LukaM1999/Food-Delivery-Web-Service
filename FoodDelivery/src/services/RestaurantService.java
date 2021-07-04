@@ -2,6 +2,10 @@ package services;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import javax.annotation.PostConstruct;
@@ -15,7 +19,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+
+
 import beans.Customer;
+import beans.Location;
 import beans.Restaurant;
 import dao.CustomerDAO;
 import dao.ManagerDAO;
@@ -40,6 +47,12 @@ public class RestaurantService {
 		}
 		if (ctx.getAttribute("managers") == null) {
 			ctx.setAttribute("managers", new ManagerDAO());
+		}
+		if (ctx.getAttribute("logo") == null) {
+			ctx.setAttribute("logo", "");
+		}
+		if (ctx.getAttribute("location") == null) {
+			ctx.setAttribute("location", new Location());
 		}
 	}
 
@@ -70,6 +83,40 @@ public class RestaurantService {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	@GET
+	@Path("/getLogo")
+	@Produces(MediaType.APPLICATION_FORM_URLENCODED)
+	public String getLogo() throws UnsupportedEncodingException {
+		System.out.println((String)ctx.getAttribute("logo"));
+		return URLEncoder.encode((String) ctx.getAttribute("logo"), StandardCharsets.UTF_8.name());
+	}
+	
+	@POST
+	@Path("/setLogo")
+	@Produces(MediaType.TEXT_PLAIN)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public String setLogo(String logo) throws UnsupportedEncodingException {
+		ctx.setAttribute("logo", URLDecoder.decode(logo, StandardCharsets.UTF_8.name()));
+		return logo;
+	}
+	
+	@GET
+	@Path("/getLocation")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Location getLocation() {
+		System.out.println(((Location) ctx.getAttribute("location")).getAddress());
+		return (Location) ctx.getAttribute("location");
+	}
+	
+	@POST
+	@Path("/setLocation")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Location setLocation(Location location) {
+		ctx.setAttribute("location", location);
+		return location;
 	}
 	
 	

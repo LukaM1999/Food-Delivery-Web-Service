@@ -66,10 +66,12 @@ Vue.component("googleMap", {
 							}
 						}
 						this.loc = location;
+						axios
+							.post('rest/restaurant/setLocation', this.loc)
+							.then(response => {});
 					}
 				}
-			}).then(this.$parent.$data.loc = this.loc);
-			//this.$emit('updateLocation', this.loc)
+			});
 		});
 	},
 

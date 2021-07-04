@@ -6,7 +6,7 @@ Vue.component("restaurantCreation", {
 		return {
 			name: '',
 			type: '',
-			logo: 'jghkf',
+			logo: '',
 			loc: null,
 			managers: [],
 			manager: {},
@@ -33,44 +33,61 @@ Vue.component("restaurantCreation", {
 	},
 
 	methods: {
-		createRestaurant: function () {
-			var restaurant = {
-				name: this.name,
-				type: this.type,
-				location: this.loc,
-				logo: this.logo,
-				status: "OPEN",
-			}
-			var dto = {
-				restaurant: restaurant,
-				manager: this.manager
-			}
+		createRestaurant() {
+			var location, logo;
+
 			axios
-				.post('rest/restaurant/createRestaurant', dto)
+				.get('rest/restaurant/getLocation')
 				.then(response => {
-					if (response.data) this.alert = "Successfully created restaurant!";
-					else this.alert = "A restaurant with the name " + this.name + " already exists";
-					$('#registrationAlert').fadeIn(300).delay(5000).fadeOut(300);
-				})
+					this.loc = response.data
+					axios.
+						get('rest/restaurant/getLogo')
+						.then(response => {
+							this.logo = response.data
+							console.log(response.data)
+							var restaurant = {
+								name: this.name,
+								type: this.type,
+								location: this.loc,
+								logo: this.logo,
+								status: "OPEN",
+							}
+							var dto = {
+								restaurant: restaurant,
+								manager: this.manager
+							}
+							axios
+								.post('rest/restaurant/createRestaurant', dto)
+								.then(response => {
+									if (response.data) this.alert = "Successfully created restaurant!";
+									else this.alert = "A restaurant with the name " + this.name + " already exists";
+									$('#registrationAlert').fadeIn(300).delay(5000).fadeOut(300);
+								})
+
+						});
+
+				});
 		},
 		getImage(e) {
 			var files = e.target.files || e.dataTransfer.files;
 			if (!files.length)
 				return;
 			var file = files[0];
-			var temp;
 			var reader = new FileReader();
 			reader.onloadend = function () {
-				//console.log('RESULT', reader.result)
 				var imgType = file.type.split('/');
-				temp = reader.result.replace('data:image/' + imgType[1] + ';base64,', '');
+				var self = this;
+				self.logo = reader.result.replace('data:image/' + imgType[1] + ';base64,', '');
+
+				axios
+					.post('rest/restaurant/setLogo', self.logo.replace('+', '%2B'))
+					.then(response => {
+						console.log(self.logo)
+						console.log(response.data)
+					})
 			}
 			reader.readAsDataURL(file);
-			this.logo = temp;
 		},
-		/* updateLocation(newLoc) {
-			this.loc = newLoc;
-		}, */
 	},
 
 	template: `
@@ -96,7 +113,7 @@ Vue.component("restaurantCreation", {
 								</tr>
 								<tr>
 									<td style="font-weight: bold;">Location: </td>
-									<td><googleMap :parent="_self"></googleMap></td>
+									<td><googleMap ref="childMap" :parent="_self"></googleMap></td>
 								</tr>
 								<tr>
 									<td style="font-weight: bold;">Logo: </td>
