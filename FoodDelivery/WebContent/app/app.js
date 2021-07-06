@@ -10,6 +10,8 @@ const registration = { template: '<registration></registration>' }
 const userPage = { template: '<userPage></userPage>' }
 const mainPage = { template: '<mainPage></mainPage>' }
 const restaurantPage = { template: '<restaurantPage></restaurantPage>' }
+const restaurants = { template: '<restaurants></restaurants>' }
+const users = { template: '<users></users>' }
 
 
 const routes = [
@@ -27,6 +29,16 @@ const routes = [
 				path: 'restaurant/:name',
 				name: 'restaurant',
 				component: restaurantPage
+			}, 
+			{
+				path: 'restaurants',
+				name: 'restaurants',
+				component: restaurants
+			},
+			{
+				path: 'users',
+				name: 'users',
+				component: users
 			}
 		]
 	},
