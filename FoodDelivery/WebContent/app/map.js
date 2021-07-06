@@ -10,6 +10,7 @@ Vue.component("googleMap", {
 
 	mounted() {
 		const ns = { lat: 45.255277, lng: 19.844444 };
+		var self = this
 		this.map = new google.maps.Map(document.getElementById("map"), {
 			zoom: 12,
 			center: ns,
@@ -59,16 +60,23 @@ Vue.component("googleMap", {
 							'longitude': event.latLng.lng(),
 							'latitude': event.latLng.lat(),
 							'address': {
-								'street': street.trim(),
+								'street': street?.trim(),
 								'streetNumber': parseInt(streetNumber),
-								'city': city.trim(),
+								'city': city?.trim(),
 								'zipCode': parseInt(zipCode)
 							}
 						}
 						this.loc = location;
+						self.$root.$data.loc = location
 						axios
 							.post('rest/restaurant/setLocation', this.loc)
-							.then(response => {});
+							.then(response => {
+								/* self.$parent.$data.street = this.loc.address.street
+								self.$parent.$data.streetNumber = this.loc.address.streetNumber
+								self.$parent.$data.city = this.loc.address.city
+								self.$parent.$data.zipCode = this.loc.address.zipCode */
+								self.$parent.$emit('location-selected', this.loc)
+							});
 					}
 				}
 			});
@@ -76,7 +84,7 @@ Vue.component("googleMap", {
 	},
 
 	template: `
-	<div id="map" style=" height: 400px; width: 400px;" >
+	<div id="map" style=" height: 400px; width: 700px;" >
 		
 	</div>
 	`

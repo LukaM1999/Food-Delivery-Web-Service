@@ -14,6 +14,20 @@ Vue.component("adminRegistration", {
 		}
 	},
 
+	props: {
+		isManagerAssigning: {
+			type: Boolean,
+			default: false
+		}
+	},
+
+	mounted(){
+		if (this.isManagerAssigning) this.role = 'MANAGER'
+		$('#restaurantModal').on('hidden.bs.modal', function () {
+			$(this).find('form').trigger('reset');
+		});		
+	},
+
 	methods: {
 		registerCustomer: function () {
 			var user = {
@@ -43,7 +57,8 @@ Vue.component("adminRegistration", {
 					.then(response => {
 						if (response.data) {
 							this.alert = this.name + " " + this.surname + " uspesno registrovan!";
-							this.$parent.$data.managers.push(response.data);
+							//this.$parent.$data.managers.push(response.data)
+							this.$emit('manager-added', response.data);
 						}
 						else this.alert = "Vec postoji korisnik sa korisnickim imenom: " + this.username;
 						$('#registrationAlert').fadeIn(300).delay(5000).fadeOut(300);
@@ -54,8 +69,8 @@ Vue.component("adminRegistration", {
 
 	template: `
 	<div>
-		<button type="button" class="btn btn-secondary btn-lg" data-bs-toggle="modal" data-bs-target="#myModal">Registruj korisnika</button>
-		<div class="modal fade" role="dialog" id="myModal">
+		<button v-if="!isManagerAssigning" type="button" class="btn btn-secondary btn-lg" data-bs-toggle="modal" data-bs-target="#myModal">Registruj korisnika</button>
+		<div v-if="!isManagerAssigning" class="modal fade" role="dialog" id="myModal">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -107,7 +122,7 @@ Vue.component("adminRegistration", {
 								</tr>
 								<tr>
 									<td colspan="2" align="center">
-										<button type="submit" class="btn btn-primary" style="margin-top: 10%;" id="register">
+										<button type="submit" class="btn btn-primary" style="margin-top: 10%;">
 											Potvrdi
 										</button>
 									</td>
@@ -118,7 +133,61 @@ Vue.component("adminRegistration", {
 				</div>
 			</div>
 		</div>
-		<div class="alert alert-warning fixed-bottom" style="display:none; z-index: 10000;" role="alert"
+		<div v-if="isManagerAssigning">
+			<div class="row">
+				<div class="col">
+					<div class="form-floating">
+						<input type="text" class="form-control" id="floatingUsername">
+						<label for="floatingUsername">Manager username</label>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<div class="form-floating">
+						<input type="password" class="form-control" id="floatingPassword">
+						<label for="floatingPassword">Password</label>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<div class="form-floating">
+						<input type="text" class="form-control" id="floatingName">
+						<label for="floatingName">First name</label>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<div class="form-floating">
+						<input type="text" class="form-control" id="floatingSurname">
+						<label for="floatingSurname">Last name</label>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<div class="form-floating">
+						<input class="form-control" type="date" id="floatingDate" v-model="dateOfBirth">
+						<label for="floatingDate">Date of birth</label>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<div class="form-floating">
+						<select class="form-select" v-model="gender" id="floatingGender">
+							<option selected value="MALE">Male</option>
+							<option value="FEMALE">Female</option>
+							<option value="OTHER">Other</option>
+						</select>	
+						<label for="floatingGender">Gender</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div v-if="!isManagerAssigning" class="alert alert-warning fixed-bottom" style="display:none; z-index: 10000;" role="alert"
 			id="registrationAlert">
 			<p>{{alert}}</p>
 		</div>

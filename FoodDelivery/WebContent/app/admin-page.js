@@ -36,6 +36,10 @@ Vue.component("adminPage", {
 	},
 
 	methods: {
+		addManager(manager){
+			this.managers.push(manager)
+			this.$refs.restaurantCreation.$data.managers.push(manager)
+		},
 	},
 
 	template: `
@@ -49,10 +53,10 @@ Vue.component("adminPage", {
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="navbar-nav">
 						<li class="nav-item active" style="padding: 5px;">
-							 <admin-registration></admin-registration>
+							 <admin-registration :is-manager-assigning="false" @manager-added="addManager"></admin-registration>
 						</li>						
 						<li class="nav-item active" style="padding: 5px;">
-							<restaurantCreation></restaurantCreation>
+							<restaurantCreation ref="restaurantCreation"></restaurantCreation>
 						</li>						
 					</ul>
 				</div>

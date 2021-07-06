@@ -2,7 +2,8 @@ const login = {
 	template: '<login></login>',
 	beforeRouteUpdate(to, from, next) {
 		if (to.name !== 'login' && this.$root.$data.user.username !== to.params.username) next(false);
-		else next();
+		next();
+
 	},
 }
 const registration = { template: '<registration></registration>' }
@@ -20,7 +21,14 @@ const routes = [
 	},
 	{
 		path: '/:username',
-		component: userPage
+		component: userPage,
+		children: [
+			{
+				path: 'restaurant/:name',
+				name: 'restaurant',
+				component: restaurantPage
+			}
+		]
 	},
 	{
 		path: '/restaurants/:name',
@@ -38,6 +46,6 @@ var app = new Vue({
 	el: "#app",
 	data: {
 		user: null,
-		loc: null,
+		loc: {},
 	},
 });

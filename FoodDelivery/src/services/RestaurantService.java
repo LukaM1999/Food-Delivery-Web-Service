@@ -119,5 +119,12 @@ public class RestaurantService {
 		return location;
 	}
 	
+	@GET
+	@Path("/getRestaurant/{name}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Restaurant getRestaurant(@PathParam(value = "name") String name) {
+		RestaurantDAO dao = (RestaurantDAO) ctx.getAttribute("restaurants");
+		return dao.getRestaurantById(name);
+	}
 	
 }

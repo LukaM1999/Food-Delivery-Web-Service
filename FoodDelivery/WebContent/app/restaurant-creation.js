@@ -7,9 +7,13 @@ Vue.component("restaurantCreation", {
 			name: '',
 			type: '',
 			logo: '',
-			loc: null,
+			loc: {},
 			managers: [],
 			manager: {},
+			street: '',
+			streetNumber: '',
+			city: '',
+			zipCode: '',
 
 			alert: '',
 		}
@@ -26,16 +30,20 @@ Vue.component("restaurantCreation", {
 					}
 				});
 			});
+		$('#restaurantModal').on('hidden.bs.modal', function () {
+			$(this).find('form').trigger('reset');
+			$('#managerAssign').removeClass('show')
+			$('#googleMap').removeClass('show')
+		});
 	},
 
 	components: {
-		'googleMap': googleMap,
+		googleMap,
 	},
 
 	methods: {
 		createRestaurant() {
-			var location, logo;
-
+			var self = this
 			axios
 				.get('rest/restaurant/getLocation')
 				.then(response => {
@@ -50,7 +58,7 @@ Vue.component("restaurantCreation", {
 								type: this.type,
 								location: this.loc,
 								logo: this.logo,
-								status: "OPEN",
+								status: "OPEN"
 							}
 							var dto = {
 								restaurant: restaurant,
@@ -59,9 +67,12 @@ Vue.component("restaurantCreation", {
 							axios
 								.post('rest/restaurant/createRestaurant', dto)
 								.then(response => {
-									if (response.data) this.alert = "Successfully created restaurant!";
-									else this.alert = "A restaurant with the name " + this.name + " already exists";
-									$('#registrationAlert').fadeIn(300).delay(5000).fadeOut(300);
+									if (response.data) self.alert = "Successfully created restaurant!";
+									else {
+										self.alert = "A restaurant with the name " + self.name + " already exists";
+										$('#restaurantModal').modal('hide')
+									}
+									$('#restaurantCreationAlert').fadeIn(300).delay(5000).fadeOut(300);
 								})
 
 						});
@@ -88,62 +99,138 @@ Vue.component("restaurantCreation", {
 			}
 			reader.readAsDataURL(file);
 		},
+		addManager(manager) {
+			this.managers.push(manager)
+		},
+		updateLocation(location) {
+			this.street = location.address.street
+			this.streetNumber = location.address.streetNumber
+			this.city = location.address.city
+			this.zipCode = location.address.zipCode
+			this.loc = location
+		},
+
 	},
 
 	template: `
 	<div>
-		<button type="button" class="btn btn-secondary btn-lg" data-bs-toggle="modal" data-bs-target="#restaurantModal">Create restaurant</button>
+		<button type="button" class="btn btn-secondary btn-lg" data-bs-toggle="modal"
+			data-bs-target="#restaurantModal">Create restaurant</button>
 		<div class="modal fade" role="dialog" id="restaurantModal">
-			<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-dialog modal-dialog-centered modal-lg" style="width: auto;">
 				<div class="modal-content">
 					<div class="modal-header">
-          				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        			</div>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+					</div>
 					<div class="modal-body">
 						<h1 style="color: blue; text-align: center;">Create restaurant</h1>
 						<form @submit.prevent="createRestaurant">
-							<table align="center">
-								<tr>
-									<td style="font-weight: bold;">Name: </td>
-									<td><input type="text" name="name" v-model="name" required></td>
-								</tr>
-								<tr>
-									<td style="font-weight: bold;">Type: </td>
-									<td><input type="text" name="type" v-model="type" required></td>
-								</tr>
-								<tr>
-									<td style="font-weight: bold;">Location: </td>
-									<td><googleMap ref="childMap" :parent="_self"></googleMap></td>
-								</tr>
-								<tr>
-									<td style="font-weight: bold;">Logo: </td>
-									<td><input class="btn btn-secondary" type="file" name="logo" v-on:change="getImage" accept="image/*"></td>
-								</tr>
-								<tr>
-									<td style="font-weight: bold;">Manager: </td>
-									<td>
-										<select name="manager" v-model="manager">
+							<div class="row mb-3">
+								<div class="col">
+									<div class="form-floating">
+										<input type="text" class="form-control" id="floatingNameManager" v-model="name"
+											required>
+										<label for="floatingNameManager">Restaurant name</label>
+									</div>
+								</div>
+							</div>
+							<div class="row mb-3">
+								<div class="col">
+									<div class="form-floating">
+										<input type="text" class="form-control" id="floatingType" v-model="type"
+											required>
+										<label for="floatingType">Restaurant type</label>
+									</div>
+								</div>
+							</div>
+							<div class="row mb-3">
+								<div class="col-md-4">
+									<div class="form-floating">
+										<input type="text" class="form-control" v-model="street"
+											id="floatingStreet" required>
+										<label for="floatingStreet">Street address</label>
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="form-floating">
+										<input type="text" class="form-control" v-model="streetNumber"
+											id="floatingStreetNum" required>
+										<label for="floatingStreetNum">Number</label>
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="form-floating">
+										<input type="text" class="form-control" v-model="city" id="floatingCity"
+											required>
+										<label for="floatingCity">City</label>
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="form-floating">
+										<input type="number" class="form-control" v-model="zipCode"
+											id="floatingZip" required>
+										<label for="floatingZip">Zipcode</label>
+									</div>
+								</div>
+								<div class="col-md-2 align-self-center">
+									<div class="form-check form-switch align-content-center">
+										<input class="form-check-input" type="checkbox" id="mapSwitch"
+											data-bs-toggle="collapse" data-bs-target="#googleMap">
+										<label class="form-check-label" for="mapSwitch">Map</label>
+									</div>
+								</div>
+							</div>
+							<div class="row collapsed collapse mb-3" id="googleMap">
+								<div class="col d-flex justify-content-center">
+									<googleMap @location-selected="updateLocation"></googleMap>
+								</div>
+							</div>
+							<div class="row mb-3">
+								<div class="col">
+									<label for="imageFile" class="form-label">Logo image</label>
+									<input class="form-control" type="file" id="imageFile" v-on:change="getImage"
+										accept="image/*">
+								</div>
+							</div>
+							<div class="row mb-3">
+								<div class="col-md-9">
+									<div class="form-floating">
+										<select class="form-select" id="managerSelect" v-model="managers[0]">
 											<option v-for="m in managers" :value="m">
 												{{m.username}}
-											</option>									
+											</option>
 										</select>
-									</td>
-								</tr>
-								<tr>
-									<td colspan="2" align="center">
-										<button type="submit" class="btn btn-primary" style="margin-top: 10%;">
-											Create
-										</button>
-									</td>
-								</tr>
-							</table>
+										<label for="managerSelect">Manager of the restaurant</label>
+									</div>
+								</div>
+								<div class="col-md-3 align-self-center">
+									<div class="form-check form-switch">
+										<input class="form-check-input" type="checkbox" id="managerCreation"
+											data-bs-toggle="collapse" data-bs-target="#managerAssign"
+											:disabled="managers.length !== 0">
+										<label class="form-check-label" for="managerCreation">Assign manager</label>
+									</div>
+								</div>
+							</div>
+							<div class="row collapsed collapse mb-3" id="managerAssign">
+								<div class="col">
+									<adminRegistration is-manager-assigning v-on:managerAdded="addManager"></adminRegistration>
+								</div>
+							</div>
+							<div class="row align-content-center">
+								<div class="col d-flex justify-content-center">
+									<button type="submit" class="btn btn-primary"  style="margin-top: 10%;">
+										Create
+									</button>
+								</div>
+							</div>
 						</form>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="alert alert-warning fixed-bottom z-index: 10000;" style="display:none;" role="alert"
-			id="registrationAlert">
+		<div class="alert alert-warning fixed-bottom" style="display:none; z-index: 10000;" role="alert"
+			id="restaurantCreationAlert">
 			<p>{{alert}}</p>
 		</div>
 	</div>
