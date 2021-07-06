@@ -46,7 +46,6 @@ Vue.component("adminRegistration", {
 						if (response.data) {
 							this.alert = this.name + " " + this.surname + " uspesno registrovan!";
 							this.$emit('deliverer-added', response.data)
-							//this.$parent.$data.deliverers.push(response.data);
 						}
 						else this.alert = "Vec postoji korisnik sa korisnickim imenom: " + this.username;
 						$('#registrationAlert').fadeIn(300).delay(5000).fadeOut(300);
@@ -58,7 +57,6 @@ Vue.component("adminRegistration", {
 					.then(response => {
 						if (response.data) {
 							this.alert = this.name + " " + this.surname + " uspesno registrovan!";
-							//this.$parent.$data.managers.push(response.data)
 							this.$emit('manager-added', response.data);
 						}
 						else this.alert = "Vec postoji korisnik sa korisnickim imenom: " + this.username;

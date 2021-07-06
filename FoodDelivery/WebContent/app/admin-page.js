@@ -8,32 +8,53 @@ Vue.component("adminPage", {
 			deliverers: [],
 			managers: [],
 			admins: [],
-			childKey: 0,
+			showUsers: true,
+			showRestaurants: false,
+			usersKey: 0,
 		}
 	},
 	
 
 	mounted() {
+		axios
+			.get('rest/user/getAllCustomers')
+			.then(response => {
+				this.customers = response.data
+			});
+		axios
+			.get('rest/user/getAllDeliverers')
+			.then(response => {
+				this.deliverers = response.data
+			});
+		axios
+			.get('rest/user/getAllManagers')
+			.then(response => {
+				this.managers = response.data
+			});
+		axios
+			.get('rest/user/getAllAdmins')
+			.then(response => {
+				this.admins = response.data
+			});
 		this.$router.push({ name: 'users'});
 	},
 
 	methods: {
 		addManager(manager){
-			//this.managers.push(manager)
-			//this.$refs.users.addManager(manager)
-			this.$refs.users.managers.push(manager)
-			this.childKey += 1;
+			this.managers.push(manager)
+			this.usersKey += 1
 		},
-		addDeliverer(deliverer){
-			
-			this.$refs.users.addDeliverer(deliverer)
-			this.childKey += 1;
+		addDeliverer(deliverer){		
+			this.deliverers.push(deliverer)
+			this.usersKey += 1
 		},
 		viewRestaurants(){
-			this.$router.push({ name: 'restaurants'});
+			this.showRestaurants = true
+			this.showUsers = false
 		},
 		viewUsers(){
-			this.$router.push({ name: 'users'});
+			this.showRestaurants = false
+			this.showUsers = true
 		},
 	},
 
@@ -58,7 +79,7 @@ Vue.component("adminPage", {
 								<button type="button" class="btn btn-secondary btn-lg" @click="viewRestaurants">Restaurants</button>
 							</li>
 							<li class="nav-item active" style="padding: 5px;">
-								<button type="button" class="btn btn-secondary btn-lg" @click="viewUsers" :key="childKey">Users</button>
+								<button type="button" class="btn btn-secondary btn-lg" @click="viewUsers">Users</button>
 							</li>					
 						</ul>
 					</div>
@@ -66,8 +87,8 @@ Vue.component("adminPage", {
 			</div>
 		</div>
 		<div class="row">
-			<router-view ref="users"> </router-view>
-			
+			<users v-if="showUsers" :key="usersKey"></users>
+			<restaurants v-if="showRestaurants"></restaurants>
 		</div>
 	</div>
 	`

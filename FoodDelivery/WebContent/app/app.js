@@ -38,7 +38,8 @@ const routes = [
 			{
 				path: 'users',
 				name: 'users',
-				component: users
+				component: users,
+				props: true,
 			}
 		]
 	},
