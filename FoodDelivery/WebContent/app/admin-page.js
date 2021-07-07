@@ -36,7 +36,7 @@ Vue.component("adminPage", {
 			.then(response => {
 				this.admins = response.data
 			});
-		this.$router.push({ name: 'users'});
+		//this.$router.push({ name: 'users'});
 	},
 
 	methods: {

@@ -1,81 +1,58 @@
-const googleMap = { template: '<googleMap></googleMap>' }
-
-Vue.component("restaurantCreation", {
+Vue.component("articleCreation", {
 
 	data: function () {
 		return {
 			name: '',
+			price: 0,
 			type: '',
-			logo: '',
-			loc: {},
-			managers: [],
-			manager: {},
-			street: '',
-			streetNumber: '',
-			city: '',
-			zipCode: '',
+			restaurant: {},
+			quantity: 0,
+			description: '',
+			image: '',
 
 			alert: '',
 		}
 	},
 
 	mounted() {
-		axios
-			.get('rest/user/getAllManagers')
-			.then(response => {
-				var mngrs = response.data
-				mngrs.forEach(element => {
-					if (element.restaurant === null) {
-						this.managers.push(element);
-					}
-				});
-			});
-		$('#restaurantModal').on('hidden.bs.modal', function () {
+		/* $('#restaurantModal').on('hidden.bs.modal', function () {
 			$(this).find('form').trigger('reset');
 			$('#managerAssign').removeClass('show')
 			$('#googleMap').removeClass('show')
-		});
+		}); */
 	},
 
 	components: {
-		googleMap,
+
 	},
 
 	methods: {
-		createRestaurant() {
+		createArticle() {
 			var self = this
 			axios
-				.get('rest/restaurant/getLocation')
+				.get('rest/restaurant/getLogo')
 				.then(response => {
-					this.loc = response.data
-					axios.
-						get('rest/restaurant/getLogo')
+					this.image = response.data
+					console.log(response.data)
+					var article = {
+						name: this.name,
+						price: this.price,
+						type: this.type,
+						restaurant: this.restaurant,
+						quantity: this.quantity,
+						description: this.description,
+						image: this.image,
+					}
+					axios
+						.post('rest/article/createArticle', article)
 						.then(response => {
-							this.logo = response.data
-							console.log(response.data)
-							var restaurant = {
-								name: this.name,
-								type: this.type,
-								location: this.loc,
-								logo: this.logo,
-								status: "OPEN"
+							if (response.data) self.alert = "Successfully created article!";
+							else {
+								self.alert = "An article with the name " + self.name + " already exists";
+								$('#restaurantModal').modal('hide')
 							}
-							var dto = {
-								restaurant: restaurant,
-								manager: this.manager
-							}
-							axios
-								.post('rest/restaurant/createRestaurant', dto)
-								.then(response => {
-									if (response.data) self.alert = "Successfully created restaurant!";
-									else {
-										self.alert = "A restaurant with the name " + self.name + " already exists";
-										$('#restaurantModal').modal('hide')
-									}
-									$('#restaurantCreationAlert').fadeIn(300).delay(5000).fadeOut(300);
-								})
-
-						});
+							$('#restaurantCreationAlert').fadeIn(300).delay(5000).fadeOut(300);
+						})
 
 				});
 		},
@@ -98,16 +75,6 @@ Vue.component("restaurantCreation", {
 					})
 			}
 			reader.readAsDataURL(file);
-		},
-		addManager(manager) {
-			this.managers.push(manager)
-		},
-		updateLocation(location) {
-			this.street = location.address.street
-			this.streetNumber = location.address.streetNumber
-			this.city = location.address.city
-			this.zipCode = location.address.zipCode
-			this.loc = location
 		},
 
 	},

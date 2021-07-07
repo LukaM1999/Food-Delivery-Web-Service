@@ -25,27 +25,17 @@ const routes = [
 		path: '/:username',
 		component: userPage,
 		children: [
-			{
-				path: 'restaurant/:name',
-				name: 'restaurant',
-				component: restaurantPage
-			}, 
-			{
+			/* {
 				path: 'restaurants',
 				name: 'restaurants',
 				component: restaurants
-			},
-			{
+			}, */
+			/* {
 				path: 'users',
 				name: 'users',
 				component: users,
-				props: true,
-			}
+			} */
 		]
-	},
-	{
-		path: '/restaurants/:name',
-		component: restaurantPage
 	}
 ]
 

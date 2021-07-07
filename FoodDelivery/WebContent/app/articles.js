@@ -2,7 +2,7 @@ function addressFormat(value) {
 	return value.street + " " + value.streetNumber + ", " + value.city + " " + value.zipCode;
 }
 
-Vue.component("restaurants", {
+Vue.component("articles", {
 
 	data: function () {
 		return {
@@ -127,7 +127,7 @@ Vue.component("restaurants", {
 						<div class="row">
 							<div class="col-lg-12">
 								<div class="heading-title text-center">
-									<h2>Restaurants</h2>
+									<h2>Articles</h2>
 								</div>
 							</div>
 						</div>

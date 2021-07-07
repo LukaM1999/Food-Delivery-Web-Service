@@ -10,10 +10,10 @@ public class Article {
 	private Restaurant restaurant;
 	private double quantity;
 	private String description;
-	private Image image;
+	private String image;
 	
 	public Article(String name, double price, ArticleType type, Restaurant restaurant, double quantity,
-			String description, Image image) {
+			String description, String image) {
 		super();
 		this.name = name;
 		this.price = price;
@@ -76,11 +76,11 @@ public class Article {
 		this.description = description;
 	}
 
-	public Image getImage() {
+	public String getImage() {
 		return image;
 	}
 
-	public void setImage(Image image) {
+	public void setImage(String image) {
 		this.image = image;
 	}
 	
