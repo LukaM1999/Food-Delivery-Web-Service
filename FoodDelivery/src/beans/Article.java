@@ -1,24 +1,23 @@
 package beans;
 
-import java.awt.Image;
 
 public class Article {
 
 	private String name;
 	private double price;
 	private ArticleType type;
-	private Restaurant restaurant;
+	private String restaurantName;
 	private double quantity;
 	private String description;
 	private String image;
 	
-	public Article(String name, double price, ArticleType type, Restaurant restaurant, double quantity,
+	public Article(String name, double price, ArticleType type, String restaurantName, double quantity,
 			String description, String image) {
 		super();
 		this.name = name;
 		this.price = price;
 		this.type = type;
-		this.restaurant = restaurant;
+		this.restaurantName = restaurantName;
 		this.quantity = quantity;
 		this.description = description;
 		this.image = image;
@@ -52,12 +51,12 @@ public class Article {
 		this.type = type;
 	}
 
-	public Restaurant getRestaurant() {
-		return restaurant;
+	public String getRestaurant() {
+		return restaurantName;
 	}
 
-	public void setRestaurant(Restaurant restaurant) {
-		this.restaurant = restaurant;
+	public void setRestaurant(String restaurantName) {
+		this.restaurantName = restaurantName;
 	}
 
 	public double getQuantity() {

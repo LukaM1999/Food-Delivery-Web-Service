@@ -6,15 +6,13 @@ Vue.component("restaurantPage", {
 	data(){
 		return {
 			r: null,
-			articles: true,
+			isManager: true,
 			comments: false 
 		}
 	},
 
 	mounted(){
 		axios
-			/* .get('rest/restaurant/getRestaurant/' + this.$route.params.name)
-			.then(response => this.restaurant = response.data) */
 			.post('rest/restaurant/setLocation', this.restaurant.location)
 			.then(response => { this.r = this.restaurant });
 	},
@@ -25,7 +23,7 @@ Vue.component("restaurantPage", {
 
 	components: {
 		staticMap,
-		articles,
+		
 	},
 
 	filters: {
@@ -81,8 +79,8 @@ Vue.component("restaurantPage", {
 					</div>
 				</div>
 			</div>
-			<hr>
-			<articles v-if="articles"></articles>
+			<hr style="border-color: black; height: 5px;">
+			<articles v-if="isManager && r" :single-restaurant="r.name"></articles>
 		</div>
 	</div>	
 	`

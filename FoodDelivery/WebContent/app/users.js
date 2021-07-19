@@ -48,32 +48,9 @@ Vue.component("users", {
 			let tempManagers = this.managers
 			let tempCustomers = this.customers
 
-			tempAdmins.forEach(element => {
-				element.points = 0
-				element.type = {
-					typeName: '',
-					discount: 0,
-					pointsRequired: 0
-				}
-			});
-
-			tempDeliverers.forEach(element => {
-				element.points = 0
-				element.type = {
-					typeName: '',
-					discount: 0,
-					pointsRequired: 0
-				}
-			});
-
-			tempManagers.forEach(element => {
-				element.points = 0
-				element.type = {
-					typeName: '',
-					discount: 0,
-					pointsRequired: 0
-				}
-			});
+			this.transformUsers(tempAdmins)
+			this.transformUsers(tempDeliverers)
+			this.transformUsers(tempManagers)
 
 			let users = []
 			Array.prototype.push.apply(users, tempAdmins)
@@ -144,17 +121,28 @@ Vue.component("users", {
 		},
 		setSortOrder() {
 			this.ascending = !this.ascending
+		},
+		transformUsers(list) {
+			list.forEach(element => {
+				element.points = 0
+				element.type = {
+					typeName: '',
+					discount: 0,
+					pointsRequired: 0
+				}
+			});
 		}
 	},
 
 	filters: {
-		roleFormat(role){
+		roleFormat(role) {
 			return role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
 		}
 	},
 
 	template: `
 	<div>
+		<a href="#" id="back-to-top" title="Back to top" style="display: none;"><i class="fa fa-angle-up" aria-hidden="true"></i></a>
 		<div class="row mb-5 mt-5">
 			<div class="col-md-4">
 				<div class="form-floating">

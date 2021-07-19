@@ -28,7 +28,7 @@ Vue.component('managerPage', {
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 						<ul class="navbar-nav">
 							<li class="nav-item active" style="padding: 5px;">
-								<article-creation></article-creation>
+								<articleCreation v-if="manager.restaurant" :restaurant="manager.restaurant"></articleCreation>
 							</li>						
 							<li class="nav-item active" style="padding: 5px;">
 								<button type="button" class="btn btn-secondary btn-lg" >All orders</button>

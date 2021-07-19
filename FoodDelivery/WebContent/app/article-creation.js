@@ -4,8 +4,7 @@ Vue.component("articleCreation", {
 		return {
 			name: '',
 			price: 0,
-			type: '',
-			restaurant: {},
+			type: 'FOOD',
 			quantity: 0,
 			description: '',
 			image: '',
@@ -14,12 +13,16 @@ Vue.component("articleCreation", {
 		}
 	},
 
+	props: {
+		restaurant: {
+			type: Object,
+		},
+	},
+
 	mounted() {
-		/* $('#restaurantModal').on('hidden.bs.modal', function () {
+		$('#articleModal').on('hidden.bs.modal', function () {
 			$(this).find('form').trigger('reset');
-			$('#managerAssign').removeClass('show')
-			$('#googleMap').removeClass('show')
-		}); */
+		});
 	},
 
 	components: {
@@ -27,35 +30,44 @@ Vue.component("articleCreation", {
 	},
 
 	methods: {
-		createArticle() {
+		async addArticle() {
 			var self = this
+			const article = await this.getArticle()
 			axios
-				.get('rest/restaurant/getLogo')
+				.post('rest/restaurant/addArticle', article)
 				.then(response => {
-					this.image = response.data
-					console.log(response.data)
-					var article = {
-						name: this.name,
-						price: this.price,
-						type: this.type,
-						restaurant: this.restaurant,
-						quantity: this.quantity,
-						description: this.description,
-						image: this.image,
+					if (response.data) {
+						self.alert = "Successfully created article!"
+						$("#articleModal .btn-close").click()
 					}
-					axios
-						.post('rest/article/createArticle', article)
-						.then(response => {
-							if (response.data) self.alert = "Successfully created article!";
-							else {
-								self.alert = "An article with the name " + self.name + " already exists";
-								$('#restaurantModal').modal('hide')
-							}
-							$('#restaurantCreationAlert').fadeIn(300).delay(5000).fadeOut(300);
-						})
-
-				});
+					else {
+						self.alert = "An article with the name " + self.name + " already exists";
+					}
+					$('#articleCreationAlert').fadeIn(300).delay(5000).fadeOut(300);
+				})
 		},
+
+		getArticle() {
+			return new Promise((resolve, reject) => {
+				axios
+					.get('rest/restaurant/getLogo')
+					.then(response => {
+						this.image = response.data
+						var article = {
+							name: this.name,
+							price: this.price,
+							type: this.type,
+							restaurant: this.restaurant.name,
+							quantity: this.quantity,
+							description: this.description,
+							image: this.image,
+						}
+						console.log(article)
+						resolve(article)
+					})
+			})
+		},
+
 		getImage(e) {
 			var files = e.target.files || e.dataTransfer.files;
 			if (!files.length)
@@ -69,10 +81,6 @@ Vue.component("articleCreation", {
 
 				axios
 					.post('rest/restaurant/setLogo', self.logo.replace('+', '%2B'))
-					.then(response => {
-						console.log(self.logo)
-						console.log(response.data)
-					})
 			}
 			reader.readAsDataURL(file);
 		},
@@ -82,112 +90,76 @@ Vue.component("articleCreation", {
 	template: `
 	<div>
 		<button type="button" class="btn btn-secondary btn-lg" data-bs-toggle="modal"
-			data-bs-target="#restaurantModal">Create restaurant</button>
-		<div class="modal fade" role="dialog" id="restaurantModal">
-			<div class="modal-dialog modal-dialog-centered modal-lg" style="width: auto;">
+			data-bs-target="#articleModal">Add article</button>
+		<div class="modal fade" role="dialog" id="articleModal">
+			<div class="modal-dialog modal-dialog-centered" style="width: auto;">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 					</div>
 					<div class="modal-body">
-						<h1 style="color: blue; text-align: center;">Create restaurant</h1>
-						<form @submit.prevent="createRestaurant">
+						<h1 style="color: blue; text-align: center;">Add article</h1>
+						<form @submit.prevent="addArticle">
 							<div class="row mb-3">
 								<div class="col">
 									<div class="form-floating">
-										<input type="text" class="form-control" id="floatingNameManager" v-model="name"
+										<input type="text" class="form-control" id="floatingNameArticle" v-model="name"
 											required>
-										<label for="floatingNameManager">Restaurant name</label>
+										<label for="floatingNameArticle">Article name</label>
 									</div>
-								</div>
-							</div>
-							<div class="row mb-3">
-								<div class="col">
-									<div class="form-floating">
-										<input type="text" class="form-control" id="floatingType" v-model="type"
-											required>
-										<label for="floatingType">Restaurant type</label>
-									</div>
-								</div>
-							</div>
-							<div class="row mb-3">
-								<div class="col-md-4">
-									<div class="form-floating">
-										<input type="text" class="form-control" v-model="street"
-											id="floatingStreet" required>
-										<label for="floatingStreet">Street address</label>
-									</div>
-								</div>
-								<div class="col-md-2">
-									<div class="form-floating">
-										<input type="text" class="form-control" v-model="streetNumber"
-											id="floatingStreetNum" required>
-										<label for="floatingStreetNum">Number</label>
-									</div>
-								</div>
-								<div class="col-md-2">
-									<div class="form-floating">
-										<input type="text" class="form-control" v-model="city" id="floatingCity"
-											required>
-										<label for="floatingCity">City</label>
-									</div>
-								</div>
-								<div class="col-md-2">
-									<div class="form-floating">
-										<input type="number" class="form-control" v-model="zipCode"
-											id="floatingZip" required>
-										<label for="floatingZip">Zipcode</label>
-									</div>
-								</div>
-								<div class="col-md-2 align-self-center">
-									<div class="form-check form-switch align-content-center">
-										<input class="form-check-input" type="checkbox" id="mapSwitch"
-											data-bs-toggle="collapse" data-bs-target="#googleMap">
-										<label class="form-check-label" for="mapSwitch">Map</label>
-									</div>
-								</div>
-							</div>
-							<div class="row collapsed collapse mb-3" id="googleMap">
-								<div class="col d-flex justify-content-center">
-									<googleMap @location-selected="updateLocation" key="'gMap'"></googleMap>
 								</div>
 							</div>
 							<div class="row mb-3">
 								<div class="col">
-									<label for="imageFile" class="form-label">Logo image</label>
+									<div class="form-floating">
+										<input type="number" class="form-control" id="floatingPrice" step="0.01" min="0" v-model="price"
+											required>
+										<label for="floatingPrice">Price</label>
+									</div>
+								</div>
+							</div>
+							<div class="row mb-3">
+								<div class="col">
+									<div class="form-floating">
+										<select class="form-select" id="typeSelect" v-model="type">
+											<option value="FOOD" selected>Food</option>
+											<option value="DRINK">Drink</option>
+										</select>
+										<label for="typeSelect">Type</label>
+									</div>
+								</div>
+							</div>
+							<div class="row mb-3">
+								<div class="col">
+									<label for="imageFile" class="form-label">Image</label>
 									<input class="form-control" type="file" id="imageFile" v-on:change="getImage"
 										accept="image/*">
 								</div>
 							</div>
 							<div class="row mb-3">
-								<div class="col-md-9">
+								<div class="col">
 									<div class="form-floating">
-										<select class="form-select" id="managerSelect" v-model="managers[0]">
-											<option v-for="m in managers" :value="m">
-												{{m.username}}
-											</option>
-										</select>
-										<label for="managerSelect">Manager of the restaurant</label>
-									</div>
-								</div>
-								<div class="col-md-3 align-self-center">
-									<div class="form-check form-switch">
-										<input class="form-check-input" type="checkbox" id="managerCreation"
-											data-bs-toggle="collapse" data-bs-target="#managerAssign"
-											:disabled="managers.length !== 0">
-										<label class="form-check-label" for="managerCreation">Assign manager</label>
+										<textarea type="text" class="form-control" id="floatingDescription" rows="3" v-model="description"/>
+										<label for="floatingDescription">Description</label>
 									</div>
 								</div>
 							</div>
-							<div class="row collapsed collapse mb-3" id="managerAssign">
-								<div class="col">
-									<adminRegistration is-manager-assigning v-on:managerAdded="addManager"></adminRegistration>
+							<div class="row mb-3">
+								<div class="col md-9">
+									<div class="form-floating">
+										<input type="number" class="form-control" id="floatingQuantity" min="0" step="0.01" v-model="quantity">
+										<label for="floatingQuantity">Quantity</label>
+									</div>
+								</div>
+								<div class="col md-3 align-self-center">
+									<label v-if="type === 'FOOD'">grams</label>
+									<label v-if="type === 'DRINK'">milliliters</label>
 								</div>
 							</div>
 							<div class="row align-content-center">
 								<div class="col d-flex justify-content-center">
-									<button type="submit" class="btn btn-primary"  style="margin-top: 10%;">
-										Create
+									<button type="submit" class="btn btn-primary" style="margin-top: 10%;">
+										Add
 									</button>
 								</div>
 							</div>
@@ -197,7 +169,7 @@ Vue.component("articleCreation", {
 			</div>
 		</div>
 		<div class="alert alert-warning fixed-bottom" style="display:none; z-index: 10000;" role="alert"
-			id="restaurantCreationAlert">
+			id="articleCreationAlert">
 			<p>{{alert}}</p>
 		</div>
 	</div>

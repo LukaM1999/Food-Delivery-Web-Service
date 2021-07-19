@@ -104,7 +104,10 @@ Vue.component("restaurants", {
 	filters: {
 		addressFormat(value) {
 			return value.street + " " + value.streetNumber + ", " + value.city + " " + value.zipCode;
-		}
+		},
+		locationFormat(location){
+			return location.longitude + ", " + location.latitude
+		},
 	},
 
 	methods: {
@@ -180,7 +183,7 @@ Vue.component("restaurants", {
 								<label for="onlyOpen">Only open</label>
 							</div>
 						</div>
-						<a href="#" id="back-to-top" title="Back to top" style="display: none;"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></a>
+						<a href="#" id="back-to-top" title="Back to top" style="display: none;"><i class="fa fa-angle-up" aria-hidden="true"></i></a>
 						<div class="row inner-menu-box">
 							<div class="col-20">
 								<div class="tab-content" id="v-pills-tabContent">
@@ -193,6 +196,7 @@ Vue.component("restaurants", {
 														<h2 style="color: white;">{{r.name}}</h2>
 														<h6 style="color: white;"><i>{{r.type}}</i></h6>
 														<h5>{{r.location.address | addressFormat}}</h5>
+														<h6 style="color: gray;">{{r.location | locationFormat}}</h6>
 														<p></p>
 														<h5 style="color: black;"><i>{{r.status}}</i></h5>
 													</div>

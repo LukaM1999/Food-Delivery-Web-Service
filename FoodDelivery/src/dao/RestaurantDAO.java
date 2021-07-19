@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Base64;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -15,8 +14,6 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import beans.Article;
 import beans.Restaurant;
-import beans.RestaurantStatus;
-import beans.RestaurantType;
 
 public class RestaurantDAO {
 
@@ -63,5 +60,28 @@ public class RestaurantDAO {
 				return r;
 		}
 		return null;
+	}
+	
+	public boolean articleExists(Article article) {
+		Restaurant restaurant = getRestaurantById(article.getRestaurant());
+		for (Article a: restaurant.getArticles()) {
+			if (a.getName().equals(article.getName())) return true;
+		}
+		return false;
+	}
+	
+	public void removeRestaurant(Restaurant restaurant) {
+		restaurants.remove(restaurant);
+	}
+	
+	public boolean addArticle(Article article) throws JsonGenerationException, JsonMappingException, IOException {
+		if (articleExists(article) || article == null) return false;
+		Restaurant restaurant = getRestaurantById(article.getRestaurant());
+		int indexOfRestaurant = restaurants.indexOf(restaurant);
+		removeRestaurant(restaurant);
+		restaurant.getArticles().add(article);
+		restaurants.add(indexOfRestaurant, restaurant);
+		serialize();
+		return true;
 	}
 }

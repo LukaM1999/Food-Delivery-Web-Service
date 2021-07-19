@@ -52,7 +52,6 @@ Vue.component("restaurantCreation", {
 						get('rest/restaurant/getLogo')
 						.then(response => {
 							this.logo = response.data
-							console.log(response.data)
 							var restaurant = {
 								name: this.name,
 								type: this.type,
@@ -92,10 +91,6 @@ Vue.component("restaurantCreation", {
 
 				axios
 					.post('rest/restaurant/setLogo', self.logo.replace('+', '%2B'))
-					.then(response => {
-						console.log(self.logo)
-						console.log(response.data)
-					})
 			}
 			reader.readAsDataURL(file);
 		},

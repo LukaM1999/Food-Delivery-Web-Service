@@ -87,8 +87,8 @@ Vue.component("adminPage", {
 			</div>
 		</div>
 		<div class="row">
-			<users v-if="showUsers" :key="usersKey"></users>
-			<restaurants v-if="showRestaurants"></restaurants>
+			<users v-show="showUsers" :key="usersKey"></users>
+			<restaurants v-show="showRestaurants"></restaurants>
 		</div>
 	</div>
 	`

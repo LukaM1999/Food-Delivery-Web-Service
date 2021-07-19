@@ -19,15 +19,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
-
-import beans.Customer;
+import beans.Article;
 import beans.Location;
 import beans.Restaurant;
-import dao.CustomerDAO;
 import dao.ManagerDAO;
 import dao.RestaurantDAO;
-import dao.UserDAO;
 import dto.RestaurantDTO;
 
 @Path("/restaurant")
@@ -89,7 +88,6 @@ public class RestaurantService {
 	@Path("/getLogo")
 	@Produces(MediaType.APPLICATION_FORM_URLENCODED)
 	public String getLogo() throws UnsupportedEncodingException {
-		System.out.println((String)ctx.getAttribute("logo"));
 		return URLEncoder.encode((String) ctx.getAttribute("logo"), StandardCharsets.UTF_8.name());
 	}
 	
@@ -125,6 +123,26 @@ public class RestaurantService {
 	public Restaurant getRestaurant(@PathParam(value = "name") String name) {
 		RestaurantDAO dao = (RestaurantDAO) ctx.getAttribute("restaurants");
 		return dao.getRestaurantById(name);
+	}
+	
+	@GET
+	@Path("/{name}/getArticles")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Article> getArticles(@PathParam(value = "name") String name) {
+		RestaurantDAO dao = (RestaurantDAO) ctx.getAttribute("restaurants");
+		Restaurant restaurant = dao.getRestaurantById(name);
+		return restaurant.getArticles();
+	}
+	
+	@POST
+	@Path("/addArticle")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Article addArticle(Article article) throws JsonGenerationException, JsonMappingException, IOException {
+		RestaurantDAO dao = (RestaurantDAO) ctx.getAttribute("restaurants");
+		if (dao.addArticle(article)) return article;
+		ctx.setAttribute("restaurants", dao);
+		return null;
 	}
 	
 }

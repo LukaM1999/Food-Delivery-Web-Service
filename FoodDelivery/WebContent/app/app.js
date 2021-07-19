@@ -24,6 +24,7 @@ const routes = [
 	{
 		path: '/:username',
 		component: userPage,
+		props: true,
 		children: [
 			/* {
 				path: 'restaurants',

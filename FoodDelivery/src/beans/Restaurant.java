@@ -1,6 +1,5 @@
 package beans;
 
-import java.awt.Image;
 import java.util.ArrayList;
 
 public class Restaurant {
