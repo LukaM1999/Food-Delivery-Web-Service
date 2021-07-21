@@ -55,7 +55,7 @@ Vue.component("articles", {
 						<div class="row">
 							<div v-for="a in articles" class="col-md-4">
 								<div class="card text-center h-100" style="width: 20rem;">
-									<articleEdit v-if="$root.user.role === 'MANAGER' && a" :articleProp="a" @article-updated="updateArticle"></articleEdit>
+									<articleEdit v-if="$root.user.role === 'MANAGER' && a" :articleProp="a" :key="a.name" @article-updated="updateArticle"></articleEdit>
 									<div class="card-body">
 										<div class="embed-responsive embed-responsive-16by9">
 											<img :src="'data:image/png;base64,' + a.image" class="card-img-top embed-responsive-item" alt="Image">

@@ -6,7 +6,6 @@ Vue.component("restaurantPage", {
 	data(){
 		return {
 			r: null,
-			isManager: true,
 			comments: false 
 		}
 	},
@@ -39,7 +38,7 @@ Vue.component("restaurantPage", {
 	<div class="row">
 		<div class="col-md-12" style="padding-top:15px; padding-left:15px;">
 			<div v-if="this.$root.$data.user">
-				<button v-if="this.$root.$data.user.role !== 'MANAGER'" type="button" class="btn btn-info btn-lg">Back</button>
+				<button v-if="this.$root.$data.user?.role !== 'MANAGER'" type="button" class="btn btn-info btn-lg">Back</button>
 			</div>
 			<div v-else>
 				<button type="button" class="btn btn-info btn-lg">Back</button>
@@ -80,7 +79,7 @@ Vue.component("restaurantPage", {
 				</div>
 			</div>
 			<hr style="border-color: black; height: 5px;">
-			<articles v-if="isManager && r" :single-restaurant="r.name"></articles>
+			<articles v-if="r" :single-restaurant="r.name"></articles>
 		</div>
 	</div>	
 	`

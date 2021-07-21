@@ -88,6 +88,7 @@ public class RestaurantDAO {
 	}
 	
 	public boolean editArticle(ArticleDTO articleDto) throws JsonGenerationException, JsonMappingException, IOException {
+		if (articleExists(articleDto.article)) return false;
 		Restaurant restaurant = getRestaurantById(articleDto.article.getRestaurant());
 		if (restaurant == null) return false;
 		Article oldArticle = restaurant.getArticle(articleDto.oldName);
