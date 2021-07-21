@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import beans.Article;
 import beans.Restaurant;
+import dto.ArticleDTO;
 
 public class RestaurantDAO {
 
@@ -70,6 +71,7 @@ public class RestaurantDAO {
 		return false;
 	}
 	
+	
 	public void removeRestaurant(Restaurant restaurant) {
 		restaurants.remove(restaurant);
 	}
@@ -80,6 +82,21 @@ public class RestaurantDAO {
 		int indexOfRestaurant = restaurants.indexOf(restaurant);
 		removeRestaurant(restaurant);
 		restaurant.getArticles().add(article);
+		restaurants.add(indexOfRestaurant, restaurant);
+		serialize();
+		return true;
+	}
+	
+	public boolean editArticle(ArticleDTO articleDto) throws JsonGenerationException, JsonMappingException, IOException {
+		Restaurant restaurant = getRestaurantById(articleDto.article.getRestaurant());
+		if (restaurant == null) return false;
+		Article oldArticle = restaurant.getArticle(articleDto.oldName);
+		if (oldArticle == null) return false;
+		int indexOfRestaurant = restaurants.indexOf(restaurant);
+		int indexOfArticle = restaurant.getArticles().indexOf(oldArticle);
+		restaurant.removeArticle(oldArticle);
+		restaurant.addArticle(indexOfArticle, articleDto.article);
+		removeRestaurant(restaurant);
 		restaurants.add(indexOfRestaurant, restaurant);
 		serialize();
 		return true;

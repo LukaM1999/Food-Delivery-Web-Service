@@ -13,6 +13,7 @@ import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -27,6 +28,7 @@ import beans.Location;
 import beans.Restaurant;
 import dao.ManagerDAO;
 import dao.RestaurantDAO;
+import dto.ArticleDTO;
 import dto.RestaurantDTO;
 
 @Path("/restaurant")
@@ -144,5 +146,18 @@ public class RestaurantService {
 		ctx.setAttribute("restaurants", dao);
 		return null;
 	}
+	
+	@PUT
+	@Path("/editArticle")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Article editArticle(ArticleDTO articleDto) throws JsonGenerationException, JsonMappingException, IOException {
+		RestaurantDAO dao = (RestaurantDAO) ctx.getAttribute("restaurants");
+		if (dao.editArticle(articleDto)) return articleDto.article;
+		ctx.setAttribute("restaurants", dao);
+		return null;
+	}
+	
+	
 	
 }

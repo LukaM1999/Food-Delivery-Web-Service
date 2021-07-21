@@ -73,5 +73,20 @@ public class Restaurant {
 	public void setLogo(String logo) {
 		this.logo = logo;
 	}
+	
+	public Article getArticle(String name) {
+		for(Article a: articles) {
+			if(name.equals(a.getName())) return a;
+		}
+		return null;
+	}
+	
+	public void addArticle(int index, Article article) {
+		articles.add(index, article);
+	}
+	
+	public void removeArticle(Article article) {
+		articles.remove(article);
+	}
 
 }

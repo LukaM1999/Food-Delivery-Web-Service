@@ -7,11 +7,11 @@ public class Article {
 	private double price;
 	private ArticleType type;
 	private String restaurantName;
-	private double quantity;
+	private int quantity;
 	private String description;
 	private String image;
 	
-	public Article(String name, double price, ArticleType type, String restaurantName, double quantity,
+	public Article(String name, double price, ArticleType type, String restaurantName, int quantity,
 			String description, String image) {
 		super();
 		this.name = name;
@@ -59,11 +59,11 @@ public class Article {
 		this.restaurantName = restaurantName;
 	}
 
-	public double getQuantity() {
+	public int getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(double quantity) {
+	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
 

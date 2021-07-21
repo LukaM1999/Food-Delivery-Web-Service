@@ -105,7 +105,7 @@ Vue.component("articleCreation", {
 									<div class="form-floating">
 										<input type="text" class="form-control" id="floatingNameArticle" v-model="name"
 											required>
-										<label for="floatingNameArticle">Article name</label>
+										<label for="floatingNameArticle">Article name*</label>
 									</div>
 								</div>
 							</div>
@@ -114,7 +114,7 @@ Vue.component("articleCreation", {
 									<div class="form-floating">
 										<input type="number" class="form-control" id="floatingPrice" step="0.01" min="0" v-model="price"
 											required>
-										<label for="floatingPrice">Price</label>
+										<label for="floatingPrice">Price*</label>
 									</div>
 								</div>
 							</div>
@@ -125,13 +125,13 @@ Vue.component("articleCreation", {
 											<option value="FOOD" selected>Food</option>
 											<option value="DRINK">Drink</option>
 										</select>
-										<label for="typeSelect">Type</label>
+										<label for="typeSelect">Type*</label>
 									</div>
 								</div>
 							</div>
 							<div class="row mb-3">
 								<div class="col">
-									<label for="imageFile" class="form-label">Image</label>
+									<label for="imageFile" class="form-label">Image*</label>
 									<input class="form-control" type="file" id="imageFile" v-on:change="getImage"
 										accept="image/*">
 								</div>
@@ -140,15 +140,15 @@ Vue.component("articleCreation", {
 								<div class="col">
 									<div class="form-floating">
 										<textarea type="text" class="form-control" id="floatingDescription" rows="3" v-model="description"/>
-										<label for="floatingDescription">Description</label>
+										<label for="floatingDescription">Description (Optional)</label>
 									</div>
 								</div>
 							</div>
 							<div class="row mb-3">
 								<div class="col md-9">
 									<div class="form-floating">
-										<input type="number" class="form-control" id="floatingQuantity" min="0" step="0.01" v-model="quantity">
-										<label for="floatingQuantity">Quantity</label>
+										<input type="number" class="form-control" id="floatingQuantity" min="0" v-model="quantity">
+										<label for="floatingQuantity">Quantity (Optional)</label>
 									</div>
 								</div>
 								<div class="col md-3 align-self-center">
