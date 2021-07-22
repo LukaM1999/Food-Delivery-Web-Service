@@ -9,12 +9,17 @@ import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
+import beans.Article;
 import beans.Customer;
 import beans.Deliverer;
 import beans.Manager;
@@ -23,8 +28,11 @@ import dao.AdminDAO;
 import dao.CustomerDAO;
 import dao.DelivererDAO;
 import dao.ManagerDAO;
+import dao.RestaurantDAO;
 import dao.UserDAO;
+import dto.ArticleDTO;
 import dto.LoginDTO;
+import dto.ProfileDTO;
 
 
 
@@ -162,5 +170,18 @@ public class UserService {
 	public User getUser(@PathParam(value = "id") String id) {
 		UserDAO dao = (UserDAO) ctx.getAttribute("users");
 		return dao.getUserById(id);
+	}
+	
+	@PUT
+	@Path("/editProfile")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public User editProfile(ProfileDTO profileDTO) throws JsonGenerationException, JsonMappingException, IOException {
+		UserDAO dao = (UserDAO) ctx.getAttribute("users");
+		
+		//nisam sredio povratnu vrednost
+		if (dao.editProfile(profileDTO)) return new User();
+		ctx.setAttribute("users", dao);
+		return null;
 	}
 }

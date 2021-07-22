@@ -23,7 +23,7 @@ Vue.component('managerPage', {
 			<div class="col-md-12">
 				<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
 					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bs-example-navbar-collapse-1">
-						<span class="navbar-toggler-icon"></span>
+						<span class="fa fa-3x fa-bars"></span>
 					</button> <a class="navbar-brand" href="http://localhost:8080/FoodDelivery/"><img src="images/quotations-button.png" width="80" height="80"></a>
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 						<ul class="navbar-nav">
@@ -34,14 +34,13 @@ Vue.component('managerPage', {
 								<button type="button" class="btn btn-secondary btn-lg" >All orders</button>
 							</li>						
 						</ul>
-					</div>
-					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
 						<ul class="navbar-nav ms-auto">
 							<li class="nav-item" style="padding: 5px;">
 								<button type="button" class="btn btn-secondary"><i class="fa fa-user fa-5x"></i></button>
 							</li>												
 						</ul>
 					</div>
+					
 				</nav>
 			</div>
 		</div>

@@ -4,6 +4,8 @@ Vue.component("userProfile", {
         return {
             oldArticle: {},
             article: {},
+			user: this.$root.$data.user,
+
 
             alert: '',
         }
