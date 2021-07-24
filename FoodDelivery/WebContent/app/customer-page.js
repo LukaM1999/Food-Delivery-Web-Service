@@ -3,6 +3,7 @@ Vue.component('customerPage', {
 	data: function () {
 		return {
 			customer: this.$root.$data.user,
+			profileView: false,
 			alert: '',
 		}
 	},
@@ -13,6 +14,9 @@ Vue.component('customerPage', {
 	},
 
 	methods: {
+		viewProfile(){
+			this.profileView = true
+		},
 	},
 
 	template: `
@@ -32,11 +36,17 @@ Vue.component('customerPage', {
 							<restaurantCreation></restaurantCreation>
 						</li>						
 					</ul>
+					<ul class="navbar-nav ms-auto">
+						<li class="nav-item" style="padding: 5px;">
+							<button type="button" class="btn btn-secondary" @click="viewProfile"><i class="fa fa-user fa-5x"></i></button>
+						</li>									
+					</ul>
 				</div>
 			</nav>
 		</div>
 	</div>
-	<restaurants></restaurants>
+	<restaurants v-if="!profileView"></restaurants>
+	<userProfile if="profileView"></userProfile>
 </div>
 	`
 });

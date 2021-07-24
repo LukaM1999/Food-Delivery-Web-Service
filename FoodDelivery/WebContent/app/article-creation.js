@@ -94,11 +94,11 @@ Vue.component("articleCreation", {
 		<div class="modal fade" role="dialog" id="articleModal">
 			<div class="modal-dialog modal-dialog-centered" style="width: auto;">
 				<div class="modal-content">
-					<div class="modal-header">
+					<div class="modal-header" style="background-color: #f72585;">
 						<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 					</div>
-					<div class="modal-body">
-						<h1 style="color: blue; text-align: center;">Add article</h1>
+					<div class="modal-body" style="background-color: #b23cfd;">
+						<h1 style="color: white; text-align: center;">Add article</h1>
 						<form @submit.prevent="addArticle">
 							<div class="row mb-3">
 								<div class="col">
@@ -131,7 +131,7 @@ Vue.component("articleCreation", {
 							</div>
 							<div class="row mb-3">
 								<div class="col">
-									<label for="imageFile" class="form-label">Image*</label>
+									<label for="imageFile" style="color: white;" class="form-label">Image*</label>
 									<input class="form-control" type="file" id="imageFile" v-on:change="getImage"
 										accept="image/*">
 								</div>
@@ -152,13 +152,13 @@ Vue.component("articleCreation", {
 									</div>
 								</div>
 								<div class="col md-3 align-self-center">
-									<label v-if="type === 'FOOD'">grams</label>
-									<label v-if="type === 'DRINK'">milliliters</label>
+									<label v-if="type === 'FOOD'" style="color: white;">grams</label>
+									<label v-if="type === 'DRINK'" style="color: white;">milliliters</label>
 								</div>
 							</div>
 							<div class="row align-content-center">
 								<div class="col d-flex justify-content-center">
-									<button type="submit" class="btn btn-primary" style="margin-top: 10%;">
+									<button type="submit" class="btn btn-primary btn-lg" style="background-color: #f72585 !important;">
 										Add
 									</button>
 								</div>

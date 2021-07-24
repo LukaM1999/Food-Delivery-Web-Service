@@ -4,8 +4,8 @@ const delivererPage = { template: '<delivererPage></delivererPage>' }
 const managerPage = { template: '<managerPage></managerPage>' }
 
 Vue.component("userPage", {
-	
-	data: function(){
+
+	data() {
 		return {
 			user: this.$root.$data.user,
 		}
@@ -16,6 +16,27 @@ Vue.component("userPage", {
 		'customerPage': customerPage,
 		'delivererPage': delivererPage,
 		'managerPage': managerPage,
+	},
+
+	mounted() {
+		var self = this
+		$('.modal').on('show.bs.modal', async function () {
+			let backdrop = await self.getBackdrop()
+			backdrop[0].parentNode?.removeChild(backdrop[0])
+		})
+	},
+
+	methods: {
+		getBackdrop() {
+			return new Promise((resolve, reject) => {
+				let backdrop = document.getElementsByClassName('modal-backdrop')
+				if (backdrop) {
+					resolve(backdrop)
+				}
+				reject('No backdrop yet')
+			})
+
+		}
 	},
 
 	template: `

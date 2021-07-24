@@ -9,6 +9,14 @@ Vue.component("login", {
 		}
 	},
 
+	mounted(){
+		var self = this
+		$('.modal').on('show.bs.modal', async function(){
+			let backdrop = await self.getBackdrop()
+			backdrop[0].parentNode?.removeChild(backdrop[0])
+		})
+	},
+
 	methods: {
 		userLogin: function () {
 			var loginDto = {
@@ -30,6 +38,16 @@ Vue.component("login", {
 						$('#loginAlert').fadeIn(300).delay(5000).fadeOut(300);
 					}
 				})
+		},
+
+		getBackdrop(){
+			return new Promise((resolve, reject) => {
+				let backdrop = document.getElementsByClassName('modal-backdrop')
+				if (backdrop) {
+					resolve(backdrop)
+				}
+				reject('No backdrop yet')
+			})
 		},
 	},
 

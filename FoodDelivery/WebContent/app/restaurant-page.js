@@ -40,15 +40,6 @@ Vue.component("restaurantPage", {
 			<div v-if="this.$root.$data.user">
 				<button v-if="this.$root.$data.user?.role !== 'MANAGER'" type="button" class="btn btn-info btn-lg">Back</button>
 			</div>
-			<div v-else>
-				<button type="button" class="btn btn-info btn-lg">Back</button>
-			</div>
-			<div>
-			<button type="button" class="btn btn-secondary btn-lg">Articles</button>
-			</div>
-			<div>
-			<button type="button" class="btn btn-secondary btn-lg">Comments</button>
-			</div>
 			<div class="menu-box">
 				<div class="container">
 					<a href="#" id="back-to-top" title="Back to top" style="display: none;"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></a>
@@ -63,13 +54,13 @@ Vue.component("restaurantPage", {
 								<h5>{{restaurant.status}}</h5>
 							</div>
 						</div>
-						<div class="row" >
+						<div class="row">
 							<div class="col-md-12">
 								<h2>*****</h2>
 							</div>
 						</div>
 						<div class="row justify-content-center">
-							<div class="col-md-12"
+							<div class="col-md-12">
 								<h3>{{restaurant.location.address | addressFormat}}</h3>
 								<h6 style="color:gray;" >{{restaurant.location | locationFormat}}</h6>
 								<staticMap v-if="r"></staticMap>
