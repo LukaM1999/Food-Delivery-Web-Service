@@ -1,8 +1,6 @@
 package dto;
 
-import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
+import beans.Role;
 
 public class ProfileDTO {
 	
@@ -13,8 +11,5 @@ public class ProfileDTO {
 	public String name;
 	public String surname;
 	public String gender;
-	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy.")
-	public Date dateOfBirth;
-
+	public Role role;
 }

@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import beans.User;
+import dto.ProfileDTO;
 
 public class AdminDAO {
 	
@@ -37,5 +38,24 @@ public class AdminDAO {
 	
 	public void serialize() throws JsonGenerationException, JsonMappingException, IOException {
 		new ObjectMapper().writeValue(new File(path), admins);
+	}
+	
+	public User getUserById(String id) {
+		for(User u: admins) {
+			if(u.getUsername().equals(id)) return u;
+		}
+		return null;
+	}
+	
+	public boolean editProfile(ProfileDTO profile) throws JsonGenerationException, JsonMappingException, IOException {
+		User user = getUserById(profile.oldUsername);
+		if (user == null || !user.getPassword().equals(profile.oldPassword)) return false;
+		getUserById(profile.oldUsername).setPassword(profile.password);
+		getUserById(profile.oldUsername).setName(profile.name);
+		getUserById(profile.oldUsername).setSurname(profile.surname);
+		getUserById(profile.oldUsername).setGender(profile.gender);
+		getUserById(profile.oldUsername).setUsername(profile.username);
+		serialize();
+		return true;
 	}
 }

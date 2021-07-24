@@ -103,7 +103,6 @@ public class UserDAO {
 		users.get(indexOfUser).setName(dto.name);
 		users.get(indexOfUser).setSurname(dto.surname);
 		users.get(indexOfUser).setGender(dto.gender);
-		users.get(indexOfUser).setDateOfBirth(dto.dateOfBirth);
 		
 		updateRoleLists(dto, user);
 		return true;
@@ -120,7 +119,6 @@ public class UserDAO {
 			admins.get(indexOfAdmin).setName(dto.name);
 			admins.get(indexOfAdmin).setSurname(dto.surname);
 			admins.get(indexOfAdmin).setGender(dto.gender);
-			admins.get(indexOfAdmin).setDateOfBirth(dto.dateOfBirth);
 
 			serialize();
 			break;
@@ -133,7 +131,6 @@ public class UserDAO {
 			customers.get(indexOfCustomer).setName(dto.name);
 			customers.get(indexOfCustomer).setSurname(dto.surname);
 			customers.get(indexOfCustomer).setGender(dto.gender);
-			customers.get(indexOfCustomer).setDateOfBirth(dto.dateOfBirth);
 			
 			serialize();
 			break;
@@ -147,7 +144,6 @@ public class UserDAO {
 			deliverers.get(indexOfDeliverer).setName(dto.name);
 			deliverers.get(indexOfDeliverer).setSurname(dto.surname);
 			deliverers.get(indexOfDeliverer).setGender(dto.gender);
-			deliverers.get(indexOfDeliverer).setDateOfBirth(dto.dateOfBirth);
 			
 			serialize();
 			break;
@@ -160,10 +156,8 @@ public class UserDAO {
 			managers.get(indexOfManager).setName(dto.name);
 			managers.get(indexOfManager).setSurname(dto.surname);
 			managers.get(indexOfManager).setGender(dto.gender);
-			managers.get(indexOfManager).setDateOfBirth(dto.dateOfBirth);
 			
 			serialize();
-			//mozda treba posebno napraviti funkcije za cuvanje u sve fajlove unutar ove klase
 			break;
 		
 		default:

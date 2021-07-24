@@ -12,12 +12,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
-import beans.Customer;
-import beans.CustomerType;
 import beans.Deliverer;
-import beans.Order;
 import beans.User;
 import dto.LoginDTO;
+import dto.ProfileDTO;
 
 public class DelivererDAO {
 
@@ -67,5 +65,16 @@ public class DelivererDAO {
 		return null;
 	}
 	
+	public boolean editProfile(ProfileDTO profile) throws JsonGenerationException, JsonMappingException, IOException {
+		Deliverer deliverer = getUserById(profile.oldUsername);
+		if (deliverer == null || !deliverer.getPassword().equals(profile.oldPassword)) return false;
+		getUserById(profile.oldUsername).setPassword(profile.password);
+		getUserById(profile.oldUsername).setName(profile.name);
+		getUserById(profile.oldUsername).setSurname(profile.surname);
+		getUserById(profile.oldUsername).setGender(profile.gender);
+		getUserById(profile.oldUsername).setUsername(profile.username);
+		serialize();
+		return true;
+	}
 	
 }

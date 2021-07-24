@@ -17,6 +17,7 @@ import beans.CustomerType;
 import beans.Order;
 import beans.User;
 import dto.LoginDTO;
+import dto.ProfileDTO;
 
 public class CustomerDAO {
 
@@ -65,5 +66,17 @@ public class CustomerDAO {
 			if(c.getUsername().equals(id)) return c;
 		}
 		return null;
+	}
+	
+	public boolean editProfile(ProfileDTO profile) throws JsonGenerationException, JsonMappingException, IOException {
+		Customer customer = getUserById(profile.oldUsername);
+		if (customer == null || !customer.getPassword().equals(profile.oldPassword)) return false;
+		getUserById(profile.oldUsername).setPassword(profile.password);
+		getUserById(profile.oldUsername).setName(profile.name);
+		getUserById(profile.oldUsername).setSurname(profile.surname);
+		getUserById(profile.oldUsername).setGender(profile.gender);
+		getUserById(profile.oldUsername).setUsername(profile.username);
+		serialize();
+		return true;
 	}
 }

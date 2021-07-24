@@ -12,11 +12,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
-import beans.Deliverer;
 import beans.Manager;
 import beans.Restaurant;
 import beans.User;
 import dto.LoginDTO;
+import dto.ProfileDTO;
 
 public class ManagerDAO {
 	
@@ -75,5 +75,17 @@ public class ManagerDAO {
 			}
 		}
 		return false;
+	}
+	
+	public boolean editProfile(ProfileDTO profile) throws JsonGenerationException, JsonMappingException, IOException {
+		Manager manager = getUserById(profile.oldUsername);
+		if (manager == null || !manager.getPassword().equals(profile.oldPassword)) return false;
+		getUserById(profile.oldUsername).setPassword(profile.password);
+		getUserById(profile.oldUsername).setName(profile.name);
+		getUserById(profile.oldUsername).setSurname(profile.surname);
+		getUserById(profile.oldUsername).setGender(profile.gender);
+		getUserById(profile.oldUsername).setUsername(profile.username);
+		serialize();
+		return true;
 	}
 }

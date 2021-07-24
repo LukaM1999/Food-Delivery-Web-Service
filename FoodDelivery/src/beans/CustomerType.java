@@ -12,9 +12,7 @@ public class CustomerType {
 		this.pointsRequired = pointsRequired;
 	}
 	
-	public CustomerType() {
-		// TODO Auto-generated constructor stub
-	}
+	public CustomerType() {}
 
 	public String getTypeName() {
 		return typeName;
