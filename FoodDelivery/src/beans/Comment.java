@@ -2,12 +2,12 @@ package beans;
 
 public class Comment {
 
-	private Customer commentPoster;
-	private Restaurant commentedRestaurant;
+	private String commentPoster;
+	private String commentedRestaurant;
 	private String commentContent;
 	private int rating;
 
-	public Comment(Customer commentPoster, Restaurant commentedRestaurant, String commentContent, int rating) {
+	public Comment(String commentPoster, String commentedRestaurant, String commentContent, int rating) {
 		super();
 		this.commentPoster = commentPoster;
 		this.commentedRestaurant = commentedRestaurant;
@@ -19,19 +19,19 @@ public class Comment {
 		
 	}
 
-	public Customer getCommentPoster() {
+	public String getCommentPoster() {
 		return commentPoster;
 	}
 
-	public void setCommentPoster(Customer commentPoster) {
+	public void setCommentPoster(String commentPoster) {
 		this.commentPoster = commentPoster;
 	}
 
-	public Restaurant getCommentedRestaurant() {
+	public String getCommentedRestaurant() {
 		return commentedRestaurant;
 	}
 
-	public void setCommentedRestaurant(Restaurant commentedRestaurant) {
+	public void setCommentedRestaurant(String commentedRestaurant) {
 		this.commentedRestaurant = commentedRestaurant;
 	}
 

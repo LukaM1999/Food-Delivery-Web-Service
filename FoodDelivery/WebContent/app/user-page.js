@@ -24,6 +24,7 @@ Vue.component("userPage", {
 			let backdrop = await self.getBackdrop()
 			backdrop[0].parentNode?.removeChild(backdrop[0])
 		})
+		this.$root.$data.cart = {}
 	},
 
 	methods: {

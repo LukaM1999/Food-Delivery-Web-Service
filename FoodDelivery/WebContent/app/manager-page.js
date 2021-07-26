@@ -6,6 +6,8 @@ Vue.component('managerPage', {
 		return {
 			manager: this.$root.$data.user,
 			profileView: false,
+			restaurantView: true,
+			restaurantsView: false,
 			alert: '',
 		}
 	},
@@ -17,8 +19,21 @@ Vue.component('managerPage', {
 
 
 	methods: {
+		viewRestaurant(){
+			this.profileView = false
+			this.restaurantView = true
+			this.restaurantsView = false
+		},
+		viewRestaurants(){
+			this.profileView = false
+			this.restaurantView = false
+			this.restaurantsView = true
+
+		},
 		viewProfile(){
 			this.profileView = true
+			this.restaurantView = false
+			this.restaurantsView = false
 		},
 	},
 
@@ -32,12 +47,18 @@ Vue.component('managerPage', {
 					</button> <a class="navbar-brand" href="http://localhost:8080/FoodDelivery/"><img src="images/quotations-button.png" width="80" height="80"></a>
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 						<ul class="navbar-nav">
+							<li class="nav-item" style="padding: 5px;">
+								<button type="button" class="btn btn-secondary btn-lg" @click="viewRestaurant">My restaurant</button>
+							</li>	
+							<li class="nav-item active" style="padding: 5px;">
+								<button type="button" class="btn btn-secondary btn-lg" @click="viewRestaurants">Restaurants</button>
+							</li>
 							<li class="nav-item active" style="padding: 5px;">
 								<articleCreation v-if="manager.restaurant" :restaurant="manager.restaurant"></articleCreation>
 							</li>						
 							<li class="nav-item" style="padding: 5px;">
 								<button type="button" class="btn btn-secondary btn-lg" >All orders</button>
-							</li>		
+							</li>	
 						</ul>
 						<ul class="navbar-nav ms-auto">
 							<li class="nav-item" style="padding: 5px;">
@@ -49,8 +70,9 @@ Vue.component('managerPage', {
 				</nav>
 			</div>
 		</div>
-		<restaurantPage v-if="manager.restaurant && !profileView" :restaurant="manager.restaurant"></restaurantPage>
+		<restaurantPage v-if="manager.restaurant && restaurantView" :restaurant="manager.restaurant"></restaurantPage>
 		<userProfile v-if="profileView"></userProfile>
+		<restaurants v-if="restaurantsView"></restaurants>
 	</div>
 	`
 });

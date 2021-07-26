@@ -6,7 +6,8 @@ Vue.component("articles", {
 		return {
 			articles: [],
 			articleForEdit: null,
-			alert: ''
+			alert: '',
+			cartArticles: [],
 		}
 	},
 
@@ -23,6 +24,9 @@ Vue.component("articles", {
 				.get(`rest/restaurant/${this.singleRestaurant}/getArticles`)
 				.then(response => {
 					this.articles = response.data
+					this.articles = this.articles.map(article => {
+						return { ...article, amount: 0 }
+					})
 				})
 		}
 
@@ -42,6 +46,12 @@ Vue.component("articles", {
 			)
 			this.alert = `Successfully edited article ${articleDto.oldName}!`
 			$('#articleEditAlert').fadeIn(300).delay(5000).fadeOut(300);
+		},
+		incrementAmount(a){
+			a.amount += 1
+		},
+		decrementAmount(a){
+			if (a.amount > 0) a.amount -= 1 
 		}
 	},
 
@@ -68,6 +78,17 @@ Vue.component("articles", {
 									</div>
 									<div class="card-footer">
 										<h3>{{a.price}} RSD</h3>
+										<div v-if="$root.user?.role === 'CUSTOMER' " class="row mb-3">									
+											<div class="number">
+												<button class="btn btn-primary btn-sm" @click="decrementAmount(a)">
+													<span class="fa fa-minus"></span>
+												</button>
+												<input type="number" class="article-amount my-number" :value="a.amount"/>
+												<button class="btn btn-primary btn-sm" @click="incrementAmount(a)">
+													<span class="fa fa-plus"></span>
+												</button>
+											</div>
+										</div>	
 									</div>
 								</div>
 							</div>

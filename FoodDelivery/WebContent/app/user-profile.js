@@ -49,7 +49,7 @@ Vue.component("userProfile", {
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col text-center">
-				<h1>{{oldProfile.name}}'s profile</h1>
+				<h1 style="padding-top: 60px;">{{oldProfile.name}}'s profile</h1>
 				<div v-if="oldProfile.role === 'CUSTOMER'" class="row mb-3">
 					<div class="col">
 						<h3>{{oldProfile.type.typeName}} tier</h3>
@@ -71,13 +71,33 @@ Vue.component("userProfile", {
 			<div class="row mb-3 justify-content-center">
 				<div class="col-md-3">
 					<div class="form-floating">
-						<input type="text" class="form-control" id="floatingProfileName" v-model="profile.name" required>
+						<input type="password" class="form-control" 
+						id="floatingOldPassword" v-model="oldPassword"
+						:readonly="oldProfile.password === oldPassword"> 
+						<label for="floatingOldPassword">Password</label>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-floating">
+						<input type="password" class="form-control" id="floatingProfilePassword" 
+						:readonly="oldProfile.password !== oldPassword" v-model="profile.password"
+						pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+						<label for="floatingProfilePassword">New password</label>
+					</div>
+				</div>
+			</div>
+			<div class="row mb-3 justify-content-center">
+				<div class="col-md-3">
+					<div class="form-floating">
+						<input type="text" class="form-control" id="floatingProfileName" v-model="profile.name" 
+						:readonly="oldProfile.password !== oldPassword" required>
 						<label for="floatingProfileName">Name</label>
 					</div>
 				</div>
 				<div class="col-md-3">
 					<div class="form-floating">
-						<input type="text" class="form-control" id="floatingProfileSurname" v-model="profile.surname" required>
+						<input type="text" class="form-control" id="floatingProfileSurname" v-model="profile.surname" 
+						:readonly="oldProfile.password !== oldPassword" required>
 						<label for="floatingProfileSurname">Surname</label>
 					</div>
 				</div>
@@ -91,7 +111,8 @@ Vue.component("userProfile", {
 				</div>
 				<div class="col-md-3">
 					<div class="form-floating">
-						<select class="form-select" id="genderSelect" v-model="profile.gender">
+						<select class="form-select" id="genderSelect" v-model="profile.gender" 
+						:disabled="oldProfile.password !== oldPassword">
 							<option value="MALE">Male</option>
 							<option value="FEMALE">Female</option>
 							<option value="OTHER">Other</option>
@@ -103,26 +124,9 @@ Vue.component("userProfile", {
 			<div class="row mb-3 justify-content-center">
 				<div class="col-md-6">
 					<div class="form-floating">
-						<input type="text" class="form-control" id="floatingProfileUsername" v-model="profile.username">
+						<input type="text" class="form-control" id="floatingProfileUsername" v-model="profile.username"
+						:readonly="oldProfile.password !== oldPassword">
 						<label for="floatingProfileUsername">Username</label>
-					</div>
-				</div>
-			</div>
-			<div class="row mb-3 justify-content-center">
-				<div class="col-md-3">
-					<div class="form-floating">
-						<input type="password" class="form-control" 
-						id="floatingOldPassword" v-model="oldPassword"
-						:readonly="oldProfile.password === oldPassword"> 
-						<label for="floatingOldPassword">Password</label>
-					</div>
-				</div>
-				<div class="col-md-3">
-					<div class="form-floating">
-						<input type="password" class="form-control" id="floatingProfilePassword" 
-						:readonly="oldProfile.password !== oldPassword" v-model="profile.password"
-						pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
-						<label for="floatingProfilePassword">New password</label>
 					</div>
 				</div>
 			</div>

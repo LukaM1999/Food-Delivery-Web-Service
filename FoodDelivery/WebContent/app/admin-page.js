@@ -10,6 +10,7 @@ Vue.component("adminPage", {
 			admins: [],
 			showUsers: true,
 			showRestaurants: false,
+			profileView: false,
 			usersKey: 0,
 		}
 	},
@@ -51,10 +52,17 @@ Vue.component("adminPage", {
 		viewRestaurants(){
 			this.showRestaurants = true
 			this.showUsers = false
+			this.profileView = false
 		},
 		viewUsers(){
 			this.showRestaurants = false
+			this.profileView = false
 			this.showUsers = true
+		},
+		viewProfile(){
+			this.showRestaurants = false
+			this.showUsers = false
+			this.profileView = true
 		},
 	},
 
@@ -70,6 +78,9 @@ Vue.component("adminPage", {
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 						<ul class="navbar-nav">
 							<li class="nav-item active" style="padding: 5px;">
+								<button type="button" class="btn btn-secondary btn-lg" @click="viewUsers">Users</button>
+							</li>
+							<li class="nav-item active" style="padding: 5px;">
 								<admin-registration :is-manager-assigning="false" ref="adminRegistration" @manager-added="addManager" @deliverer-added="addDeliverer"></admin-registration>
 							</li>						
 							<li class="nav-item active" style="padding: 5px;">
@@ -77,14 +88,11 @@ Vue.component("adminPage", {
 							</li>		
 							<li class="nav-item active" style="padding: 5px;">
 								<button type="button" class="btn btn-secondary btn-lg" @click="viewRestaurants">Restaurants</button>
-							</li>
-							<li class="nav-item active" style="padding: 5px;">
-								<button type="button" class="btn btn-secondary btn-lg" @click="viewUsers">Users</button>
 							</li>					
 						</ul>
 						<ul class="navbar-nav ms-auto">
 							<li class="nav-item" style="padding: 5px;">
-								<button type="button" class="btn btn-secondary"><i class="fa fa-user fa-5x"></i></button>
+								<button type="button" class="btn btn-secondary" @click="viewProfile"><i class="fa fa-user fa-5x"></i></button>
 							</li>												
 						</ul>
 					</div>
@@ -94,6 +102,7 @@ Vue.component("adminPage", {
 		<div class="row">
 			<users v-show="showUsers" :key="usersKey"></users>
 			<restaurants v-show="showRestaurants"></restaurants>
+			<userProfile v-show="profileView"></userProfile>
 		</div>
 	</div>
 	`

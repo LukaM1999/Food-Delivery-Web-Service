@@ -13,13 +13,13 @@ public class Cart {
 	@JsonSerialize(keyUsing = ArticleSerializer.class)
 	@JsonDeserialize(keyUsing = ArticleDeserializer.class)
 	public HashMap<Article, Integer> articles = new HashMap<Article, Integer>();
-	public User cartOwner;
+	public String ownerUsername;
 	public double price;
 	
-	public Cart(HashMap<Article, Integer> articles, User cartOwner, double price) {
+	public Cart(HashMap<Article, Integer> articles, String username, double price) {
 		super();
 		this.articles = articles;
-		this.cartOwner = cartOwner;
+		this.ownerUsername = username;
 		this.price = price;
 	}
 	
@@ -35,12 +35,12 @@ public class Cart {
 		this.articles = articles;
 	}
 
-	public User getCartOwner() {
-		return cartOwner;
+	public String getCartOwner() {
+		return ownerUsername;
 	}
 
-	public void setCartOwner(User cartOwner) {
-		this.cartOwner = cartOwner;
+	public void setCartOwner(String cartOwner) {
+		this.ownerUsername = cartOwner;
 	}
 
 	public double getPrice() {
