@@ -50,7 +50,8 @@ public class AdminDAO {
 	public boolean editProfile(ProfileDTO profile) throws JsonGenerationException, JsonMappingException, IOException {
 		User user = getUserById(profile.oldUsername);
 		if (user == null || !user.getPassword().equals(profile.oldPassword)) return false;
-		getUserById(profile.oldUsername).setPassword(profile.password);
+		if (new UserDAO().alreadyRegistered(profile.username)) return false;
+		if (profile.password != "") getUserById(profile.oldUsername).setPassword(profile.password);
 		getUserById(profile.oldUsername).setName(profile.name);
 		getUserById(profile.oldUsername).setSurname(profile.surname);
 		getUserById(profile.oldUsername).setGender(profile.gender);

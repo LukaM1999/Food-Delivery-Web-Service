@@ -55,15 +55,15 @@ public class UserDAO {
 		new ObjectMapper().writeValue(new File(path), users);
 	}
 	
-	public boolean alreadyRegistered(User user) {
+	public boolean alreadyRegistered(String username) {
 		for (User u: users) {
-			if (u.getUsername().equals(user.getUsername())) return true;
+			if (u.getUsername().equals(username)) return true;
 		}
 		return false;
 	}
 	
 	public boolean addUser(User user) throws JsonGenerationException, JsonMappingException, IOException {
-		if (alreadyRegistered(user)) return false;
+		if (alreadyRegistered(user.getUsername())) return false;
 		users.add(user);
 		serialize();
 		deserialize();
@@ -78,33 +78,24 @@ public class UserDAO {
 		return null;
 	}
 	
-	public User findUser(String username, String password) {
+	public User findByUsername(String username) {
 		for(User u: users) {
-			if (u.getUsername().equals(username) && u.getPassword().equals(password))
+			if (u.getUsername().equals(username))
 				return u;
 		}
 		return null;
 	}
 	
-	public User getUserById(String id) {
-		for(User u: users) {
-			if(u.getUsername().equals(id)) return u;
-		}
-		return null;
-	}
-	
 	public boolean editProfile(ProfileDTO dto) throws JsonGenerationException, JsonMappingException, IOException {
-		User user = findUser(dto.oldUsername, dto.oldPassword);
-		if (user == null) return false;
-		
-		int indexOfUser = users.indexOf(user);
-		users.get(indexOfUser).setUsername(dto.username);
-		users.get(indexOfUser).setPassword(dto.password);
-		users.get(indexOfUser).setName(dto.name);
-		users.get(indexOfUser).setSurname(dto.surname);
-		users.get(indexOfUser).setGender(dto.gender);
-		
-		updateRoleLists(dto, user);
+		if (findByUsername(dto.oldUsername) == null) return false;
+		findByUsername(dto.oldUsername).setPassword(dto.password);
+		findByUsername(dto.oldUsername).setName(dto.name);
+		findByUsername(dto.oldUsername).setSurname(dto.surname);
+		findByUsername(dto.oldUsername).setGender(dto.gender);
+		findByUsername(dto.oldUsername).setUsername(dto.username);
+		serialize();
+		deserialize();
+		//updateRoleLists(dto, user);
 		return true;
 	}
 

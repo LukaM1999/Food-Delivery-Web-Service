@@ -42,7 +42,7 @@ public class UserService {
 
 	@PostConstruct
 	public void init() throws IOException {
-		System.out.println(new File(".").getCanonicalPath());
+		//System.out.println(new File(".").getCanonicalPath());
 		if (ctx.getAttribute("users") == null) {
 			ctx.setAttribute("users", new UserDAO());
 		}
@@ -166,7 +166,7 @@ public class UserService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public User getUser(@PathParam(value = "id") String id) {
 		UserDAO dao = (UserDAO) ctx.getAttribute("users");
-		return dao.getUserById(id);
+		return dao.findByUsername(id);
 	}
 
 	@PUT
@@ -174,34 +174,44 @@ public class UserService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public User editProfile(ProfileDTO profileDTO) throws JsonGenerationException, JsonMappingException, IOException {
+		User editedProfile = null;
 		switch (profileDTO.role) {
 		case CUSTOMER: {
 			CustomerDAO customerDao = (CustomerDAO) ctx.getAttribute("customers");
 			if (!customerDao.editProfile(profileDTO))
-				return null;
+				break;
 			ctx.setAttribute("customers", customerDao);
-			return customerDao.getUserById(profileDTO.username);
+			editedProfile = customerDao.getUserById(profileDTO.username);
+			break;
 		}
 		case ADMIN:
 			AdminDAO adminDao = (AdminDAO) ctx.getAttribute("admins");
 			if (!adminDao.editProfile(profileDTO))
-				return null;
+				break;
 			ctx.setAttribute("admins", adminDao);
-			return adminDao.getUserById(profileDTO.username);
+			editedProfile = adminDao.getUserById(profileDTO.username);
+			break;
 		case DELIVERER:
 			DelivererDAO delivererDao = (DelivererDAO) ctx.getAttribute("deliverers");
 			if (!delivererDao.editProfile(profileDTO))
-				return null;
+				break;
 			ctx.setAttribute("deliverers", delivererDao);
-			return delivererDao.getUserById(profileDTO.username);
+			editedProfile = delivererDao.getUserById(profileDTO.username);
+			break;
 		case MANAGER:
 			ManagerDAO managerDao = (ManagerDAO) ctx.getAttribute("managers");
 			if (!managerDao.editProfile(profileDTO))
-				return null;
+				break;
 			ctx.setAttribute("managers", managerDao);
-			return managerDao.getUserById(profileDTO.username);
+			editedProfile = managerDao.getUserById(profileDTO.username);
 		default:
-			return null;
+			break;
 		}
+		if (editedProfile == null)
+			return null;
+		UserDAO userDao = (UserDAO) ctx.getAttribute("users");
+		if (!userDao.editProfile(profileDTO)) return null;
+		ctx.setAttribute("users", userDao);
+		return editedProfile;
 	}
 }

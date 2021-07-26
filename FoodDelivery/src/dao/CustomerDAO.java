@@ -45,7 +45,7 @@ public class CustomerDAO {
 	}
 	
 	public boolean addCustomer(User customer) throws JsonGenerationException, JsonMappingException, IOException {
-		if (new UserDAO().alreadyRegistered(customer)) return false;
+		if (new UserDAO().alreadyRegistered(customer.getUsername())) return false;
 		customers.add(new Customer(customer.getUsername(), customer.getPassword(), customer.getName(), 
 				customer.getSurname(), customer.getGender(), customer.getDateOfBirth(), customer.getRole(), 
 				new ArrayList<Order>(), null, 0, new CustomerType("Bronze", 0, 3000)));
@@ -71,7 +71,7 @@ public class CustomerDAO {
 	public boolean editProfile(ProfileDTO profile) throws JsonGenerationException, JsonMappingException, IOException {
 		Customer customer = getUserById(profile.oldUsername);
 		if (customer == null || !customer.getPassword().equals(profile.oldPassword)) return false;
-		getUserById(profile.oldUsername).setPassword(profile.password);
+		if (profile.password != "") getUserById(profile.oldUsername).setPassword(profile.password);
 		getUserById(profile.oldUsername).setName(profile.name);
 		getUserById(profile.oldUsername).setSurname(profile.surname);
 		getUserById(profile.oldUsername).setGender(profile.gender);

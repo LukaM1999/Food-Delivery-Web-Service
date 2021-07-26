@@ -43,7 +43,7 @@ public class DelivererDAO {
 	}
 	
 	public boolean addDeliverer(User deliverer) throws JsonGenerationException, JsonMappingException, IOException {
-		if (new UserDAO().alreadyRegistered(deliverer)) return false;
+		if (new UserDAO().alreadyRegistered(deliverer.getUsername())) return false;
 		deliverers.add(new Deliverer(deliverer.getUsername(), deliverer.getPassword(), deliverer.getName(), 
 				deliverer.getSurname(), deliverer.getGender(), deliverer.getDateOfBirth(), deliverer.getRole()));
 		serialize();
@@ -68,7 +68,7 @@ public class DelivererDAO {
 	public boolean editProfile(ProfileDTO profile) throws JsonGenerationException, JsonMappingException, IOException {
 		Deliverer deliverer = getUserById(profile.oldUsername);
 		if (deliverer == null || !deliverer.getPassword().equals(profile.oldPassword)) return false;
-		getUserById(profile.oldUsername).setPassword(profile.password);
+		if (profile.password != "") getUserById(profile.oldUsername).setPassword(profile.password);
 		getUserById(profile.oldUsername).setName(profile.name);
 		getUserById(profile.oldUsername).setSurname(profile.surname);
 		getUserById(profile.oldUsername).setGender(profile.gender);

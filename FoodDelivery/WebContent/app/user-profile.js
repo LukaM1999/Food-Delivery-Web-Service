@@ -3,7 +3,8 @@ Vue.component("userProfile", {
 	data: function () {
 		return {
 			oldProfile: this.$root.$data.user,
-			profile: this.$root.$data.user,
+			profile: Object.assign({}, this.$root.$data.user),
+			oldPassword: '',
 			progress: 0,
 			progressColor: '#FF5733',
 			alert: '',
@@ -15,28 +16,29 @@ Vue.component("userProfile", {
 		if (this.oldProfile.points > 7000) this.progress = 100
 		if (this.oldProfile.points >= 3000 && this.oldProfile.points < 7000) this.progressColor = 'silver'
 		if (this.oldProfile.points >= 7000) this.progressColor = 'gold'
-
-	},
-
-	filters: {
+		this.profile.password = ''
 	},
 
 	methods: {
 		async editProfile() {
+			const { type, points, orders, dateOfBirth, cart, ...editedProfile} = this.profile
 			axios
-				.put('rest/user/editProfile', { profile: this.profile, oldUsername: this.oldProfile.username })
+				.put('rest/user/editProfile', { ...editedProfile, oldUsername: this.oldProfile.username, oldPassword: this.oldProfile.password})
 				.then(response => {
 					let oldUsername = this.oldProfile.username
 					if (response.data) {
-						let selector = "#" + self.oldProfile.username.replace(/\s/g, "")
-						$(selector + " .btn-close").click()
-						this.$emit('profile-updated', { profile: this.profile, oldUsername: this.oldProfile.username })
 						this.oldProfile = response.data
-					}
-					else {
-						self.alert = "An error has occured.";
+						this.$root.$data.user = this.oldProfile
+						if (response.data.username !== oldUsername) this.$router.replace(`/${response.data.username}`)
+						this.alert = "Successfully edited profile information!";
 						$('#alert' + oldUsername).fadeIn(300).delay(5000).fadeOut(300);
 					}
+					else {
+						this.alert = "An error has occured.";
+						$('#alert' + oldUsername).fadeIn(300).delay(5000).fadeOut(300);
+					}
+					this.oldPassword = ''
+					this.profile.password = ''
 				})
 		},
 
@@ -46,7 +48,7 @@ Vue.component("userProfile", {
 	template: `
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col text-center" style="padding-top:100px; padding-left:15px;">
+			<div class="col text-center">
 				<h1>{{oldProfile.name}}'s profile</h1>
 				<div v-if="oldProfile.role === 'CUSTOMER'" class="row mb-3">
 					<div class="col">
@@ -65,29 +67,75 @@ Vue.component("userProfile", {
 				</div>
 			</div>
 		</div>
-		<div class="row mb-3">
-			<div class="col-md-4">
-				<div class="form-floating">
-					<input type="number" class="form-control" id="floatingName" v-model="profile.name" required>
-					<label for="floatingName">Name</label>
+		<form @submit.prevent="editProfile">
+			<div class="row mb-3 justify-content-center">
+				<div class="col-md-3">
+					<div class="form-floating">
+						<input type="text" class="form-control" id="floatingProfileName" v-model="profile.name" required>
+						<label for="floatingProfileName">Name</label>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-floating">
+						<input type="text" class="form-control" id="floatingProfileSurname" v-model="profile.surname" required>
+						<label for="floatingProfileSurname">Surname</label>
+					</div>
 				</div>
 			</div>
-			<div class="col-md-4">
-				<div class="form-floating">
-					<input type="number" class="form-control" id="floatingSurname" v-model="profile.surname" required>
-					<label for="floatingSurname">Surname</label>
+			<div class="row mb-3 justify-content-center">
+				<div class="col-md-3">
+					<div class="form-floating">
+						<input type="text" class="form-control" id="floatingProfileDate" v-model="profile.dateOfBirth" readonly>
+						<label for="floatingProfileDate">Date of birth</label>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-floating">
+						<select class="form-select" id="genderSelect" v-model="profile.gender">
+							<option value="MALE">Male</option>
+							<option value="FEMALE">Female</option>
+							<option value="OTHER">Other</option>
+						</select>
+						<label for="genderSelect">Gender</label>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="row align-content-center">
-			<div class="col d-flex justify-content-center">
-				<button type="submit" class="btn btn-primary" style="margin-top: 10%;">
-					Save
-				</button>
+			<div class="row mb-3 justify-content-center">
+				<div class="col-md-6">
+					<div class="form-floating">
+						<input type="text" class="form-control" id="floatingProfileUsername" v-model="profile.username">
+						<label for="floatingProfileUsername">Username</label>
+					</div>
+				</div>
 			</div>
-		</div>
+			<div class="row mb-3 justify-content-center">
+				<div class="col-md-3">
+					<div class="form-floating">
+						<input type="password" class="form-control" 
+						id="floatingOldPassword" v-model="oldPassword"
+						:readonly="oldProfile.password === oldPassword"> 
+						<label for="floatingOldPassword">Password</label>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-floating">
+						<input type="password" class="form-control" id="floatingProfilePassword" 
+						:readonly="oldProfile.password !== oldPassword" v-model="profile.password"
+						pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+						<label for="floatingProfilePassword">New password</label>
+					</div>
+				</div>
+			</div>
+			<div class="row mb-3 justify-content-center">
+				<div class="col-md-1 ms-2">
+					<button type="submit" class="btn btn-lg btn-primary">
+						Save
+					</button>
+				</div>
+			</div>
+		</form>
 		<div class="alert alert-warning fixed-bottom" style="display:none; z-index: 10000;" role="alert"
-			:id="'#alert' + oldProfile.username">
+			:id="'alert' + oldProfile.username">
 			<p>{{alert}}</p>
 		</div>
 	</div>

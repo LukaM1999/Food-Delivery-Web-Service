@@ -44,7 +44,7 @@ public class ManagerDAO {
 	}
 	
 	public boolean addManager(User manager) throws JsonGenerationException, JsonMappingException, IOException {
-		if (new UserDAO().alreadyRegistered(manager)) return false;
+		if (new UserDAO().alreadyRegistered(manager.getUsername())) return false;
 		managers.add(new Manager(manager.getUsername(), manager.getPassword(), manager.getName(), 
 				manager.getSurname(), manager.getGender(), manager.getDateOfBirth(), manager.getRole(), null));
 		serialize();
@@ -80,7 +80,7 @@ public class ManagerDAO {
 	public boolean editProfile(ProfileDTO profile) throws JsonGenerationException, JsonMappingException, IOException {
 		Manager manager = getUserById(profile.oldUsername);
 		if (manager == null || !manager.getPassword().equals(profile.oldPassword)) return false;
-		getUserById(profile.oldUsername).setPassword(profile.password);
+		if (profile.password != "") getUserById(profile.oldUsername).setPassword(profile.password);
 		getUserById(profile.oldUsername).setName(profile.name);
 		getUserById(profile.oldUsername).setSurname(profile.surname);
 		getUserById(profile.oldUsername).setGender(profile.gender);
