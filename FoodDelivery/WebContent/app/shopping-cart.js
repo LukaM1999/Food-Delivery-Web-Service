@@ -1,12 +1,19 @@
 Vue.component('shoppingCart', {
 
 	data: function () {
-		cart: this.$root.$data.cart
+		return {
+			cart: this.$root.$data.cart
+		}
 	},
-	
 
 	mounted() {
-		
+		console.log(this.cart)
+	},
+
+	watch: {
+		'$root.$data.cart': function (newValue, oldValue) {
+			this.cart = newValue
+		}
 	},
 
 	methods: {
@@ -23,8 +30,21 @@ Vue.component('shoppingCart', {
 				<h5 id="offcanvasRightLabel">Offcanvas right</h5>
 				<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 			</div>
-			<div class="offcanvas-body large">
-				...
+			<div class="offcanvas-body">
+				<div class="card mb-3" style="max-width: 540px; height: 140px;" v-for="a in cart?.articles" v-if="a.amount > 0">
+					<div class="row g-0">
+						<div class="col-md-8">
+							<div class="card-body">
+								<h5 class="card-title">{{a.name}}</h5>
+								<p class="card-text">Amount: {{a.amount}}</p>
+								<p class="card-text">Price: {{a.amount * a.price}}</p>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<img :src="'data:image/png;base64,' + a.image" class="img-fluid rounded-start" alt="Image">
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

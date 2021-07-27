@@ -41,6 +41,8 @@ Vue.component("restaurants", {
 						this.allTypes.push(r.type)
 				});
 			});
+		this.singleRestaurant = false
+		this.allRestaurants = true
 	},
 
 	computed: {

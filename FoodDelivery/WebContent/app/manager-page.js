@@ -28,6 +28,10 @@ Vue.component('managerPage', {
 			this.profileView = false
 			this.restaurantView = false
 			this.restaurantsView = true
+			if(this.$refs.restaurantsRef){
+				this.$refs.restaurantsRef.$data.singleRestaurant = false
+				this.$refs.restaurantsRef.$data.allRestaurants = true
+			}
 
 		},
 		viewProfile(){
@@ -72,7 +76,7 @@ Vue.component('managerPage', {
 		</div>
 		<restaurantPage v-if="manager.restaurant && restaurantView" :restaurant="manager.restaurant"></restaurantPage>
 		<userProfile v-if="profileView"></userProfile>
-		<restaurants v-if="restaurantsView"></restaurants>
+		<restaurants v-if="restaurantsView" ref="restaurantsRef"></restaurants>
 	</div>
 	`
 });

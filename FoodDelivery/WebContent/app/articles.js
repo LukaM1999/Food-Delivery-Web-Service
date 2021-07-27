@@ -36,7 +36,6 @@ Vue.component("articles", {
 	},
 
 	filters: {
-
 	},
 
 	methods: {
@@ -47,11 +46,21 @@ Vue.component("articles", {
 			this.alert = `Successfully edited article ${articleDto.oldName}!`
 			$('#articleEditAlert').fadeIn(300).delay(5000).fadeOut(300);
 		},
-		incrementAmount(a){
+		incrementAmount(a) {
 			a.amount += 1
+			this.$root.$data.cart = {
+				articles: this.articles,
+				ownerUsername: this.$root.$data.user.username
+			}
 		},
-		decrementAmount(a){
-			if (a.amount > 0) a.amount -= 1 
+		decrementAmount(a) {
+			if (a.amount > 0) {
+				a.amount -= 1
+				this.$root.$data.cart = {
+					articles: this.articles,
+					ownerUsername: this.$root.$data.user.username
+				}
+			}
 		}
 	},
 
@@ -65,7 +74,8 @@ Vue.component("articles", {
 						<div class="row">
 							<div v-for="a in articles" class="col-md-4">
 								<div class="card text-center h-100" style="width: 20rem;">
-									<articleEdit v-if="$root.user?.role === 'MANAGER' && a" :articleProp="a" :key="a.name" @article-updated="updateArticle"></articleEdit>
+									<articleEdit v-if="$root.user?.role === 'MANAGER' && a && singleRestaurant === $root.user?.restaurant?.name" 
+									:articleProp="a" :key="a.name" @article-updated="updateArticle"></articleEdit>
 									<div class="card-body">
 										<div class="embed-responsive embed-responsive-16by9">
 											<img :src="'data:image/png;base64,' + a.image" class="card-img-top embed-responsive-item" alt="Image">
@@ -78,12 +88,12 @@ Vue.component("articles", {
 									</div>
 									<div class="card-footer">
 										<h3>{{a.price}} RSD</h3>
-										<div v-if="$root.user?.role === 'CUSTOMER' " class="row mb-3">									
+										<div v-if="$root.$data.user?.role === 'CUSTOMER' " class="row mb-3">									
 											<div class="number">
 												<button class="btn btn-primary btn-sm" @click="decrementAmount(a)">
 													<span class="fa fa-minus"></span>
 												</button>
-												<input type="number" class="article-amount my-number" :value="a.amount"/>
+												<input type="number" min="0" class="article-amount my-number" :value="a.amount"/>
 												<button class="btn btn-primary btn-sm" @click="incrementAmount(a)">
 													<span class="fa fa-plus"></span>
 												</button>
