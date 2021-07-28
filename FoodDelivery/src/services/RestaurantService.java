@@ -28,6 +28,7 @@ import beans.Location;
 import beans.Restaurant;
 import dao.ManagerDAO;
 import dao.RestaurantDAO;
+import dao.UserDAO;
 import dto.ArticleDTO;
 import dto.RestaurantDTO;
 
@@ -77,6 +78,9 @@ public class RestaurantService {
 				ctx.setAttribute("restaurants", dao1);
 				dao2.assignRestaurant(dto.restaurant, dto.manager);
 				ctx.setAttribute("managers", dao2);
+				UserDAO userDao = (UserDAO) ctx.getAttribute("users");
+				userDao.deserialize();
+				ctx.setAttribute("users", userDao);
 				return dao1.getRestaurantById(dto.restaurant.getName());
 			}
 		} catch (IOException e) {

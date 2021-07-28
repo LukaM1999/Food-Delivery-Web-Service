@@ -17,7 +17,6 @@ Vue.component("articles", {
 	},
 
 	mounted() {
-		console.log(this.singleRestaurant)
 		if (this.singleRestaurant) {
 			axios
 				.get(`rest/restaurant/${this.singleRestaurant}/getArticles`)

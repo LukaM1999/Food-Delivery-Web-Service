@@ -38,6 +38,7 @@ Vue.component("articleCreation", {
 				.then(response => {
 					if (response.data) {
 						self.alert = "Successfully created article!"
+						this.$emit('article-created', article)
 						$("#articleModal .btn-close").click()
 					}
 					else {

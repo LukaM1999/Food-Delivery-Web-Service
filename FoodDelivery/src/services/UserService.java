@@ -42,7 +42,6 @@ public class UserService {
 
 	@PostConstruct
 	public void init() throws IOException {
-		//System.out.println(new File(".").getCanonicalPath());
 		if (ctx.getAttribute("users") == null) {
 			ctx.setAttribute("users", new UserDAO());
 		}
@@ -152,6 +151,7 @@ public class UserService {
 				ctx.setAttribute("managers", dao);
 				UserDAO userDao = (UserDAO) ctx.getAttribute("users");
 				userDao.addUser(manager);
+				ctx.setAttribute("users", userDao);
 				return dao.getUserById(manager.getUsername());
 			}
 		} catch (IOException e) {

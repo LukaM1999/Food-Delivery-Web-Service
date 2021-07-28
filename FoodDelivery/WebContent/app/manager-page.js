@@ -39,6 +39,9 @@ Vue.component('managerPage', {
 			this.restaurantView = false
 			this.restaurantsView = false
 		},
+		addArticle(article){
+			this.$refs.restaurantPage.addArticle(article)
+		},
 	},
 
 	template: `
@@ -58,7 +61,7 @@ Vue.component('managerPage', {
 								<button type="button" class="btn btn-secondary btn-lg" @click="viewRestaurants">Restaurants</button>
 							</li>
 							<li class="nav-item active" style="padding: 5px;">
-								<articleCreation v-if="manager.restaurant" :restaurant="manager.restaurant"></articleCreation>
+								<articleCreation v-if="manager.restaurant" :restaurant="manager.restaurant" @article-created="addArticle"></articleCreation>
 							</li>						
 							<li class="nav-item" style="padding: 5px;">
 								<button type="button" class="btn btn-secondary btn-lg" >All orders</button>
@@ -74,7 +77,7 @@ Vue.component('managerPage', {
 				</nav>
 			</div>
 		</div>
-		<restaurantPage v-if="manager.restaurant && restaurantView" :restaurant="manager.restaurant"></restaurantPage>
+		<restaurantPage v-if="manager.restaurant && restaurantView" :restaurant="manager.restaurant" ref="restaurantPage"></restaurantPage>
 		<userProfile v-if="profileView"></userProfile>
 		<restaurants v-if="restaurantsView" ref="restaurantsRef"></restaurants>
 	</div>

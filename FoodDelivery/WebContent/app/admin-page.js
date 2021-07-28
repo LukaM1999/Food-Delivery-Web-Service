@@ -14,7 +14,7 @@ Vue.component("adminPage", {
 			usersKey: 0,
 		}
 	},
-	
+
 
 	mounted() {
 		axios
@@ -41,26 +41,29 @@ Vue.component("adminPage", {
 	},
 
 	methods: {
-		addManager(manager){
+		addManager(manager) {
 			this.managers.push(manager)
 			this.usersKey += 1
-			this.$refs.restaurantCreation.$data.managers.push(manager)
+			this.$refs.restaurantCreation.addManager(manager)
 		},
-		addDeliverer(deliverer){		
+		addDeliverer(deliverer) {
 			this.deliverers.push(deliverer)
 			this.usersKey += 1
 		},
-		viewRestaurants(){
+		addRestaurant(restaurant) {
+			this.$refs.restaurantsRef.$data.restaurants.push(restaurant)
+		},
+		viewRestaurants() {
 			this.showRestaurants = true
 			this.showUsers = false
 			this.profileView = false
 		},
-		viewUsers(){
+		viewUsers() {
 			this.showRestaurants = false
 			this.profileView = false
 			this.showUsers = true
 		},
-		viewProfile(){
+		viewProfile() {
 			this.showRestaurants = false
 			this.showUsers = false
 			this.profileView = true
@@ -101,9 +104,9 @@ Vue.component("adminPage", {
 			</div>
 		</div>
 		<div class="row">
-			<users v-show="showUsers" :key="usersKey"></users>
-			<restaurants v-show="showRestaurants" ref="restaurantsRef"></restaurants>
-			<userProfile v-show="profileView"></userProfile>
+			<users v-if="showUsers" :key="usersKey"></users>
+			<restaurants v-if="showRestaurants" ref="restaurantsRef"></restaurants>
+			<userProfile v-if="profileView"></userProfile>
 		</div>
 	</div>
 	`

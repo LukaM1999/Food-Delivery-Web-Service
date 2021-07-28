@@ -51,9 +51,16 @@ var app = new Vue({
 	el: "#app",
 	data: {
 		user: null,
+		alert: '',
 		cart: {
 			ownerUsername: "",
 			articles: []
 		},
 	},
+	methods: {
+		showAlert(alert) {
+			this.alert = alert
+			$('#alertGlobal').fadeIn(300).delay(5000).fadeOut(300)
+		}
+	}
 });

@@ -22,7 +22,12 @@ Vue.component("restaurantPage", {
 
 	components: {
 		staticMap,
-		
+	},
+
+	methods: {
+		addArticle(article) {
+			this.$refs.articlesRef.$data.articles.push(article)
+		}
 	},
 
 	filters: {
@@ -67,7 +72,7 @@ Vue.component("restaurantPage", {
 				</div>
 			</div>
 			<hr style="border-color: black; height: 5px;">
-			<articles v-if="r" :single-restaurant="r.name"></articles>
+			<articles v-if="r" :single-restaurant="r.name" ref="articlesRef"></articles>
 		</div>
 	</div>	
 	`

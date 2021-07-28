@@ -6,7 +6,7 @@ Vue.component("adminRegistration", {
 			password: '',
 			name: '',
 			surname: '',
-			gender: '',
+			gender: 'MALE',
 			dateOfBirth: Date.now,
 			role: '',
 
@@ -21,11 +21,11 @@ Vue.component("adminRegistration", {
 		}
 	},
 
-	mounted(){
+	mounted() {
 		if (this.isManagerAssigning) this.role = 'MANAGER'
 		$('#restaurantModal').on('hidden.bs.modal', function () {
 			$(this).find('form').trigger('reset');
-		});		
+		});
 	},
 
 	methods: {
@@ -44,11 +44,11 @@ Vue.component("adminRegistration", {
 					.post('rest/user/registerDeliverer', user)
 					.then(response => {
 						if (response.data) {
-							this.alert = this.name + " " + this.surname + " uspesno registrovan!";
+							this.alert = this.name + " " + this.surname + " successfully registered!";
 							this.$emit('deliverer-added', response.data)
 						}
-						else this.alert = "Vec postoji korisnik sa korisnickim imenom: " + this.username;
-						$('#registrationAlert').fadeIn(300).delay(5000).fadeOut(300);
+						else this.alert = `A user with the username ${this.username} already exists.`
+						this.$root.showAlert(this.alert)
 					})
 			}
 			else {
@@ -56,11 +56,11 @@ Vue.component("adminRegistration", {
 					.post('rest/user/registerManager', user)
 					.then(response => {
 						if (response.data) {
-							this.alert = this.name + " " + this.surname + " uspesno registrovan!";
+							this.alert = this.name + " " + this.surname + " successfully registered!"
 							this.$emit('manager-added', response.data);
 						}
-						else this.alert = "Vec postoji korisnik sa korisnickim imenom: " + this.username;
-						$('#registrationAlert').fadeIn(300).delay(5000).fadeOut(300);
+						else this.alert = `A user with the username ${this.username} already exists.`
+						this.$root.showAlert(this.alert)
 					})
 			}
 		},
@@ -132,61 +132,64 @@ Vue.component("adminRegistration", {
 				</div>
 			</div>
 		</div>
-		<div v-if="isManagerAssigning">
-			<div class="row">
+		<form @submit.prevent="registerCustomer" v-if="isManagerAssigning">
+			<div class="row mb-3">
 				<div class="col">
 					<div class="form-floating">
-						<input type="text" class="form-control" id="floatingUsername">
-						<label for="floatingUsername">Manager username</label>
+						<input type="text" class="form-control" id="floatingUsername" v-model="username" required>
+						<label for="floatingUsername">Manager username*</label>
 					</div>
 				</div>
 			</div>
-			<div class="row">
+			<div class="row mb-3">
 				<div class="col">
 					<div class="form-floating">
-						<input type="password" class="form-control" id="floatingPassword">
-						<label for="floatingPassword">Password</label>
+						<input type="password" class="form-control" id="floatingPassword" v-model="password" required>
+						<label for="floatingPassword">Password*</label>
 					</div>
 				</div>
 			</div>
-			<div class="row">
+			<div class="row mb-3">
 				<div class="col">
 					<div class="form-floating">
-						<input type="text" class="form-control" id="floatingName">
-						<label for="floatingName">First name</label>
+						<input type="text" class="form-control" id="floatingName" v-model="name" required>
+						<label for="floatingName">First name*</label>
 					</div>
 				</div>
 			</div>
-			<div class="row">
+			<div class="row mb-3">
 				<div class="col">
 					<div class="form-floating">
-						<input type="text" class="form-control" id="floatingSurname">
-						<label for="floatingSurname">Last name</label>
+						<input type="text" class="form-control" id="floatingSurname" v-model="surname" required>
+						<label for="floatingSurname">Last name*</label>
 					</div>
 				</div>
 			</div>
-			<div class="row">
+			<div class="row mb-3">
 				<div class="col">
 					<div class="form-floating">
-						<input class="form-control" type="date" id="floatingDate" v-model="dateOfBirth">
-						<label for="floatingDate">Date of birth</label>
+						<input class="form-control" type="date" id="floatingDate" v-model="dateOfBirth" required>
+						<label for="floatingDate">Date of birth*</label>
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col">
+			<div class="row mb-3">
+				<div class="col-md-4">
 					<div class="form-floating">
-						<select class="form-select" v-model="gender" id="floatingGender">
+						<select class="form-select" id="floatingGender" v-model="gender" required>
 							<option selected value="MALE">Male</option>
 							<option value="FEMALE">Female</option>
 							<option value="OTHER">Other</option>
 						</select>	
-						<label for="floatingGender">Gender</label>
+						<label for="floatingGender">Gender*</label>
 					</div>
 				</div>
+				<div class="col-md-2 align-self-center">
+					<button type="submit" class="btn btn-secondary">Register</button>
+				</div>
 			</div>
-		</div>
-		<div v-if="!isManagerAssigning" class="alert alert-warning fixed-bottom" style="display:none; z-index: 10000;" role="alert"
+		</form>
+		<div class="alert alert-warning fixed-bottom" style="display:none; z-index: 10000;" role="alert"
 			id="registrationAlert">
 			<p>{{alert}}</p>
 		</div>

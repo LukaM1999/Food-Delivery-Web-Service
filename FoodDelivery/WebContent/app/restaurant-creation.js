@@ -14,23 +14,12 @@ Vue.component("restaurantCreation", {
 			streetNumber: '',
 			city: '',
 			zipCode: '',
-
 			alert: '',
 		}
 	},
 
 	mounted() {
-		axios
-			.get('rest/user/getAllManagers')
-			.then(response => {
-				var mngrs = response.data
-				mngrs.forEach(element => {
-					if (element.restaurant === null) {
-						this.managers.push(element);
-					}
-				});
-				this.manager = this.managers[0]
-			});
+		this.setFreeManagers()
 		$('#restaurantModal').on('hidden.bs.modal', function () {
 			$(this).find('form').trigger('reset');
 			$('#managerAssign').removeClass('show')
@@ -43,50 +32,56 @@ Vue.component("restaurantCreation", {
 	},
 
 	methods: {
-		createRestaurant() {
-			var self = this
+		setFreeManagers() {
 			axios
-				.get('rest/restaurant/getLocation')
+				.get('rest/user/getAllManagers')
 				.then(response => {
-					this.loc = response.data
-					this.loc.address = {
-						street: this.street,
-						streetNumber: this.streetNumber,
-						city: this.city,
-						zipCode: this.zipCode,
-					}
-					axios.
-						get('rest/restaurant/getLogo')
-						.then(response => {
-							this.logo = response.data
-							var restaurant = {
-								name: this.name,
-								type: this.type,
-								location: this.loc,
-								logo: this.logo,
-								status: "OPEN"
-							}
-							var dto = {
-								restaurant: restaurant,
-								manager: this.manager
-							}
-							axios
-								.post('rest/restaurant/createRestaurant', dto)
-								.then(response => {
-									if (response.data) {
-										self.alert = "Successfully created restaurant!";
-										
-									}
-									else {
-										self.alert = "A restaurant with the name " + self.name + " already exists";
-										$('#restaurantModal').modal('hide')
-									}
-									$('#restaurantCreationAlert').fadeIn(300).delay(5000).fadeOut(300);
-								})
-
-						});
-
+					var mngrs = response.data
+					this.managers = []
+					mngrs.forEach(element => {
+						if (element.restaurant === null) {
+							this.managers.push(element);
+						}
+					});
+					this.manager = this.managers[0]
 				});
+		},
+		async createRestaurant() {
+			this.loc.address = {
+				street: this.street,
+				streetNumber: this.streetNumber,
+				city: this.city,
+				zipCode: this.zipCode,
+			}
+			const geoLocation = await axios
+				.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${this.street}%20${this.streetNumber}%20${this.city}
+				&key=AIzaSyBk-FoX9VMB6msn3skG2-P0xM6JMRhPH3k`)
+			this.loc.latitude = geoLocation.data.results[0].geometry.location.lat
+			this.loc.longitude = geoLocation.data.results[0].geometry.location.lng
+			const logo = await axios.get('rest/restaurant/getLogo')
+			this.logo = logo.data
+			const restaurant = {
+				name: this.name,
+				type: this.type,
+				location: this.loc,
+				logo: this.logo,
+				status: "OPEN"
+			}
+			const dto = {
+				restaurant: restaurant,
+				manager: this.manager
+			}
+			const success =  await axios.post('rest/restaurant/createRestaurant', dto)
+			if (success.data) {
+				this.alert = "Successfully created restaurant!"
+				$("#restaurantModal .btn-close").click()
+				this.setFreeManagers()
+			}
+			else {
+				this.alert = "A restaurant with the name " + this.name + " already exists"
+				$('#restaurantModal').modal('hide')
+			}
+			$('#restaurantCreationAlert').fadeIn(300).delay(5000).fadeOut(300)
 		},
 		getImage(e) {
 			var files = e.target.files || e.dataTransfer.files;
@@ -107,6 +102,8 @@ Vue.component("restaurantCreation", {
 		addManager(manager) {
 			this.managers.push(manager)
 			this.manager = this.managers[0]
+			$('#managerCreation').prop('checked', false)
+			$('#managerAssign').removeClass('show')
 		},
 		updateLocation(location) {
 			this.street = location.address.street
@@ -136,7 +133,7 @@ Vue.component("restaurantCreation", {
 									<div class="form-floating">
 										<input type="text" class="form-control" id="floatingNameManager" v-model="name"
 											required>
-										<label for="floatingNameManager">Restaurant name</label>
+										<label for="floatingNameManager">Restaurant name*</label>
 									</div>
 								</div>
 							</div>
@@ -145,7 +142,7 @@ Vue.component("restaurantCreation", {
 									<div class="form-floating">
 										<input type="text" class="form-control" id="floatingType" v-model="type"
 											required>
-										<label for="floatingType">Restaurant type</label>
+										<label for="floatingType">Restaurant type*</label>
 									</div>
 								</div>
 							</div>
@@ -154,28 +151,28 @@ Vue.component("restaurantCreation", {
 									<div class="form-floating">
 										<input type="text" class="form-control" v-model="street"
 											id="floatingStreet" required>
-										<label for="floatingStreet">Street address</label>
+										<label for="floatingStreet">Street address*</label>
 									</div>
 								</div>
 								<div class="col-md-2">
 									<div class="form-floating">
 										<input type="text" class="form-control" v-model="streetNumber"
 											id="floatingStreetNum" required>
-										<label for="floatingStreetNum">Number</label>
+										<label for="floatingStreetNum">Number*</label>
 									</div>
 								</div>
 								<div class="col-md-2">
 									<div class="form-floating">
 										<input type="text" class="form-control" v-model="city" id="floatingCity"
 											required>
-										<label for="floatingCity">City</label>
+										<label for="floatingCity">City*</label>
 									</div>
 								</div>
 								<div class="col-md-2">
 									<div class="form-floating">
 										<input type="number" class="form-control" v-model="zipCode"
 											id="floatingZip" required>
-										<label for="floatingZip">Zipcode</label>
+										<label for="floatingZip">Zipcode*</label>
 									</div>
 								</div>
 								<div class="col-md-2 align-self-center">
@@ -193,7 +190,7 @@ Vue.component("restaurantCreation", {
 							</div>
 							<div class="row mb-3">
 								<div class="col">
-									<label for="imageFile" class="form-label">Logo image</label>
+									<label for="imageFile" class="form-label">Logo image*</label>
 									<input class="form-control" type="file" id="imageFile" v-on:change="getImage"
 										accept="image/*">
 								</div>
@@ -201,12 +198,12 @@ Vue.component("restaurantCreation", {
 							<div class="row mb-3">
 								<div class="col-md-9">
 									<div class="form-floating">
-										<select class="form-select" id="managerSelect" v-model="manager">
+										<select class="form-select" id="managerSelect" v-model="manager" required> 
 											<option v-for="m in managers" :value="m">
 												{{m.username}}
 											</option>
 										</select>
-										<label for="managerSelect">Manager of the restaurant</label>
+										<label for="managerSelect">Manager of the restaurant*</label>
 									</div>
 								</div>
 								<div class="col-md-3 align-self-center">
@@ -225,7 +222,7 @@ Vue.component("restaurantCreation", {
 							</div>
 							<div class="row align-content-center">
 								<div class="col d-flex justify-content-center">
-									<button type="submit" class="btn btn-primary"  style="margin-top: 10%;">
+									<button type="submit" class="btn btn-primary btn-lg">
 										Create
 									</button>
 								</div>
