@@ -29,6 +29,7 @@ Vue.component("restaurantCreation", {
 						this.managers.push(element);
 					}
 				});
+				this.manager = this.managers[0]
 			});
 		$('#restaurantModal').on('hidden.bs.modal', function () {
 			$(this).find('form').trigger('reset');
@@ -48,6 +49,12 @@ Vue.component("restaurantCreation", {
 				.get('rest/restaurant/getLocation')
 				.then(response => {
 					this.loc = response.data
+					this.loc.address = {
+						street: this.street,
+						streetNumber: this.streetNumber,
+						city: this.city,
+						zipCode: this.zipCode,
+					}
 					axios.
 						get('rest/restaurant/getLogo')
 						.then(response => {
@@ -66,7 +73,10 @@ Vue.component("restaurantCreation", {
 							axios
 								.post('rest/restaurant/createRestaurant', dto)
 								.then(response => {
-									if (response.data) self.alert = "Successfully created restaurant!";
+									if (response.data) {
+										self.alert = "Successfully created restaurant!";
+										
+									}
 									else {
 										self.alert = "A restaurant with the name " + self.name + " already exists";
 										$('#restaurantModal').modal('hide')
@@ -96,6 +106,7 @@ Vue.component("restaurantCreation", {
 		},
 		addManager(manager) {
 			this.managers.push(manager)
+			this.manager = this.managers[0]
 		},
 		updateLocation(location) {
 			this.street = location.address.street
@@ -190,7 +201,7 @@ Vue.component("restaurantCreation", {
 							<div class="row mb-3">
 								<div class="col-md-9">
 									<div class="form-floating">
-										<select class="form-select" id="managerSelect" v-model="managers[0]">
+										<select class="form-select" id="managerSelect" v-model="manager">
 											<option v-for="m in managers" :value="m">
 												{{m.username}}
 											</option>
@@ -209,7 +220,7 @@ Vue.component("restaurantCreation", {
 							</div>
 							<div class="row collapsed collapse mb-3" id="managerAssign">
 								<div class="col">
-									<adminRegistration is-manager-assigning v-on:managerAdded="addManager"></adminRegistration>
+									<adminRegistration is-manager-assigning v-on:manager-added="addManager"></adminRegistration>
 								</div>
 							</div>
 							<div class="row align-content-center">

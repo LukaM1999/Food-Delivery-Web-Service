@@ -51,6 +51,9 @@ var app = new Vue({
 	el: "#app",
 	data: {
 		user: null,
-		cart: {},
+		cart: {
+			ownerUsername: "",
+			articles: []
+		},
 	},
 });

@@ -17,7 +17,7 @@ Vue.component("restaurants", {
 			allTypes: [],
 			allRestaurants: true,
 			singleRestaurant: false,
-			restaurant: {},
+			restaurant: this.$root.$data.user?.restaurant,
 		}
 	},
 

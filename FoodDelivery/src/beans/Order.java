@@ -7,18 +7,18 @@ public class Order {
 
 	private String id;
 	private ArrayList<Article> orderedArticles = new ArrayList<Article>();
-	private Restaurant restaurant;
+	private String restaurantName;
 	private LocalDateTime orderTime;
 	private double price;
 	private String customerName;
 	private OrderStatus status;
 
-	public Order(String id, ArrayList<Article> orderedArticles, Restaurant restaurant, LocalDateTime orderTime,
+	public Order(String id, ArrayList<Article> orderedArticles, String restaurant, LocalDateTime orderTime,
 			double price, String customerName, OrderStatus status) {
 		super();
 		this.id = id;
 		this.orderedArticles = orderedArticles;
-		this.restaurant = restaurant;
+		this.restaurantName = restaurant;
 		this.orderTime = orderTime;
 		this.price = price;
 		this.customerName = customerName;
@@ -45,12 +45,12 @@ public class Order {
 		this.orderedArticles = orderedArticles;
 	}
 
-	public Restaurant getRestaurant() {
-		return restaurant;
+	public String getRestaurant() {
+		return restaurantName;
 	}
 
-	public void setRestaurant(Restaurant restaurant) {
-		this.restaurant = restaurant;
+	public void setRestaurant(String restaurant) {
+		this.restaurantName = restaurant;
 	}
 
 	public LocalDateTime getOrderTime() {

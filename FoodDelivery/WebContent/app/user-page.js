@@ -22,9 +22,8 @@ Vue.component("userPage", {
 		var self = this
 		$('.modal').on('show.bs.modal', async function () {
 			let backdrop = await self.getBackdrop()
-			backdrop[0].parentNode?.removeChild(backdrop[0])
+			backdrop[0]?.parentNode?.removeChild(backdrop[0])
 		})
-		this.$root.$data.cart = {}
 	},
 
 	methods: {

@@ -44,6 +44,7 @@ Vue.component("adminPage", {
 		addManager(manager){
 			this.managers.push(manager)
 			this.usersKey += 1
+			this.$refs.restaurantCreation.$data.managers.push(manager)
 		},
 		addDeliverer(deliverer){		
 			this.deliverers.push(deliverer)
@@ -84,7 +85,7 @@ Vue.component("adminPage", {
 								<admin-registration :is-manager-assigning="false" ref="adminRegistration" @manager-added="addManager" @deliverer-added="addDeliverer"></admin-registration>
 							</li>						
 							<li class="nav-item active" style="padding: 5px;">
-								<restaurantCreation ref="restaurantCreation"></restaurantCreation>
+								<restaurantCreation ref="restaurantCreation" @restaurant-created="addRestaurant"></restaurantCreation>
 							</li>		
 							<li class="nav-item active" style="padding: 5px;">
 								<button type="button" class="btn btn-secondary btn-lg" @click="viewRestaurants">Restaurants</button>
@@ -101,7 +102,7 @@ Vue.component("adminPage", {
 		</div>
 		<div class="row">
 			<users v-show="showUsers" :key="usersKey"></users>
-			<restaurants v-show="showRestaurants"></restaurants>
+			<restaurants v-show="showRestaurants" ref="restaurantsRef"></restaurants>
 			<userProfile v-show="profileView"></userProfile>
 		</div>
 	</div>

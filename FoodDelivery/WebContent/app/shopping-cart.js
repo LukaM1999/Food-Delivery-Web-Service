@@ -7,12 +7,12 @@ Vue.component('shoppingCart', {
 	},
 
 	mounted() {
-		console.log(this.cart)
+		
 	},
 
 	watch: {
 		'$root.$data.cart': function (newValue, oldValue) {
-			this.cart = newValue
+			if(typeof(newValue) !== 'undefined') this.cart = newValue
 		}
 	},
 

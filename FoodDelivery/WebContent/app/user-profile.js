@@ -21,7 +21,7 @@ Vue.component("userProfile", {
 
 	methods: {
 		async editProfile() {
-			const { type, points, orders, dateOfBirth, cart, ...editedProfile} = this.profile
+			const { type, points, orders, dateOfBirth, cart, restaurant, ...editedProfile} = this.profile
 			axios
 				.put('rest/user/editProfile', { ...editedProfile, oldUsername: this.oldProfile.username, oldPassword: this.oldProfile.password})
 				.then(response => {
@@ -132,7 +132,7 @@ Vue.component("userProfile", {
 			</div>
 			<div class="row mb-3 justify-content-center">
 				<div class="col-md-1 ms-2">
-					<button type="submit" class="btn btn-lg btn-primary">
+					<button type="submit" class="btn btn-lg btn-primary" :disabled="oldProfile.password !== oldPassword">
 						Save
 					</button>
 				</div>

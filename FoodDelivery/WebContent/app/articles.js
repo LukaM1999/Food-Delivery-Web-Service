@@ -7,7 +7,6 @@ Vue.component("articles", {
 			articles: [],
 			articleForEdit: null,
 			alert: '',
-			cartArticles: [],
 		}
 	},
 
@@ -49,16 +48,16 @@ Vue.component("articles", {
 		incrementAmount(a) {
 			a.amount += 1
 			this.$root.$data.cart = {
-				articles: this.articles,
-				ownerUsername: this.$root.$data.user.username
+				ownerUsername: this.$root.$data.user.username,
+				articles: this.articles
 			}
 		},
 		decrementAmount(a) {
 			if (a.amount > 0) {
 				a.amount -= 1
 				this.$root.$data.cart = {
-					articles: this.articles,
-					ownerUsername: this.$root.$data.user.username
+					ownerUsername: this.$root.$data.user.username,
+					articles: this.articles
 				}
 			}
 		}

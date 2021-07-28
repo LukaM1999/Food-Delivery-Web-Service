@@ -37,9 +37,6 @@ Vue.component("restaurantPage", {
 	template: `
 	<div class="row">
 		<div class="col-md-12" style="padding-top:15px; padding-left:15px;">
-			<div v-if="this.$root.$data.user">
-				<button v-if="this.$root.$data.user?.role !== 'MANAGER'" type="button" class="btn btn-info btn-lg">Back</button>
-			</div>
 			<div class="menu-box">
 				<div class="container">
 					<a href="#" id="back-to-top" title="Back to top" style="display: none;"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></a>
