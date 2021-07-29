@@ -6,13 +6,15 @@ public class Comment {
 	private String commentedRestaurant;
 	private String commentContent;
 	private int rating;
+	private boolean approved;
 
-	public Comment(String commentPoster, String commentedRestaurant, String commentContent, int rating) {
+	public Comment(String commentPoster, String commentedRestaurant, String commentContent, int rating, boolean approved) {
 		super();
 		this.commentPoster = commentPoster;
 		this.commentedRestaurant = commentedRestaurant;
 		this.commentContent = commentContent;
 		this.rating = rating;
+		this.approved = approved;
 	}
 	
 	public Comment() {
@@ -51,4 +53,13 @@ public class Comment {
 		this.rating = rating;
 	}
 
+	public boolean isApproved() {
+		return approved;
+	}
+
+	public void setApproved(boolean approved) {
+		this.approved = approved;
+	}
+
+	
 }

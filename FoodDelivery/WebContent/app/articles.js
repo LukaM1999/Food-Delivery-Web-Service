@@ -81,8 +81,8 @@ Vue.component("articles", {
 										<h1 class="card-title">{{a.name}}</h1>
 										<h5 class="card-subtitle mb-2 text-muted"><i>{{a.type}}</i></h5>
 										<p class="card-text" v-if="a.description != ''">{{a.description}}</p>
-										<h4 v-if="a.type === 'FOOD'">{{a.quantity}} grams</h4>
-										<h4 v-else>{{a.quantity}} milliliters</h4>
+										<h4 v-if="a.type === 'FOOD' && a.quantity > 0">{{a.quantity}} grams</h4>
+										<h4 v-else-if="a.quantity > 0">{{a.quantity}} milliliters</h4>
 									</div>
 									<div class="card-footer">
 										<h3>{{a.price}} RSD</h3>
