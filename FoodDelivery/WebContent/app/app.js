@@ -20,24 +20,11 @@ const routes = [
 		path: '/',
 		name: 'login',
 		component: login,
-		/* meta: { isAuthenticated: false } */
 	},
 	{
 		path: '/:username',
 		component: userPage,
 		props: true,
-		children: [
-			/* {
-				path: 'restaurants',
-				name: 'restaurants',
-				component: restaurants
-			}, */
-			/* {
-				path: 'users',
-				name: 'users',
-				component: users,
-			} */
-		]
 	}
 ]
 
@@ -48,19 +35,23 @@ const router = new VueRouter({
 
 var app = new Vue({
 	router,
-	el: "#app",
+	el: '#app',
 	data: {
 		user: null,
 		alert: '',
 		cart: {
-			ownerUsername: "",
+			ownerUsername: '',
 			articles: []
 		},
+		orders: []
 	},
 	methods: {
 		showAlert(alert) {
 			this.alert = alert
 			$('#alertGlobal').fadeIn(300).delay(5000).fadeOut(300)
-		}
+		},
+		addOrder(order){
+			this.orders.push(order)
+		},
 	}
 });

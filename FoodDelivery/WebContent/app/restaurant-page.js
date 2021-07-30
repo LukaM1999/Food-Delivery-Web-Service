@@ -27,6 +27,9 @@ Vue.component("restaurantPage", {
 	methods: {
 		addArticle(article) {
 			this.$refs.articlesRef.$data.articles.push(article)
+		},
+		updateArticleAmount(){
+			this.$refs.articlesRef.updateArticleAmount()
 		}
 	},
 

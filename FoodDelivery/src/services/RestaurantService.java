@@ -43,7 +43,7 @@ public class RestaurantService {
 
 	@PostConstruct
 	public void init() throws IOException {
-		System.out.println(new File(".").getCanonicalPath());
+		//System.out.println(new File(".").getCanonicalPath());
 		if (ctx.getAttribute("restaurants") == null) {
 			ctx.setAttribute("restaurants", new RestaurantDAO());
 		}

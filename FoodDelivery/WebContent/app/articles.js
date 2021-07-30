@@ -6,7 +6,6 @@ Vue.component("articles", {
 		return {
 			articles: [],
 			articleForEdit: null,
-			alert: '',
 		}
 	},
 
@@ -17,32 +16,23 @@ Vue.component("articles", {
 	},
 
 	mounted() {
-		if (this.singleRestaurant) {
-			axios
-				.get(`rest/restaurant/${this.singleRestaurant}/getArticles`)
-				.then(response => {
-					this.articles = response.data
-					this.articles = this.articles.map(article => {
-						return { ...article, amount: 0 }
-					})
-				})
-		}
-
-	},
-
-	components: {
-	},
-
-	filters: {
+		if (this.singleRestaurant) this.getArticles()
 	},
 
 	methods: {
+		async getArticles() {
+			const articles = await axios.get(`rest/restaurant/${this.singleRestaurant}/getArticles`)
+			this.articles = articles.data
+			this.updateArticleAmount()
+		},
+		updateArticleAmount() {
+			this.articles = this.articles.map(article => { return { ...article, amount: 0 } })
+		},
 		updateArticle(articleDto) {
 			this.articles = this.articles.map(article =>
 				article.name === articleDto.oldName ? { ...articleDto.article } : article
 			)
-			this.alert = `Successfully edited article ${articleDto.oldName}!`
-			$('#articleEditAlert').fadeIn(300).delay(5000).fadeOut(300);
+			this.$root.showAlert(`Successfully edited article ${articleDto.oldName}!`)
 		},
 		incrementAmount(a) {
 			a.amount += 1
@@ -52,12 +42,11 @@ Vue.component("articles", {
 			}
 		},
 		decrementAmount(a) {
-			if (a.amount > 0) {
-				a.amount -= 1
-				this.$root.$data.cart = {
-					ownerUsername: this.$root.$data.user.username,
-					articles: this.articles
-				}
+			if (a.amount == 0) return
+			a.amount -= 1
+			this.$root.$data.cart = {
+				ownerUsername: this.$root.$data.user.username,
+				articles: this.articles
 			}
 		}
 	},
@@ -102,9 +91,6 @@ Vue.component("articles", {
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="alert alert-warning fixed-bottom" style="display:none; z-index: 10000;" role="alert" id="articleEditAlert">
-					<p>{{alert}}</p>
 				</div>
 			</div>
 		</div>

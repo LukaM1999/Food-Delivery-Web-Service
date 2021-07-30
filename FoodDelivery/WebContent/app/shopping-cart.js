@@ -39,9 +39,35 @@ Vue.component('shoppingCart', {
 			}
 		},
 		setTotalPrice() {
-			this.totalPrice = this.cart.articles.reduce((total, article) => {
+			const priceWithoutDiscount = this.cart.articles.reduce((total, article) => {
 				return total + article.price * article.amount
 			}, 0)
+			this.totalPrice = priceWithoutDiscount - priceWithoutDiscount * this.$root.$data.user.type.discount
+		},
+		async confirmOrder() {
+			const articles = this.cart.articles.flatMap((article) => article.amount > 0 ? article.name : [])
+			const order = {
+				id: uuidv4(),
+				orderedArticles: articles,
+				restaurant: this.cart.articles[0].restaurant,
+				orderTime: new Date().format("dd.mm.yyyy. HH:MM:ss"),
+				price: this.totalPrice,
+				customerName: this.cart.ownerUsername,
+				status: 'PROCESSING'
+			}
+			const orderResponse = await axios.post('rest/order/addOrder', order)
+			if (orderResponse.data) {
+				this.$root.addOrder(order)
+				this.$emit('order-added')
+				this.$root.showAlert(`Succesfully ordered from ${order.restaurant}!`)
+				this.cart = {
+					ownerUsername: this.$root.$data.user.username,
+					articles: []
+				}
+				this.setTotalPrice()
+				return
+			}
+			this.$root.showAlert(`An order with the same ID already exists, try ordering again.`)
 		}
 	},
 
@@ -97,12 +123,19 @@ Vue.component('shoppingCart', {
 					<div class="col">
 						<div class="row">
 							<div class="col-md-4">
-								<h5 class="align-middle" style="display: inline;">Total price: {{totalPrice}} RSD</h5>
+								<h5 class="align-middle" style="display: inline;">
+								Total price: {{totalPrice}} RSD
+								</h5>
 							</div>
 							<div class="col-md-4 d-flex justify-content-center align-items-center">
-								<button class="btn btn-secondary btn-lg" >Confirm order</button>
+								<button class="btn btn-secondary btn-lg" :disabled="totalPrice === 0" @click="confirmOrder">Confirm order</button>
 							</div>
-						</div>			
+						</div>
+						<div class="row" v-if="$root.$data.user.type.discount > 0">
+							<div class="col">
+								<h5>Discount: {{$root.$data.user.type.discount * 100}}%</h5>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>	

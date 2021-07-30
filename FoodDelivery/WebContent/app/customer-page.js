@@ -20,7 +20,7 @@ Vue.component('customerPage', {
 	methods: {
 		openCartResetDialog(view){
 			this.currentView = view
-			if(this.$root.$data.cart.articles.length > 0) {
+			if(this.$refs.shoppingCart.$data.totalPrice > 0) {
 				$('#cartModal').modal('show')
 			}
 			else this.confirmCartReset()
@@ -54,7 +54,10 @@ Vue.component('customerPage', {
 			$('#cartModal').modal('hide')
 			let body = document.getElementsByTagName("body")
 			body[0].style.overflow = "visible"
-		}
+		},
+		updateArticleAmount(){
+			this.$refs.restaurantsRef.updateArticleAmount()
+		},
 	},
 
 	template: `
@@ -73,7 +76,7 @@ Vue.component('customerPage', {
 						</ul>
 						<ul class="navbar-nav ms-auto">
 							<li class="nav-item" style="padding: 5px;">
-								<shoppingCart></shoppingCart>
+								<shoppingCart @order-added="updateArticleAmount" ref="shoppingCart"></shoppingCart>
 							</li>
 							<li class="nav-item" style="padding: 5px;">
 								<button type="button" class="btn btn-secondary" @click="openCartResetDialog('profileView')"><i class="fa fa-user fa-5x"></i></button>

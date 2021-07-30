@@ -121,6 +121,9 @@ Vue.component("restaurants", {
 		},
 		setSortOrder() {
 			this.ascending = !this.ascending
+		},
+		updateArticleAmount(){
+			this.$refs.restaurantPage.updateArticleAmount()
 		}
 	},
 
@@ -212,7 +215,7 @@ Vue.component("restaurants", {
 					</div>
 				</div>	
 			</div>
-			<restaurantPage v-if="singleRestaurant" :restaurant="restaurant"></restaurantPage>
+			<restaurantPage v-if="singleRestaurant" ref="restaurantPage" :restaurant="restaurant"></restaurantPage>
 		</div>
 	</div>
 	`

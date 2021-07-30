@@ -24,6 +24,7 @@ Vue.component("userPage", {
 			let backdrop = await self.getBackdrop()
 			backdrop[0]?.parentNode?.removeChild(backdrop[0])
 		})
+		this.getAllOrders()
 	},
 
 	methods: {
@@ -36,7 +37,11 @@ Vue.component("userPage", {
 				reject('No backdrop yet')
 			})
 
-		}
+		},
+		async getAllOrders(){
+			const orders = await axios.get('rest/order/getAllOrders')
+			this.$root.$data.orders = orders.data
+		},
 	},
 
 	template: `

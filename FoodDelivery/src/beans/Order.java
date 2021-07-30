@@ -1,19 +1,23 @@
 package beans;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class Order {
 
 	private String id;
-	private ArrayList<Article> orderedArticles = new ArrayList<Article>();
+	private ArrayList<String> orderedArticles = new ArrayList<String>();
 	private String restaurantName;
-	private LocalDateTime orderTime;
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy. HH:mm:ss")
+	private Date orderTime;
 	private double price;
 	private String customerName;
 	private OrderStatus status;
 
-	public Order(String id, ArrayList<Article> orderedArticles, String restaurant, LocalDateTime orderTime,
+	public Order(String id, ArrayList<String> orderedArticles, String restaurant, Date orderTime,
 			double price, String customerName, OrderStatus status) {
 		super();
 		this.id = id;
@@ -37,11 +41,11 @@ public class Order {
 		this.id = id;
 	}
 
-	public ArrayList<Article> getOrderedArticles() {
+	public ArrayList<String> getOrderedArticles() {
 		return orderedArticles;
 	}
 
-	public void setOrderedArticles(ArrayList<Article> orderedArticles) {
+	public void setOrderedArticles(ArrayList<String> orderedArticles) {
 		this.orderedArticles = orderedArticles;
 	}
 
@@ -53,11 +57,11 @@ public class Order {
 		this.restaurantName = restaurant;
 	}
 
-	public LocalDateTime getOrderTime() {
+	public Date getOrderTime() {
 		return orderTime;
 	}
 
-	public void setOrderTime(LocalDateTime orderTime) {
+	public void setOrderTime(Date orderTime) {
 		this.orderTime = orderTime;
 	}
 
