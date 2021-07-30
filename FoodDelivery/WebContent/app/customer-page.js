@@ -21,11 +21,12 @@ Vue.component('customerPage', {
 		openCartResetDialog(view){
 			this.currentView = view
 			if(this.$root.$data.cart.articles.length > 0) {
-				$('#cartModal').modal('show');
+				$('#cartModal').modal('show')
 			}
 			else this.confirmCartReset()
 		},
 		confirmCartReset(){
+			this.dismissCartModal()
 			if(this.currentView === 'restaurantsView') this.viewRestaurants()
 			if(this.currentView === 'profileView') this.viewProfile()
 		},
@@ -53,7 +54,6 @@ Vue.component('customerPage', {
 			$('#cartModal').modal('hide')
 			let body = document.getElementsByTagName("body")
 			body[0].style.overflow = "visible"
-			//$('.modal-backdrop').remove();
 		}
 	},
 

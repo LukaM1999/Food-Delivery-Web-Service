@@ -2,8 +2,7 @@
     background-color: #fb9dc7 !important;
 }
 
-.article-amount::-webkit-outer-spin-button,
-.article-amount::-webkit-inner-spin-button {
+.article-amount::-webkit-outer-spin-button, .article-amount::-webkit-inner-spin-button {
     /* display: none; <- Crashes Chrome on hover */
     -webkit-appearance: none;
     margin: 0;
@@ -23,11 +22,19 @@
 
 .my-canvas {
     -ms-overflow-style: none !important;
-    scrollbar-width: none !important;  
-  }
+    scrollbar-width: none !important;
+}
 
 /* Hide scrollbar for Chrome, Safari and Opera */
+
 .my-canvas::-webkit-scrollbar {
     display: none !important;
-  }
+}
 
+.my-canvas-footer {
+    position: absolute !important;
+    background-color: white;
+    height: 16%;
+    margin-left: 0px !important;
+    box-shadow: 0 0 15px 0 rgb(0 0 0 / 20%);
+}
