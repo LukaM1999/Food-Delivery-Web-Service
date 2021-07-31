@@ -22,19 +22,19 @@ public class CustomerType {
 		this.typeName = typeName;
 	}
 
-	public void determineType(int points) {
+	public void determineType(double points) {
 		switch (typeName) {
 		case "Bronze":
 			if (points > pointsRequired) {
 				typeName = "Silver";
 				pointsRequired = 7000;
-				calculateDiscount();
+				discount = 0.03;
 			}
-		case "SILVER":
+		case "Silver":
 			if (points > pointsRequired) {
 				typeName = "Gold";
 				pointsRequired = 0;
-				calculateDiscount();
+				discount = 0.05;
 			}
 		}
 	}
@@ -45,17 +45,6 @@ public class CustomerType {
 
 	public void setDiscount(double discount) {
 		this.discount = discount;
-	}
-
-	public void calculateDiscount() {
-		switch (typeName) {
-		case "Bronze":
-			this.discount = 0;
-		case "Silver":
-			this.discount = 0.03;
-		case "Gold":
-			this.discount = 0.05;
-		}
 	}
 
 	public int getPointsRequired() {

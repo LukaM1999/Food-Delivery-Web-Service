@@ -12,18 +12,21 @@ Vue.component("userProfile", {
 	},
 
 	mounted() {
-		if (this.oldProfile.points <= 7000) this.progress = this.oldProfile.points * 100 / 7000
-		if (this.oldProfile.points > 7000) this.progress = 100
-		if (this.oldProfile.points >= 3000 && this.oldProfile.points < 7000) this.progressColor = 'silver'
-		if (this.oldProfile.points >= 7000) this.progressColor = 'gold'
+		this.updateProgress()
 		this.profile.password = ''
 	},
 
 	methods: {
+		updateProgress() {
+			if (this.oldProfile.points <= 7000) this.progress = this.oldProfile.points * 100 / 7000
+			if (this.oldProfile.points > 7000) this.progress = 100
+			if (this.oldProfile.points >= 3000 && this.oldProfile.points < 7000) this.progressColor = 'silver'
+			if (this.oldProfile.points >= 7000) this.progressColor = 'gold'
+		},
 		async editProfile() {
-			const { type, points, orders, dateOfBirth, cart, restaurant, ...editedProfile} = this.profile
+			const { type, points, orders, dateOfBirth, cart, restaurant, ...editedProfile } = this.profile
 			axios
-				.put('rest/user/editProfile', { ...editedProfile, oldUsername: this.oldProfile.username, oldPassword: this.oldProfile.password})
+				.put('rest/user/editProfile', { ...editedProfile, oldUsername: this.oldProfile.username, oldPassword: this.oldProfile.password })
 				.then(response => {
 					let oldUsername = this.oldProfile.username
 					if (response.data) {
@@ -53,9 +56,9 @@ Vue.component("userProfile", {
 				<div v-if="oldProfile.role === 'CUSTOMER'" class="row mb-3">
 					<div class="col">
 						<h3>{{oldProfile.type.typeName}} tier</h3>
-						<h5 class="text-muted">{{oldProfile.points}} points</h5>
-						<h5 class="text-muted" v-if="oldProfile.points < 3000">{{3000 - oldProfile.points}} points to Silver tier</h5>
-						<h5 class="text-muted" v-if="oldProfile.points >= 3000 && oldProfile.points < 7000">{{7000 - oldProfile.points}} points to Gold tier</h5>
+						<h5 class="text-muted">{{oldProfile.points.toFixed(2)}} points</h5>
+						<h5 class="text-muted" v-if="oldProfile.points < 3000">{{(3000 - oldProfile.points).toFixed(2)}} points to Silver tier</h5>
+						<h5 class="text-muted" v-if="oldProfile.points >= 3000 && oldProfile.points < 7000">{{(7000 - oldProfile.points).toFixed(2)}} points to Gold tier</h5>
 						<div class="row justify-content-center">
 							<div class="col-md-4">
 								<div class="progress" style="height: 20px; border-radius: 10px;">

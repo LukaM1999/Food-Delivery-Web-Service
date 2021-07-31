@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import beans.Customer;
+import beans.CustomerType;
 import beans.Deliverer;
 import beans.Manager;
 import beans.User;
@@ -28,6 +29,7 @@ import dao.CustomerDAO;
 import dao.DelivererDAO;
 import dao.ManagerDAO;
 import dao.UserDAO;
+import dto.CustomerPointsDTO;
 import dto.LoginDTO;
 import dto.ProfileDTO;
 
@@ -213,5 +215,19 @@ public class UserService {
 		if (!userDao.editProfile(profileDTO)) return null;
 		ctx.setAttribute("users", userDao);
 		return editedProfile;
+	}
+	
+	@PUT
+	@Path("/updatePoints")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public CustomerType updatePoints(CustomerPointsDTO pointsDto) throws IOException {
+		CustomerDAO customerDao = (CustomerDAO) ctx.getAttribute("customers");
+		UserDAO userDao = (UserDAO) ctx.getAttribute("users");
+		if (!customerDao.updatePoints(pointsDto)) return null;
+		ctx.setAttribute("customers", customerDao);
+		userDao.deserialize();
+		ctx.setAttribute("users", userDao);
+		return customerDao.getUserById(pointsDto.customerUsername).getType();
 	}
 }

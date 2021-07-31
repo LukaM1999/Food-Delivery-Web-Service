@@ -44,6 +44,15 @@ Vue.component('shoppingCart', {
 			}, 0)
 			this.totalPrice = priceWithoutDiscount - priceWithoutDiscount * this.$root.$data.user.type.discount
 		},
+		async updatePoints(){
+			const pointsAdded = (this.totalPrice/1000) * 133
+			const totalPoints = this.$root.$data.user.points + pointsAdded
+			const updatedCustomerType = await axios.put('rest/user/updatePoints', 
+			{ customerUsername: this.cart.ownerUsername, points: totalPoints })
+			if (updatedCustomerType.data == null) return
+			this.$root.$data.user.type = updatedCustomerType.data
+			this.$root.$data.user.points = totalPoints
+		},
 		async confirmOrder() {
 			const articles = this.cart.articles.flatMap((article) => article.amount > 0 ? article.name : [])
 			const order = {
@@ -58,6 +67,7 @@ Vue.component('shoppingCart', {
 			const orderResponse = await axios.post('rest/order/addOrder', order)
 			if (orderResponse.data) {
 				this.$root.addOrder(order)
+				this.updatePoints()
 				this.$emit('order-added')
 				this.$root.showAlert(`Succesfully ordered from ${order.restaurant}!`)
 				this.cart = {

@@ -16,6 +16,7 @@ import beans.Customer;
 import beans.CustomerType;
 import beans.Order;
 import beans.User;
+import dto.CustomerPointsDTO;
 import dto.LoginDTO;
 import dto.ProfileDTO;
 
@@ -24,7 +25,7 @@ public class CustomerDAO {
 	private final String path = "json/customers.json";
 
 	private ArrayList<Customer> customers = new ArrayList<Customer>();
-	
+
 	public CustomerDAO() {
 		try {
 			deserialize();
@@ -39,43 +40,55 @@ public class CustomerDAO {
 		customers = new ObjectMapper().readValue(new String(Files.readAllBytes(Paths.get(path))), typeReference);
 		return customers;
 	}
-	
+
 	public void serialize() throws JsonGenerationException, JsonMappingException, IOException {
 		new ObjectMapper().writeValue(new File(path), customers);
 	}
-	
+
 	public boolean addCustomer(User customer) throws JsonGenerationException, JsonMappingException, IOException {
-		if (new UserDAO().alreadyRegistered(customer.getUsername())) return false;
-		customers.add(new Customer(customer.getUsername(), customer.getPassword(), customer.getName(), 
-				customer.getSurname(), customer.getGender(), customer.getDateOfBirth(), customer.getRole(), 
+		if (new UserDAO().alreadyRegistered(customer.getUsername()))
+			return false;
+		customers.add(new Customer(customer.getUsername(), customer.getPassword(), customer.getName(),
+				customer.getSurname(), customer.getGender(), customer.getDateOfBirth(), customer.getRole(),
 				new ArrayList<Order>(), null, 0, new CustomerType("Bronze", 0, 3000)));
 		serialize();
 		return true;
 	}
-	
+
 	public Customer findUser(LoginDTO dto) {
-		for(Customer c: customers) {
+		for (Customer c : customers) {
 			if (c.getUsername().equals(dto.username) && c.getPassword().equals(dto.password))
 				return c;
 		}
 		return null;
 	}
-	
+
 	public Customer getUserById(String id) {
-		for(Customer c: customers) {
-			if(c.getUsername().equals(id)) return c;
+		for (Customer c : customers) {
+			if (c.getUsername().equals(id))
+				return c;
 		}
 		return null;
 	}
-	
+
 	public boolean editProfile(ProfileDTO profile) throws JsonGenerationException, JsonMappingException, IOException {
 		Customer customer = getUserById(profile.oldUsername);
-		if (customer == null || !customer.getPassword().equals(profile.oldPassword)) return false;
-		if (profile.password != "") getUserById(profile.oldUsername).setPassword(profile.password);
+		if (customer == null || !customer.getPassword().equals(profile.oldPassword))
+			return false;
+		if (profile.password != "")
+			getUserById(profile.oldUsername).setPassword(profile.password);
 		getUserById(profile.oldUsername).setName(profile.name);
 		getUserById(profile.oldUsername).setSurname(profile.surname);
 		getUserById(profile.oldUsername).setGender(profile.gender);
 		getUserById(profile.oldUsername).setUsername(profile.username);
+		serialize();
+		return true;
+	}
+
+	public boolean updatePoints(CustomerPointsDTO pointsDto) throws JsonGenerationException, JsonMappingException, IOException {
+		if (getUserById(pointsDto.customerUsername) == null) return false;
+		getUserById(pointsDto.customerUsername).setPoints(pointsDto.points);
+		getUserById(pointsDto.customerUsername).getType().determineType(pointsDto.points);
 		serialize();
 		return true;
 	}

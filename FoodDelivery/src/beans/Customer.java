@@ -7,11 +7,11 @@ public class Customer extends User {
 
 	private ArrayList<Order> orders = new ArrayList<Order>();
 	private Cart cart;
-	private int points;
+	private double points;
 	private CustomerType type;
 	
 	public Customer(String username, String password, String name, String surname, String gender, Date dateOfBirth,
-			Role role, ArrayList<Order> orders, Cart cart, int points, CustomerType type) {
+			Role role, ArrayList<Order> orders, Cart cart, double points, CustomerType type) {
 		super(username, password, name, surname, gender, dateOfBirth, role);
 		this.orders = orders;
 		this.cart = cart;
@@ -37,11 +37,11 @@ public class Customer extends User {
 		this.cart = cart;
 	}
 
-	public int getPoints() {
+	public double getPoints() {
 		return points;
 	}
 
-	public void setPoints(int points) {
+	public void setPoints(double points) {
 		this.points = points;
 	}
 
