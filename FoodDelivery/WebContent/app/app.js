@@ -13,6 +13,7 @@ const restaurantPage = { template: '<restaurantPage></restaurantPage>' }
 const restaurants = { template: '<restaurants></restaurants>' }
 const users = { template: '<users></users>' }
 const userProfile = { template: '<userProfile></userProfile>' }
+const orders = { template: '<orders></orders>' }
 
 
 const routes = [

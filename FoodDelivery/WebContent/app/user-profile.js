@@ -18,10 +18,21 @@ Vue.component("userProfile", {
 
 	methods: {
 		updateProgress() {
+			if (this.oldProfile.points < 3000) {
+				this.progressColor = '#FF5733'
+				this.oldProfile.type.name = 'Bronze'
+				this.oldProfile.type.discount = 0
+			}
 			if (this.oldProfile.points <= 7000) this.progress = this.oldProfile.points * 100 / 7000
-			if (this.oldProfile.points > 7000) this.progress = 100
-			if (this.oldProfile.points >= 3000 && this.oldProfile.points < 7000) this.progressColor = 'silver'
-			if (this.oldProfile.points >= 7000) this.progressColor = 'gold'
+			if (this.oldProfile.points >= 3000 && this.oldProfile.points < 7000) {
+				this.progressColor = 'silver'
+				this.oldProfile.type.name = 'Silver'
+				this.oldProfile.type.discount = 0.03
+			}
+			if (this.oldProfile.points >= 7000) {
+				this.progress = 100
+				this.progressColor = 'gold'
+			}
 		},
 		async editProfile() {
 			const { type, points, orders, dateOfBirth, cart, restaurant, ...editedProfile } = this.profile
@@ -133,14 +144,15 @@ Vue.component("userProfile", {
 					</div>
 				</div>
 			</div>
-			<div class="row mb-3 justify-content-center">
-				<div class="col-md-1 ms-2">
+			<div class="row mb-5 justify-content-center">
+				<div class="col-md d-flex justify-content-center">
 					<button type="submit" class="btn btn-lg btn-primary" :disabled="oldProfile.password !== oldPassword">
 						Save
 					</button>
 				</div>
 			</div>
 		</form>
+		<orders></orders>
 		<div class="alert alert-warning fixed-bottom" style="display:none; z-index: 10000;" role="alert"
 			:id="'alert' + oldProfile.username">
 			<p>{{alert}}</p>

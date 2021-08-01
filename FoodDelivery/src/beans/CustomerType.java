@@ -23,19 +23,20 @@ public class CustomerType {
 	}
 
 	public void determineType(double points) {
-		switch (typeName) {
-		case "Bronze":
-			if (points > pointsRequired) {
-				typeName = "Silver";
-				pointsRequired = 7000;
-				discount = 0.03;
-			}
-		case "Silver":
-			if (points > pointsRequired) {
-				typeName = "Gold";
-				pointsRequired = 0;
-				discount = 0.05;
-			}
+		if (points < 3000) {
+			typeName = "Bronze";
+			pointsRequired = 3000;
+			discount = 0;
+		}
+		if (points >= 3000 && points < 7000) {
+			typeName = "Silver";
+			pointsRequired = 7000;
+			discount = 0.03;
+		}
+		if (points >= 7000) {
+			typeName = "Gold";
+			pointsRequired = 0;
+			discount = 0.05;
 		}
 	}
 
