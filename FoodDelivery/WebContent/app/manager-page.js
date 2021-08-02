@@ -1,45 +1,68 @@
 const articleCreation = { template: '<articleCreation></articleCreation>' }
+const deliveryRequests = { template: '<deliveryRequests></deliveryRequests>' }
 
 Vue.component('managerPage', {
 
 	data: function () {
 		return {
 			manager: this.$root.$data.user,
-			profileView: false,
 			restaurantView: true,
 			restaurantsView: false,
+			ordersView: false,
+			requestsView: false,
+			profileView: false,
 			alert: '',
 		}
 	},
-	
+
 
 	mounted() {
-		
+
 	},
 
 
 	methods: {
-		viewRestaurant(){
-			this.profileView = false
+		viewRestaurant() {
 			this.restaurantView = true
 			this.restaurantsView = false
-		},
-		viewRestaurants(){
+			this.ordersView = false
+			this.requestsView = false
 			this.profileView = false
+		},
+		viewRestaurants() {
 			this.restaurantView = false
 			this.restaurantsView = true
-			if(this.$refs.restaurantsRef){
+			this.ordersView = false
+			this.requestsView = false
+			this.profileView = false
+			if (this.$refs.restaurantsRef) {
 				this.$refs.restaurantsRef.$data.singleRestaurant = false
 				this.$refs.restaurantsRef.$data.allRestaurants = true
 			}
 
 		},
-		viewProfile(){
-			this.profileView = true
+		viewOrders() {
 			this.restaurantView = false
 			this.restaurantsView = false
+			this.ordersView = true
+			this.requestsView = false
+			this.profileView = false
 		},
-		addArticle(article){
+		viewRequests() {
+			this.restaurantView = false
+			this.restaurantsView = false
+			this.ordersView = false
+			this.requestsView = true
+			this.profileView = false
+		},
+		viewProfile() {
+			this.restaurantView = false
+			this.restaurantsView = false
+			this.ordersView = false
+			this.requestsView = false
+			this.profileView = true
+		},
+		addArticle(article) {
 			this.$refs.restaurantPage.addArticle(article)
 		},
 	},
@@ -64,7 +87,10 @@ Vue.component('managerPage', {
 								<articleCreation v-if="manager.restaurant" :restaurant="manager.restaurant" @article-created="addArticle"></articleCreation>
 							</li>						
 							<li class="nav-item" style="padding: 5px;">
-								<button type="button" class="btn btn-secondary btn-lg" >All orders</button>
+								<button type="button" class="btn btn-secondary btn-lg" @click="viewOrders">All orders</button>
+							</li>	
+							<li class="nav-item" style="padding: 5px;">
+								<button type="button" class="btn btn-secondary btn-lg" @click="viewRequests">Delivery requests</button>
 							</li>	
 						</ul>
 						<ul class="navbar-nav ms-auto">
@@ -73,13 +99,14 @@ Vue.component('managerPage', {
 							</li>									
 						</ul>
 					</div>
-					
 				</nav>
 			</div>
 		</div>
 		<restaurantPage v-if="manager.restaurant && restaurantView" :restaurant="manager.restaurant" ref="restaurantPage"></restaurantPage>
 		<userProfile v-if="profileView"></userProfile>
 		<restaurants v-if="restaurantsView" ref="restaurantsRef"></restaurants>
+		<orders v-if="ordersView"></orders>
+		<deliveryRequests v-if="requestsView"></deliveryRequests>
 	</div>
 	`
-});
+})

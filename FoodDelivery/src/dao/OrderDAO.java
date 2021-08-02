@@ -13,6 +13,8 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import beans.Order;
+import beans.OrderStatus;
+import dto.DeliveryRequestDTO;
 import dto.OrderDTO;
 
 public class OrderDAO {
@@ -70,6 +72,12 @@ public class OrderDAO {
 	
 	public void setOrderStatus(OrderDTO orderDto) throws JsonGenerationException, JsonMappingException, IOException {
 		getById(orderDto.orderId).setStatus(orderDto.status);
+		serialize();
+	}
+	
+	public void updateDelivery(DeliveryRequestDTO requestDto) throws JsonGenerationException, JsonMappingException, IOException {
+		getById(requestDto.orderId).setDelivererUsername(requestDto.delivererUsername);
+		getById(requestDto.orderId).setStatus(OrderStatus.DELIVERING);
 		serialize();
 	}
 }

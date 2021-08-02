@@ -25,6 +25,7 @@ import dao.ManagerDAO;
 import dao.OrderDAO;
 import dao.RestaurantDAO;
 import dao.UserDAO;
+import dto.DeliveryRequestDTO;
 import dto.OrderDTO;
 import dto.RestaurantDTO;
 
@@ -81,6 +82,15 @@ public class OrderService {
 	public void updateStatus(OrderDTO orderDto) throws JsonGenerationException, JsonMappingException, IOException {
 		OrderDAO orderDao = (OrderDAO) ctx.getAttribute("orders");
 		orderDao.setOrderStatus(orderDto);
+		ctx.setAttribute("orders", orderDao);
+	}
+	
+	@PUT
+	@Path("/updateDelivery")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void updateDelivery(DeliveryRequestDTO requestDto) throws JsonGenerationException, JsonMappingException, IOException {
+		OrderDAO orderDao = (OrderDAO) ctx.getAttribute("orders");
+		orderDao.updateDelivery(requestDto);
 		ctx.setAttribute("orders", orderDao);
 	}
 }

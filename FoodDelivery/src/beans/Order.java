@@ -9,29 +9,29 @@ public class Order {
 
 	private String id;
 	private ArrayList<String> orderedArticles = new ArrayList<String>();
-	private String restaurantName;
+	private String restaurant;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy. HH:mm:ss")
 	private Date orderTime;
 	private double price;
 	private String customerName;
+	private String delivererUsername;
 	private OrderStatus status;
 
 	public Order(String id, ArrayList<String> orderedArticles, String restaurant, Date orderTime,
-			double price, String customerName, OrderStatus status) {
+			double price, String customerName, String delivererUsername, OrderStatus status) {
 		super();
 		this.id = id;
 		this.orderedArticles = orderedArticles;
-		this.restaurantName = restaurant;
+		this.restaurant = restaurant;
 		this.orderTime = orderTime;
 		this.price = price;
 		this.customerName = customerName;
+		this.delivererUsername = delivererUsername;
 		this.status = status;
 	}
 	
-	public Order() {
-		// TODO Auto-generated constructor stub
-	}
+	public Order() {}
 
 	public String getId() {
 		return id;
@@ -50,11 +50,19 @@ public class Order {
 	}
 
 	public String getRestaurant() {
-		return restaurantName;
+		return restaurant;
 	}
 
 	public void setRestaurant(String restaurant) {
-		this.restaurantName = restaurant;
+		this.restaurant = restaurant;
+	}
+
+	public String getDelivererUsername() {
+		return delivererUsername;
+	}
+
+	public void setDelivererUsername(String delivererUsername) {
+		this.delivererUsername = delivererUsername;
 	}
 
 	public Date getOrderTime() {

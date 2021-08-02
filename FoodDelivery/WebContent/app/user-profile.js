@@ -11,6 +11,10 @@ Vue.component("userProfile", {
 		}
 	},
 
+	props: {
+		delivererProfile: false
+	},
+
 	mounted() {
 		this.updateProgress()
 		this.profile.password = ''
@@ -152,7 +156,7 @@ Vue.component("userProfile", {
 				</div>
 			</div>
 		</form>
-		<orders></orders>
+		<orders deliverer-profile></orders>
 		<div class="alert alert-warning fixed-bottom" style="display:none; z-index: 10000;" role="alert"
 			:id="'alert' + oldProfile.username">
 			<p>{{alert}}</p>

@@ -18,13 +18,14 @@ Vue.component("userPage", {
 		'managerPage': managerPage,
 	},
 
-	mounted() {
+	async mounted() {
 		var self = this
 		$('.modal').on('show.bs.modal', async function () {
 			let backdrop = await self.getBackdrop()
 			backdrop[0]?.parentNode?.removeChild(backdrop[0])
 		})
-		this.getAllOrders()
+		await this.getAllOrders()
+		await this.getAllRequests()
 	},
 
 	methods: {
@@ -38,9 +39,13 @@ Vue.component("userPage", {
 			})
 
 		},
-		async getAllOrders(){
+		async getAllOrders() {
 			const orders = await axios.get('rest/order/getAllOrders')
 			this.$root.$data.orders = orders.data
+		},
+		async getAllRequests() {
+			const requests = await axios.get('rest/request/getAllRequests')
+			this.$root.$data.requests = requests.data
 		},
 	},
 

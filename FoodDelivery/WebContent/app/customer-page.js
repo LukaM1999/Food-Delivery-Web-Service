@@ -63,7 +63,7 @@ Vue.component('customerPage', {
 	template: `
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-md-12">
+			<div class="col">
 				<nav class="navbar my-navbar navbar-expand-lg navbar-light fixed-top">
 					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bs-example-navbar-collapse-1">
 						<span class="fa fa-3x fa-bars"></span>

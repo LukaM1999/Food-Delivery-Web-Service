@@ -44,7 +44,8 @@ var app = new Vue({
 			ownerUsername: '',
 			articles: []
 		},
-		orders: []
+		orders: [],
+		deliveryRequests: [],
 	},
 	methods: {
 		showAlert(alert) {
