@@ -10,9 +10,10 @@ public class Restaurant {
 	private RestaurantStatus status;
 	private Location location;
 	private String logo;
+	private double rating;
 
 	public Restaurant(String name, String type, ArrayList<Article> articles, RestaurantStatus status,
-			Location location, String logo) {
+			Location location, String logo, double rating) {
 		super();
 		this.name = name;
 		this.type = type;
@@ -20,6 +21,7 @@ public class Restaurant {
 		this.status = status;
 		this.location = location;
 		this.logo = logo;
+		this.rating = rating;
 	}
 
 	public Restaurant() {
@@ -87,6 +89,14 @@ public class Restaurant {
 	
 	public void removeArticle(Article article) {
 		articles.remove(article);
+	}
+
+	public double getRating() {
+		return rating;
+	}
+
+	public void setRating(double rating) {
+		this.rating = rating;
 	}
 
 }

@@ -38,3 +38,7 @@
     margin-left: 0px !important;
     box-shadow: 0 0 15px 0 rgb(0 0 0 / 20%);
 }
+
+.rating-stars{
+    outline: none !important;
+}

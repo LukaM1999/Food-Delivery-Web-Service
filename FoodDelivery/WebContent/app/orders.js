@@ -1,3 +1,5 @@
+const commentForm = { template: '<commentForm></commentForm>' }
+
 Vue.component('orders', {
     data() {
         return {
@@ -17,6 +19,7 @@ Vue.component('orders', {
             dateRangeMax: '',
             sortBy: '',
             ascending: true,
+            commentKey: 10000
         }
     },
 
@@ -129,6 +132,9 @@ Vue.component('orders', {
         setSortOrder() {
             this.ascending = !this.ascending
         },
+        commentExists(orderId) {
+            return this.$root.$data.comments.filter(c => c.orderId === orderId).length > 0
+        }
     },
 
     computed: {
@@ -195,7 +201,7 @@ Vue.component('orders', {
     },
 
     filters: {
-        formatStatus: function(value) {
+        formatStatus: function (value) {
             return value.substring(0, 1) + value.substring(1).toLowerCase().replace('_', ' ')
         }
     },
@@ -295,6 +301,7 @@ Vue.component('orders', {
                             <th>Status</th>
                             <th v-if="user.role !== 'DELIVERER' || insideProfile">Change order status</th>
                             <th v-if="user.role === 'DELIVERER' && !insideProfile">Request delivery</th>
+                            <th v-if="user.role === 'CUSTOMER'">Comment</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -331,7 +338,10 @@ Vue.component('orders', {
                                     Delivered
                                 </button>
                             </td>
-                        </tr>
+                            <td class="text-center" v-if="user.role === 'CUSTOMER'" >
+                                <commentForm v-if="o.status === 'DELIVERED' && !commentExists(o.id)" :order-prop="o"></commentForm>
+                                <p v-if="commentExists(o.id)">Already commented</p>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

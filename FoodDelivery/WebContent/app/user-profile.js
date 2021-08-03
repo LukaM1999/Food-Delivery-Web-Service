@@ -159,7 +159,7 @@ Vue.component("userProfile", {
 				</div>
 			</div>
 		</form>
-		<orders inside-profile v-if="oldProfile.role !== 'ADMIN'"></orders>
+		<orders inside-profile v-if="oldProfile.role === 'CUSTOMER' || oldProfile.role === 'DELIVERER' "></orders>
 		<div class="alert alert-warning fixed-bottom" style="display:none; z-index: 10000;" role="alert"
 			:id="'alert' + oldProfile.username">
 			<p>{{alert}}</p>

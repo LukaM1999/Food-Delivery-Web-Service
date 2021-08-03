@@ -17,9 +17,10 @@ public class Order {
 	private String customerName;
 	private String delivererUsername;
 	private OrderStatus status;
+	private boolean commented; 
 
 	public Order(String id, ArrayList<String> orderedArticles, String restaurant, Date orderTime,
-			double price, String customerName, String delivererUsername, OrderStatus status) {
+			double price, String customerName, String delivererUsername, OrderStatus status, boolean commented) {
 		super();
 		this.id = id;
 		this.orderedArticles = orderedArticles;
@@ -29,6 +30,7 @@ public class Order {
 		this.customerName = customerName;
 		this.delivererUsername = delivererUsername;
 		this.status = status;
+		this.commented = commented;
 	}
 	
 	public Order() {}
@@ -55,6 +57,14 @@ public class Order {
 
 	public void setRestaurant(String restaurant) {
 		this.restaurant = restaurant;
+	}
+
+	public boolean isCommented() {
+		return commented;
+	}
+
+	public void setCommented(boolean commented) {
+		this.commented = commented;
 	}
 
 	public String getDelivererUsername() {

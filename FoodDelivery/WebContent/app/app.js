@@ -46,6 +46,7 @@ var app = new Vue({
 		},
 		orders: [],
 		deliveryRequests: [],
+		comments: [],
 	},
 	methods: {
 		showAlert(alert) {

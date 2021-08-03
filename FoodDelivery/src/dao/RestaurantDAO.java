@@ -50,7 +50,7 @@ public class RestaurantDAO {
 		if (alreadyCreated(restaurant))
 			return false;
 		restaurants.add(new Restaurant(restaurant.getName(), restaurant.getType(), new ArrayList<Article>(),
-				restaurant.getStatus(), restaurant.getLocation(), restaurant.getLogo()));
+				restaurant.getStatus(), restaurant.getLocation(), restaurant.getLogo(), 0));
 		serialize();
 		return true;
 	}
