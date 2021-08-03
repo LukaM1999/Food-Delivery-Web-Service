@@ -87,6 +87,7 @@ public class CustomerDAO {
 
 	public boolean updatePoints(CustomerPointsDTO pointsDto) throws JsonGenerationException, JsonMappingException, IOException {
 		if (getUserById(pointsDto.customerUsername) == null) return false;
+		if (pointsDto.points < 0) pointsDto.points = 0;
 		getUserById(pointsDto.customerUsername).setPoints(pointsDto.points);
 		getUserById(pointsDto.customerUsername).getType().determineType(pointsDto.points);
 		serialize();

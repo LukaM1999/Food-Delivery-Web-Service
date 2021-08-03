@@ -69,4 +69,9 @@ public class DeliveryRequestDAO {
 		getRequest(request.getOrderId(), request.getDelivererUsername()).setStatus("Declined");
 		serialize();
 	}
+	
+	public void updateRequests(ArrayList<DeliveryRequest> requests) throws JsonGenerationException, JsonMappingException, IOException {
+		this.requests = requests;
+		serialize();
+	}
 }

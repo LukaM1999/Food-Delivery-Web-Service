@@ -21,7 +21,7 @@ Vue.component('deliveryRequests', {
             axios.put('rest/order/updateDelivery', { orderId: order.id, delivererUsername: request.delivererUsername })
             axios.put('rest/request/updateRequests', this.requests)
             this.$root.showAlert('Successfully accepted delivery request!' +
-                'All requests for the selected order have been removed.')
+                ' All requests for the selected order have been removed.')
         },
         declineRequest(request) {
             axios.put('rest/request/updateStatus', request)

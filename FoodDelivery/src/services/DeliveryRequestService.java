@@ -73,4 +73,13 @@ public class DeliveryRequestService {
 		requestDao.updateStatus(request);
 		ctx.setAttribute("requests", requestDao);
 	}
+	
+	@PUT
+	@Path("/updateRequests")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void updateRequests(ArrayList<DeliveryRequest> requests) throws JsonGenerationException, JsonMappingException, IOException {
+		DeliveryRequestDAO requestDao = (DeliveryRequestDAO) ctx.getAttribute("requests");
+		requestDao.updateRequests(requests);
+		ctx.setAttribute("requests", requestDao);
+	}
 }

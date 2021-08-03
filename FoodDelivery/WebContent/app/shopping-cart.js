@@ -52,7 +52,7 @@ Vue.component('shoppingCart', {
 			if (updatedCustomerType.data == null) return
 			this.$root.$data.user.type = updatedCustomerType.data
 			this.$root.$data.user.points = totalPoints
-			this.$root.showAlert(`Succesfully ordered from ${restaurantName}! You received ${pointsAdded} points!`)
+			this.$root.showAlert(`Succesfully ordered from ${restaurantName}! You received ${pointsAdded.toFixed(2)} points!`)
 		},
 		async confirmOrder() {
 			const articles = this.cart.articles.flatMap((article) => article.amount > 0 ? article.name : [])
