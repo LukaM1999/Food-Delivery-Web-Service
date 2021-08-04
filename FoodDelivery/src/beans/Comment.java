@@ -11,18 +11,18 @@ public class Comment {
 	private String restaurant;
 	private String content;
 	private double rating;
-	private boolean approved;
+	private CommentApproval approval;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy.")
 	private Date date;
 
 	public Comment(String commentPoster, String commentedRestaurant, String commentContent, double rating,
-			boolean approved, Date commentDate, String orderId) {
+			CommentApproval approved, Date commentDate, String orderId) {
 		super();
 		this.poster = commentPoster;
 		this.restaurant = commentedRestaurant;
 		this.content = commentContent;
 		this.rating = rating;
-		this.approved = approved;
+		this.approval = approved;
 		this.date = commentDate;
 		this.orderId = orderId;
 	}
@@ -62,12 +62,12 @@ public class Comment {
 		this.rating = rating;
 	}
 
-	public boolean isApproved() {
-		return approved;
+	public CommentApproval getApproval() {
+		return approval;
 	}
 
-	public void setApproved(boolean approved) {
-		this.approved = approved;
+	public void setApproval(CommentApproval approved) {
+		this.approval = approved;
 	}
 
 	public Date getDate() {

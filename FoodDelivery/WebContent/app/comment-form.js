@@ -36,7 +36,7 @@ Vue.component('commentForm', {
                 restaurant: this.orderProp.restaurant,
                 content: this.content,
                 rating: this.rating,
-                approved: false,
+                approval: 'PROCESSING',
                 date: new Date().format('dd.mm.yyyy.')
             }
             this.$root.$data.comments.push(comment)

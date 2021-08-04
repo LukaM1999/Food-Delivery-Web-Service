@@ -9,12 +9,13 @@ Vue.component("login", {
 		}
 	},
 
-	mounted(){
+	async mounted(){
 		var self = this
 		$('.modal').on('show.bs.modal', async function(){
 			let backdrop = await self.getBackdrop()
 			backdrop[0].parentNode?.removeChild(backdrop[0])
 		})
+		await this.getAllComments()
 	},
 
 	methods: {
@@ -49,6 +50,10 @@ Vue.component("login", {
 				reject('No backdrop yet')
 			})
 		},
+		async getAllComments() {
+			const comments = await axios.get('rest/comment/getAllComments')
+			this.$root.$data.comments = comments.data
+		}
 	},
 
 	template: `

@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import beans.Comment;
+import beans.CommentApproval;
 
 public class CommentDAO {
 	
@@ -38,7 +39,7 @@ public class CommentDAO {
 	public void addComment(Comment newComment)
 			throws JsonGenerationException, JsonMappingException, IOException {
 		comments.add(new Comment(newComment.getPoster(), newComment.getRestaurant(),
-				newComment.getContent(), newComment.getRating(), false, newComment.getDate(), newComment.getOrderId()));
+				newComment.getContent(), newComment.getRating(), CommentApproval.PROCESSING, newComment.getDate(), newComment.getOrderId()));
 		serialize();
 	}
 
@@ -51,10 +52,10 @@ public class CommentDAO {
 		serialize();
 	}
 	
-	public void approveComment(Comment comment) throws JsonGenerationException, JsonMappingException, IOException{
+	public void setCommentApproval(Comment comment) throws JsonGenerationException, JsonMappingException, IOException{
 		for(Comment c : comments) {
 			if(c.getOrderId().equals(comment.getOrderId())) {
-				c.setApproved(true);
+				c.setApproval(comment.getApproval());
 				serialize();
 				return;
 			}

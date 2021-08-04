@@ -71,6 +71,8 @@ Vue.component('managerPage', {
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12">
+				<a href="#" id="back-to-top" title="Back to top" style="display: none;"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></a>
+
 				<nav class="navbar my-navbar navbar-expand-lg navbar-light fixed-top">
 					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bs-example-navbar-collapse-1">
 						<span class="fa fa-3x fa-bars"></span>
@@ -91,7 +93,7 @@ Vue.component('managerPage', {
 							</li>	
 							<li class="nav-item" style="padding: 5px;">
 								<button type="button" class="btn btn-secondary btn-lg" @click="viewRequests">Delivery requests</button>
-							</li>	
+							</li>
 						</ul>
 						<ul class="navbar-nav ms-auto">
 							<li class="nav-item" style="padding: 5px;">

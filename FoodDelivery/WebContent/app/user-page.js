@@ -26,7 +26,6 @@ Vue.component("userPage", {
 		})
 		await this.getAllOrders()
 		await this.getAllRequests()
-		await this.getAllComments()
 	},
 
 	methods: {
@@ -48,10 +47,6 @@ Vue.component("userPage", {
 			const requests = await axios.get('rest/request/getAllRequests')
 			this.$root.$data.requests = requests.data
 		},
-		async getAllComments() {
-			const comments = await axios.get('rest/comment/getAllComments')
-			this.$root.$data.comments = comments.data
-		}
 	},
 
 	template: `

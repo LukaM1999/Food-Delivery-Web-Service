@@ -55,11 +55,11 @@ public class CommentService {
 	}
 	
 	@PUT
-	@Path("/approveComment")
+	@Path("/setCommentApproval")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void approveComment(Comment comment) throws JsonGenerationException, JsonMappingException, IOException {
+	public void setCommentApproval(Comment comment) throws JsonGenerationException, JsonMappingException, IOException {
 		CommentDAO commentDao = (CommentDAO) ctx.getAttribute("comments");
-		commentDao.approveComment(comment);
+		commentDao.setCommentApproval(comment);
 		ctx.setAttribute("comments", commentDao);
 	}
 	
