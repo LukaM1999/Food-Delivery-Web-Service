@@ -70,11 +70,11 @@ Vue.component("restaurants", {
 				})
 			}
 
-			/* if (this.ratingSearch != '') {
+			if (this.ratingSearch != '') {
 				tempRestaurants = tempRestaurants.filter((r) => {
-					return r.averageRating >= this.ratingSearch
+					return r.rating >= this.ratingSearch
 				})
-			} */
+			}
 
 			tempRestaurants = tempRestaurants.sort((a, b) => {
 				if (this.sortBy == 'Name') {
@@ -115,9 +115,9 @@ Vue.component("restaurants", {
 	methods: {
 		viewRestaurant(r) {
 			//this.$router.push('/restaurants/' + r.name);
-			this.restaurant = r;
-			this.singleRestaurant = true;
-			this.allRestaurants = false;
+			this.restaurant = r
+			this.singleRestaurant = true
+			this.allRestaurants = false
 		},
 		setSortOrder() {
 			this.ascending = !this.ascending
@@ -163,7 +163,7 @@ Vue.component("restaurants", {
 							</div>
 							<div class="col-md-1">
 								<div class="form-floating">
-									<input type="number" class="form-control" id="restaurantRating" v-model="ratingSearch" max="5" min="1">
+									<input type="number" class="form-control" id="restaurantRating" v-model.number="ratingSearch" max="5" min="0">
 									<label for="restaurantRating">Rating</label>
 								</div>
 							</div>

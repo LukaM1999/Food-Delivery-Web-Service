@@ -46,3 +46,8 @@
 .my-shadow {
     box-shadow: 0 0 15px 0 rgb(0 0 0 / 20%) !important;
 }
+
+.my-background {
+    background-repeat: no-repeat; 
+    background-attachment: fixed;
+}

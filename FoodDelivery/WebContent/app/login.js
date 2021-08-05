@@ -10,6 +10,7 @@ Vue.component("login", {
 	},
 
 	async mounted(){
+		$('.my-background').css('background-image', "url('images/login-background.png')");
 		var self = this
 		$('.modal').on('show.bs.modal', async function(){
 			let backdrop = await self.getBackdrop()

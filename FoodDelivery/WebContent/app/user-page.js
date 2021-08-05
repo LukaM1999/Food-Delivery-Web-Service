@@ -19,6 +19,7 @@ Vue.component("userPage", {
 	},
 
 	async mounted() {
+		$('.my-background').css('background-image', "url('images/main-background.jfif')");
 		var self = this
 		$('.modal').on('show.bs.modal', async function () {
 			let backdrop = await self.getBackdrop()
@@ -50,7 +51,7 @@ Vue.component("userPage", {
 	},
 
 	template: `
-	<div>
+	<div class="my-background">
 		<div v-if="user">
 			<adminPage v-if="user.role === 'ADMIN'"></adminPage>
 			<customerPage v-else-if="user.role === 'CUSTOMER'"></customerPage>

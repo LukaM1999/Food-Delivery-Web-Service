@@ -7,14 +7,15 @@ Vue.component("restaurantPage", {
 	data() {
 		return {
 			r: null,
-			comments: false
+			ratingCount: 0,
 		}
 	},
 
-	mounted() {
-		axios
-			.post('rest/restaurant/setLocation', this.restaurant.location)
-			.then(response => { this.r = this.restaurant });
+	async mounted() {
+		await axios.post('rest/restaurant/setLocation', this.restaurant.location)
+		this.r = this.restaurant
+		this.calculateRating()
+		this.initializeRatingOverId()
 	},
 
 	props: {
@@ -39,6 +40,22 @@ Vue.component("restaurantPage", {
 			$('.rating').each(function () {
 				$(this).rating({ showCaption: false, displayOnly: true, step: 1 })
 			})
+		},
+		initializeRatingOverId() {
+			$('#restaurantRating').rating({ showCaption: false, displayOnly: true, step: 0.1 })
+			$("#restaurantRating").rating("update", this.r.rating)
+		},
+		calculateRating() {
+			const ratings = this.$root.$data.comments.flatMap(c => c.restaurant === this.r.name && c.approval === 'APPROVED' ? c.rating : [])
+			const ratingSum = ratings.reduce((total, rating) => {
+				return total + rating
+			}, 0)
+			this.r.rating = Math.round((ratingSum / ratings.length) * 10) / 10
+			this.ratingCount = ratings.length
+		},
+		refreshRating() {
+			this.calculateRating()
+			this.initializeRatingOverId()
 		}
 	},
 
@@ -56,7 +73,7 @@ Vue.component("restaurantPage", {
 		<div class="col-md-12" style="padding-top:3%; padding-left:1%;">
 			<nav>
 				<div class="nav nav-tabs" id="nav-tab" role="tablist">
-					<button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab" aria-controls="info" aria-selected="true">Information</button>
+					<button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab" aria-controls="info" aria-selected="true" @click="refreshRating">Information</button>
 					<button class="nav-link" id="articles-tab" data-bs-toggle="tab" data-bs-target="#articles" type="button" role="tab" aria-controls="articles" aria-selected="true">Articles</button>
 					<button class="nav-link" id="comments-tab" data-bs-toggle="tab" data-bs-target="#comments" type="button" role="tab" aria-controls="comments" aria-selected="false" @click="initializeRating">Comments</button>
 				</div>	
@@ -77,20 +94,29 @@ Vue.component("restaurantPage", {
 												<h1>{{restaurant.name}}</h1>
 												<h5>{{restaurant.type}}</h5>
 												<h5>{{restaurant.status}}</h5>
+												<div v-show="r !== null" class="row">
+													<div class="col align-self-center">
+														<input id="restaurantRating" class="rating rating-loading" :value="r?.rating" data-min="0" data-max="5" data-step="0.1">
+														<h5 style="margin-top:-4%;">{{r?.rating.toFixed(1)}} ({{ratingCount}})</h5>
+													</div>
+												</div>
 											</div>
 										</div>
-										<div class="row">
-											<div class="col-md-12">
-												<h2>*****</h2>
+										<div class="row mt-5 justify-content-center">
+											<div class="col-md-12 align-self-center">
+												<h3>{{restaurant.location.address | addressFormat}}</h3>
 											</div>
 										</div>
 										<div class="row justify-content-center">
-											<div class="col-md-12">
-												<h3>{{restaurant.location.address | addressFormat}}</h3>
+											<div class="col-md-12 align-self-center">
 												<h6 style="color:gray;" >{{restaurant.location | locationFormat}}</h6>
+											</div>
+										</div>	
+										<div class="row justify-content-center">
+											<div class="col justify-content-center d-flex align-self-center">
 												<staticMap v-if="r"></staticMap>
 											</div>
-										</div>
+										</div>	
 									</div>
 								</div>
 							</div>	

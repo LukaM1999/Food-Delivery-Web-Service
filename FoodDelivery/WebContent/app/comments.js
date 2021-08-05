@@ -18,18 +18,30 @@ Vue.component("comments", {
 
 	methods: {
 		getRestaurantComments() {
-			if(this.$root.$data.user?.role === 'CUSTOMER' || this.$root.$data.user?.role === 'DELIVERER' || this.$root.$data.user === null)
+			if (this.$root.$data.user?.role === 'CUSTOMER' || this.$root.$data.user?.role === 'DELIVERER' || this.$root.$data.user === null)
 				this.comments = this.$root.$data.comments.filter(c => c.approval === 'APPROVED' && c.restaurant === this.singleRestaurant)
-			else	
+			else
 				this.comments = this.$root.$data.comments.filter(c => c.restaurant === this.singleRestaurant)
 
 		},
-		setCommentApproval(comment, approval){
+		setCommentApproval(comment, approval) {
 			comment.approval = approval
+			this.$root.$data.comments.find(c => c.orderId === comment.orderId).approval = approval
 			axios.put('rest/comment/setCommentApproval', comment)
-			if(approval === 'APPROVED') this.$root.showAlert('Successfully approved comment!')
-			if(approval === 'REJECTED') this.$root.showAlert('Successfully rejected comment!')
-		}
+			if (approval === 'APPROVED') {
+				this.$root.showAlert('Successfully approved comment!')
+				this.calculateRating()
+			}
+			if (approval === 'REJECTED') this.$root.showAlert('Successfully rejected comment!')
+		},
+		calculateRating() {
+			const ratings = this.$root.$data.comments.flatMap(c => c.restaurant === this.singleRestaurant && c.approval === 'APPROVED' ? c.rating : [])
+			const ratingSum = ratings.reduce((total, rating) => {
+				return total + rating
+			}, 0)
+			const rating = Math.round((ratingSum / ratings.length) * 10) / 10
+			axios.put('rest/restaurant/updateRating', { restaurant: this.singleRestaurant, rating: rating })
+		},
 	},
 
 	template: `
@@ -41,9 +53,9 @@ Vue.component("comments", {
 						<div class="row">
 							<div v-for="c in comments" class="col-md-4 mb-4">
 								<div class="card text-center h-100 my-shadow" style="width: 20rem;">
-									<i v-if="c.approval === 'APPROVED' && ($root.$data.user?.role === 'MANAGER' || $root.$data.user?.role === 'ADMIN')" 
+									<i v-show="c.approval === 'APPROVED' && ($root.$data.user?.role === 'MANAGER' || $root.$data.user?.role === 'ADMIN')" 
 										class="fa fa-3x fa-check position-absolute top-0 start-100 translate-middle" style="z-index: 10; color:lightgreen;"></i>
-									<i v-if="c.approval === 'REJECTED' && ($root.$data.user?.role === 'MANAGER' || $root.$data.user?.role === 'ADMIN')" 
+									<i v-show="c.approval === 'REJECTED' && ($root.$data.user?.role === 'MANAGER' || $root.$data.user?.role === 'ADMIN')" 
 										class="fa fa-3x fa-times position-absolute top-0 start-100 translate-middle" style="z-index: 10; color:red;"></i>  
 									<div class="card-body">
 										<h3 class="card-title">{{c.poster}}</h3>
@@ -54,7 +66,7 @@ Vue.component("comments", {
                                         	<input id="c.orderId" class="rating rating-loading" :value="c.rating" data-min="0" data-max="5" data-step="1">
 										</div>	
 									</div>
-									<div class="card-footer" v-if="c.approval === 'PROCESSING' && $root.$data.user?.role === 'MANAGER'" style="display:inline;">
+									<div class="card-footer" v-show="c.approval === 'PROCESSING' && $root.$data.user?.role === 'MANAGER'" style="display:inline;">
 										<button class="btn btn-primary" @click="setCommentApproval(c, 'APPROVED')"><i class="fa fa-2x fa-check"></i></button>
 										<button class="btn btn-danger" @click="setCommentApproval(c, 'REJECTED')"><i class="fa fa-2x fa-times"></i></button>
 									</div>

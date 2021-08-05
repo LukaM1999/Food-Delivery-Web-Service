@@ -30,6 +30,7 @@ import dao.ManagerDAO;
 import dao.RestaurantDAO;
 import dao.UserDAO;
 import dto.ArticleDTO;
+import dto.RatingDTO;
 import dto.RestaurantDTO;
 
 @Path("/restaurant")
@@ -162,6 +163,13 @@ public class RestaurantService {
 		return null;
 	}
 	
-	
+	@PUT
+	@Path("/updateRating")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void updateRating(RatingDTO ratingDto) throws JsonGenerationException, JsonMappingException, IOException {
+		RestaurantDAO dao = (RestaurantDAO) ctx.getAttribute("restaurants");
+		dao.updateRating(ratingDto);
+		ctx.setAttribute("restaurants", dao);
+	}
 	
 }

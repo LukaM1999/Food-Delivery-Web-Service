@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import beans.Article;
 import beans.Restaurant;
 import dto.ArticleDTO;
+import dto.RatingDTO;
 
 public class RestaurantDAO {
 
@@ -101,5 +102,10 @@ public class RestaurantDAO {
 		restaurants.add(indexOfRestaurant, restaurant);
 		serialize();
 		return true;
+	}
+	
+	public void updateRating(RatingDTO ratingDto) throws JsonGenerationException, JsonMappingException, IOException {
+		getRestaurantById(ratingDto.restaurant).setRating(ratingDto.rating);
+		serialize();
 	}
 }
