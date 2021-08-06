@@ -18,6 +18,7 @@ Vue.component("restaurants", {
 			allRestaurants: true,
 			singleRestaurant: false,
 			restaurant: this.$root.$data.user?.restaurant,
+			typeCheckboxes: [],
 		}
 	},
 
@@ -37,27 +38,34 @@ Vue.component("restaurants", {
 						return 0;
 					})
 				this.restaurants.forEach(r => {
-					if (this.allTypes.filter((type) => { type.toLowerCase() == r.type.toLowerCase() }).length == 0)
+					if (this.allTypes.filter((type) => { type.toLowerCase() == r.type.toLowerCase() }).length == 0) {
 						this.allTypes.push(r.type)
+						this.typeCheckboxes.push(false)
+					}
 				});
 			});
 		this.singleRestaurant = false
 		this.allRestaurants = true
+		this.initializeFilterDropdown()
 	},
 
 	computed: {
 		filteredRestaurants() {
 			let tempRestaurants = this.restaurants
 
+			const types = this.allTypes.filter((type, index) => this.typeCheckboxes[index] === true)
+			const filteredRestaurants = []
+			for (let i = 0; i < types.length; i++) {
+				filteredRestaurants.push(...tempRestaurants.filter((r) => {
+					return r.type.toLowerCase().includes(types[i].toLowerCase())
+				}))
+			}
+
+			if (filteredRestaurants.length > 0) tempRestaurants = filteredRestaurants
+
 			if (this.nameSearch != '') {
 				tempRestaurants = tempRestaurants.filter((r) => {
 					return r.name.toLowerCase().includes(this.nameSearch.toLowerCase())
-				})
-			}
-
-			if (this.typeSearch != '') {
-				tempRestaurants = tempRestaurants.filter((r) => {
-					return r.type.toLowerCase().includes(this.typeSearch.toLowerCase())
 				})
 			}
 
@@ -87,7 +95,7 @@ Vue.component("restaurants", {
 				else if (this.sortBy == 'Location') {
 					var result = 0
 					if (addressFormat(a.location.address) < addressFormat(b.location.address)) result = -1
-					if (addressFormat(a.location.address) > addressFormat(b.location.address)) result =  1
+					if (addressFormat(a.location.address) > addressFormat(b.location.address)) result = 1
 					if (this.ascending) return result
 					return result * -1
 				}
@@ -107,14 +115,13 @@ Vue.component("restaurants", {
 		addressFormat(value) {
 			return value.street + " " + value.streetNumber + ", " + value.city + " " + value.zipCode;
 		},
-		locationFormat(location){
+		locationFormat(location) {
 			return location.longitude + ", " + location.latitude
 		},
 	},
 
 	methods: {
 		viewRestaurant(r) {
-			//this.$router.push('/restaurants/' + r.name);
 			this.restaurant = r
 			this.singleRestaurant = true
 			this.allRestaurants = false
@@ -122,8 +129,18 @@ Vue.component("restaurants", {
 		setSortOrder() {
 			this.ascending = !this.ascending
 		},
-		updateArticleAmount(){
+		updateArticleAmount() {
 			this.$refs.restaurantPage.updateArticleAmount()
+		},
+		initializeFilterDropdown() {
+			$(".checkbox-menu").on("change", "input[type='checkbox']", function () {
+				$(this).closest("li").toggleClass("active", this.checked)
+			})
+			$('.dropdown-menu.keep-open').on({"click": function (e) {
+					e.stopPropagation()
+					this.closable = false
+				}
+			})
 		}
 	},
 
@@ -152,14 +169,20 @@ Vue.component("restaurants", {
 									<label for="restaurantLocation">Location</label>
 								</div>
 							</div>
-							<div class="col-md-2">
-								<div class="form-floating">
-									<input list="types" id="restaurantType" class="form-control" v-model="typeSearch">
-									<datalist id="types" v-for="type in allTypes">
-										<option v-for="type in allTypes" :value="type">{{type}}</option>
-									</datalist>
-									<label for="restaurantType">Type</label>
-								</div>
+							<div class="col-md-2 d-flex justify-content-center">
+								<button class="btn btn-lg btn-primary dropdown-toggle" type="button" 
+								id="dropdownMenu1" data-bs-toggle="dropdown" 
+								aria-haspopup="true" aria-expanded="true">
+									Select types
+								</button>
+								<ul class="dropdown-menu checkbox-menu allow-focus keep-open" aria-labelledby="dropdownMenu1">
+									<li v-for="(type, i) in allTypes">
+										<label>
+											<input type="checkbox" v-model="typeCheckboxes[i]">
+											{{type}}
+										</label>
+									</li>
+								</ul>
 							</div>
 							<div class="col-md-1">
 								<div class="form-floating">

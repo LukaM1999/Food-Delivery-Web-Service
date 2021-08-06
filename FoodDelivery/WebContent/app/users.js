@@ -12,8 +12,10 @@ Vue.component("users", {
 			searchFilters: '',
 			sortBy: '',
 			ascending: true,
-			roleFilter: '',
-			typeFilter: '',
+			roles: ['Admin', 'Manager', 'Customer', 'Deliverer'],
+			roleFilters: [false, false, false, false],
+			types: ['Bronze', 'Silver', 'Gold'],
+			typeFilters: [false, false, false],
 		}
 	},
 
@@ -39,6 +41,7 @@ Vue.component("users", {
 			.then(response => {
 				this.admins = response.data
 			});
+		this.initializeFilterDropdown()
 	},
 
 	computed: {
@@ -59,23 +62,33 @@ Vue.component("users", {
 			Array.prototype.push.apply(users, tempCustomers)
 
 
+			let filteredUsers = []
+			if (this.roleFilters.filter(role => role === true).length > 0) {
+				const roles = this.roles.filter((role, index) => this.roleFilters[index] === true)
+				for (let i = 0; i < roles.length; i++) {
+					filteredUsers.push(...users.filter((u) => {
+						return u.role.toLowerCase().includes(roles[i].toLowerCase())
+					}))
+				}
+				users = filteredUsers
+			}
+
+			filteredUsers = []
+			if (this.typeFilters.filter(type => type === true).length > 0) {
+				const types = this.types.filter((type, index) => this.typeFilters[index] === true)
+				for (let i = 0; i < types.length; i++) {
+					filteredUsers.push(...users.filter((u) => {
+						return u.type.typeName.toLowerCase().includes(types[i].toLowerCase())
+					}))
+				}
+				users = filteredUsers
+			}
+
 			if (this.searchFilters != '') {
-				users = users.filter((r) => {
-					return r.name.toLowerCase().includes(this.searchFilters.toLowerCase())
-						|| r.surname.toLowerCase().includes(this.searchFilters.toLowerCase())
-						|| r.username.toLowerCase().includes(this.searchFilters.toLowerCase())
-				})
-			}
-
-			if (this.roleFilter != '') {
-				users = users.filter((r) => {
-					return r.role.toLowerCase().includes(this.roleFilter.toLowerCase())
-				})
-			}
-
-			if (this.typeFilter != '') {
-				users = users.filter((r) => {
-					return r.type.typeName.toLowerCase().includes(this.typeFilter.toLowerCase())
+				users = users.filter((u) => {
+					return u.name.toLowerCase().includes(this.searchFilters.toLowerCase())
+						|| u.surname.toLowerCase().includes(this.searchFilters.toLowerCase())
+						|| u.username.toLowerCase().includes(this.searchFilters.toLowerCase())
 				})
 			}
 
@@ -130,7 +143,17 @@ Vue.component("users", {
 					discount: 0,
 					pointsRequired: 0
 				}
-			});
+			})
+		},
+		initializeFilterDropdown() {
+			$(".checkbox-menu").on("change", "input[type='checkbox']", function () {
+				$(this).closest("li").toggleClass("active", this.checked)
+			})
+			$('.dropdown-menu.keep-open').on({"click": function (e) {
+					e.stopPropagation()
+					this.closable = false
+				}
+			})
 		}
 	},
 
@@ -167,28 +190,35 @@ Vue.component("users", {
       				<i :class="[ascending ? 'fa fa-sort-up' : 'fa fa-sort-down']"></i>
     			</button>
 			</div>
-			<div class="col-md-2">
-				<div class="form-floating">
-					<select v-model="roleFilter" class="form-select" id="roleFilter">
-						<option value="">Any</option>
-						<option value="Customer">Customer</option>
-						<option value="Deliverer">Deliverer</option>
-						<option value="Manager">Manager</option>									
-						<option value="Admin">Admin</option>									
-					</select>
-					<label for="roleFilter">Role</label>
-				</div>
+			<div class="col-md-2 d-flex justify-content-center">
+				<button class="btn btn-lg btn-primary dropdown-toggle" type="button" 
+				id="roleMenu" data-bs-toggle="dropdown" 
+				aria-haspopup="true" aria-expanded="true">
+					Select roles
+				</button>
+				<ul class="dropdown-menu checkbox-menu allow-focus keep-open" aria-labelledby="roleMenu">
+					<li v-for="(role, i) in roles">
+						<label>
+							<input type="checkbox" v-model="roleFilters[i]">
+							{{role}}
+						</label>
+					</li>
+				</ul>
 			</div>
-			<div class="col-md-2">
-				<div class="form-floating">
-					<select v-model="typeFilter" class="form-select" id="typeFilter">
-						<option value="">Any</option>
-						<option value="Bronze">Bronze</option>
-						<option value="Silver">Silver</option>
-						<option value="Gold">Gold</option>									
-					</select>
-					<label for="typeFilter">Customer type</label>
-				</div>
+			<div class="col-md-2 d-flex justify-content-center">
+				<button class="btn btn-lg btn-primary dropdown-toggle" type="button" 
+				id="typeMenu" data-bs-toggle="dropdown" 
+				aria-haspopup="true" aria-expanded="true">
+					Select types
+				</button>
+				<ul class="dropdown-menu checkbox-menu allow-focus keep-open" aria-labelledby="typeMenu">
+					<li v-for="(type, i) in types">
+						<label>
+							<input type="checkbox" v-model="typeFilters[i]">
+							{{type}}
+						</label>
+					</li>
+				</ul>
 			</div>
 		</div>
 		<div class="col-md-12">

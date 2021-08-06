@@ -4,15 +4,15 @@ Vue.component("login", {
 		return {
 			usernameLogin: '',
 			passwordLogin: '',
-			
+
 			alertLogin: '',
 		}
 	},
 
-	async mounted(){
-		$('.my-background').css('background-image', "url('images/login-background.png')");
+	async mounted() {
+		//$('.my-background').css('background-image', "url('images/login-background.png')")
 		var self = this
-		$('.modal').on('show.bs.modal', async function(){
+		$('.modal').on('show.bs.modal', async function () {
 			let backdrop = await self.getBackdrop()
 			backdrop[0].parentNode?.removeChild(backdrop[0])
 		})
@@ -20,42 +20,33 @@ Vue.component("login", {
 	},
 
 	methods: {
-		userLogin: function () {
-			var loginDto = {
-				username: this.usernameLogin,
-				password: this.passwordLogin,
+		async userLogin() {
+			const loginDto = { username: this.usernameLogin, password: this.passwordLogin }
+			const response = await axios.post('rest/user/find', loginDto)
+			if (response.data) {
+				const user = await axios.get('rest/user/getUser/' + loginDto.username)
+				this.$root.$data.user = user.data
+				this.$router.push('/' + this.usernameLogin)
+				$('.my-background').css('background-image', "url('images/main-background.jfif')")
 			}
-			axios
-				.post('rest/user/find', loginDto)
-				.then(response => {
-					if (response.data) {
-						axios
-							.get('rest/user/getUser/' + loginDto.username)
-							.then(response => {
-								this.$root.$data.user = response.data
-								this.$router.push('/' + this.usernameLogin)
-							});					}
-					else {
-						this.alertLogin = "Pogresno uneseno korisnicko ime/lozinka";
-						$('#loginAlert').fadeIn(300).delay(5000).fadeOut(300);
-					}
-				})
-		},
-
-		getBackdrop(){
-			return new Promise((resolve, reject) => {
-				let backdrop = document.getElementsByClassName('modal-backdrop')
-				if (backdrop) {
-					resolve(backdrop)
-				}
-				reject('No backdrop yet')
-			})
-		},
-		async getAllComments() {
-			const comments = await axios.get('rest/comment/getAllComments')
-			this.$root.$data.comments = comments.data
-		}
+			else 
+				this.$root.showAlert('Wrong username/password!')
 	},
+
+	getBackdrop() {
+		return new Promise((resolve, reject) => {
+			let backdrop = document.getElementsByClassName('modal-backdrop')
+			if (backdrop) {
+				resolve(backdrop)
+			}
+			reject('No backdrop yet')
+		})
+	},
+	async getAllComments() {
+		const comments = await axios.get('rest/comment/getAllComments')
+		this.$root.$data.comments = comments.data
+	}
+},
 
 	template: `
 	<div>

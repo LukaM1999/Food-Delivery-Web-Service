@@ -11,8 +11,10 @@ Vue.component('orders', {
             showDelivererOrders: false,
             requestKey: 1000,
             nameSearch: '',
-            typeSearch: '',
-            statusFilter: '',
+            types: [],
+            typeFilters: [],
+            statuses: ['Not delivered', 'CANCELLED', 'PROCESSING', 'PREPARING', 'AWAITING_PICKUP', 'DELIVERING', 'DELIVERED'],
+            statusFilters: [false, false, false, false, false, false, false],
             priceRangeMin: 0,
             priceRangeMax: 0,
             dateRangeMin: '',
@@ -31,8 +33,10 @@ Vue.component('orders', {
     },
 
     async mounted() {
-        if (this.user.role === 'MANAGER')
+        if (this.user.role === 'MANAGER') {
             this.orders = this.$root.$data.orders.filter((order) => order.restaurant === this.user.restaurant.name)
+            this.statuses.shift()
+        }
 
         if (this.user.role === 'CUSTOMER') {
             this.orders = this.$root.$data.orders.filter((order) => order.customerName === this.user.username)
@@ -51,8 +55,8 @@ Vue.component('orders', {
         this.priceRangeMax = this.getMaxPrice()
 
         this.instantiateDatepickers()
-
         this.setMinMaxDates()
+        this.initializeFilterDropdown()
 
     },
 
@@ -63,6 +67,12 @@ Vue.component('orders', {
                 this.restaurantTypes.set(order.restaurant, restaurant.data.type)
             }
             this.typesReady = true
+            this.setTypeFilters()
+        },
+        setTypeFilters() {
+            for (let i = 0; i < this.restaurantTypes.size; i++) {
+                this.typeFilters.push(false)
+            }
         },
         instantiateDatepickers() {
             var self = this
@@ -134,34 +144,65 @@ Vue.component('orders', {
         },
         commentExists(orderId) {
             return this.$root.$data.comments.filter(c => c.orderId === orderId).length > 0
-        }
+        },
+        initializeFilterDropdown() {
+			$(".checkbox-menu").on("change", "input[type='checkbox']", function () {
+				$(this).closest("li").toggleClass("active", this.checked)
+			})
+			$('.dropdown-menu.keep-open').on({"click": function (e) {
+					e.stopPropagation()
+					this.closable = false
+				}
+			})
+		}
     },
 
     computed: {
         filteredOrders() {
             let tempOrders = this.orders
+            
+            let filteredOrders = []
+            const statuses = this.statuses.filter((status, index) => this.statusFilters[index] === true)
+            if (statuses.includes('Not delivered')) {
+                tempOrders = tempOrders.filter((o) => {
+                    return !o.status.includes('DELIVERED')
+                })
+            }
+            
+            if (statuses.length > 1 && statuses.includes('Not delivered')) {
+                const delivered = new Map()
+                for (let i = 0; i < statuses.length; i++) {
+                    this.orders.forEach(order => {
+                        if (order.status.includes('DELIVERED')) delivered.set(order.id, order)
+                    })
+                }
+                tempOrders.push(...Array.from(delivered.values()))
+            }
+
+            if (statuses.length > 0 && !statuses.includes('Not delivered')) {
+                for (let i = 0; i < statuses.length; i++) {
+                    filteredOrders.push(...tempOrders.filter((o) => {
+                        return o.status.toLowerCase().includes(statuses[i].toLowerCase())
+                    }))
+                }
+                tempOrders = filteredOrders
+            }
+            
+            
+            filteredOrders = []
+            const types = Array.from(this.restaurantTypes.values()).filter((type, index) => this.typeFilters[index] === true)
+            if (types.length > 0) {
+                for (let i = 0; i < types.length; i++) {
+                    filteredOrders.push(...tempOrders.filter((o) => {
+                        return this.restaurantTypes.get(o.restaurant).toLowerCase().includes(types[i].toLowerCase())
+                    }))
+                }
+                tempOrders = filteredOrders
+            }
 
             if (this.nameSearch != '') {
                 tempOrders = tempOrders.filter(o => {
                     return o.restaurant.toLowerCase().includes(this.nameSearch.toLowerCase())
-                })
-            }
-
-            if (this.typeSearch != '') {
-                tempOrders = tempOrders.filter(o => {
-                    return this.restaurantTypes.get(o.restaurant).toLowerCase().includes(this.typeSearch.toLowerCase())
-                })
-            }
-
-            if (this.statusFilter != '' && this.statusFilter !== 'Not delivered') {
-                tempOrders = tempOrders.filter(o => {
-                    return o.status.toLowerCase().includes(this.statusFilter.toLowerCase())
-                })
-            }
-
-            if (this.statusFilter === 'Not delivered') {
-                tempOrders = tempOrders.filter(o => {
-                    return !o.status.toLowerCase().includes('delivered')
                 })
             }
 
@@ -220,14 +261,20 @@ Vue.component('orders', {
                     <label for="restaurantName">Restaurant name</label>
                 </div>
             </div>
-            <div class="col-md-2" v-if="user.role !== 'MANAGER'">
-                <div class="form-floating">
-                    <input list="types" id="restaurantType" class="form-control" v-model="typeSearch">
-                    <datalist id="types" v-for="type in Array.from(restaurantTypes.values())">
-                        <option v-for="type in Array.from(restaurantTypes.values())" :value="type">{{type}}</option>
-                    </datalist>
-                    <label for="restaurantType">Restaurant type</label>
-                </div>
+            <div class="col-md-2 d-flex justify-content-center" v-if="user.role !== 'MANAGER'">
+                <button class="btn btn-lg btn-primary dropdown-toggle" type="button" 
+                id="typeMenu" data-bs-toggle="dropdown" 
+                aria-haspopup="true" aria-expanded="true">
+                    Select types
+                </button>
+                <ul class="dropdown-menu checkbox-menu allow-focus keep-open" aria-labelledby="typeMenu">
+                    <li v-for="(type, i) in Array.from(restaurantTypes.values())">
+                        <label>
+                            <input type="checkbox" v-model="typeFilters[i]">
+                            {{type}}
+                        </label>
+                    </li>
+                </ul>
             </div>
             <div class="col-md-1">
                 <div class="form-floating">
@@ -256,20 +303,21 @@ Vue.component('orders', {
                     </div>
                 </div>
             </div>
-            <div class="col-md-2">
-                <div class="form-floating">
-                    <select v-model="statusFilter" class="form-select" id="statusFilter">
-                        <option value="">None</option>
-                        <option value="Not delivered" v-if="user.role !== 'MANAGER' && insideProfile">Not delivered</option>
-                        <option value="PROCESSING">Processing</option>
-                        <option value="PREPARING">Preparing</option>									
-                        <option value="AWAITING_PICKUP">Awaiting pickup</option>									
-                        <option value="DELIVERING">Delivering</option>									
-                        <option value="DELIVERED">Delivered</option>									
-                    </select>
-                    <label for="statusFilter">Status</label>
-                </div>
-            </div>
+            <div class="col-md-2 d-flex justify-content-center">
+				<button class="btn btn-lg btn-primary dropdown-toggle" type="button" 
+				id="statusMenu" data-bs-toggle="dropdown" 
+				aria-haspopup="true" aria-expanded="true">
+					Select statuses
+				</button>
+				<ul class="dropdown-menu checkbox-menu allow-focus keep-open" aria-labelledby="statusMenu">
+					<li v-for="(status, i) in statuses">
+						<label>
+							<input type="checkbox" v-model="statusFilters[i]">
+							{{status | formatStatus}}
+						</label>
+					</li>
+				</ul>
+			</div>
         </div>
         <div class="row mb-5 justify-content-center">
             <div class="col-md-2">
