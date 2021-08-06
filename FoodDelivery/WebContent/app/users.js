@@ -149,11 +149,34 @@ Vue.component("users", {
 			$(".checkbox-menu").on("change", "input[type='checkbox']", function () {
 				$(this).closest("li").toggleClass("active", this.checked)
 			})
-			$('.dropdown-menu.keep-open').on({"click": function (e) {
+			$('.dropdown-menu.keep-open').on({
+				"click": function (e) {
 					e.stopPropagation()
 					this.closable = false
 				}
 			})
+		},
+		removeUser(user) {
+			const { points, type, restaurant, orders, cart, ...u } = user
+			switch (user.role) {
+				case 'CUSTOMER':
+					axios.delete('rest/user/removeUser', { data: u })
+					this.customers = this.customers.filter((u) => u.username !== user.username)
+					break
+				case 'DELIVERER':
+					axios.delete(`rest/request/removeRequests/${user.username}`)
+					axios.delete('rest/user/removeUser', { data: u })
+					this.deliverers = this.deliverers.filter((u) => u.username !== user.username)
+					break
+				case 'MANAGER':
+					if (user.restaurant)
+						axios.delete(`rest/restaurant/removeRestaurant/${user.restaurant.name}`)
+					axios.delete('rest/user/removeUser', { data: u })
+					this.managers = this.managers.filter((u) => u.username !== user.username)
+					break
+				default:
+					break
+			}
 		}
 	},
 
@@ -252,13 +275,13 @@ Vue.component("users", {
 						<td>{{u.username}}</td>
 						<td>{{u.name}}</td>
 						<td>{{u.surname}}</td>
-						<td>{{u.points}}</td>
+						<td>{{u.points.toFixed(2)}}</td>
 						<td>{{u.role | roleFormat}}</td>
 						<td>{{u.type.typeName}}</td>
 						<td>
 							<div class="d-flex justify-content-center" v-if="u.role !== 'ADMIN'" style="display:inline;">
 								<button class="btn btn-warning" style="margin-right: 5%;"> Block </button>
-								<button class="btn btn-danger"> Delete </button>
+								<button class="btn btn-danger" @click="removeUser(u)"> Delete </button>
 							</div>
 						</td>
 					</tr>

@@ -77,4 +77,9 @@ public class DelivererDAO {
 		return true;
 	}
 	
+	public void removeDeliverer(User user) throws JsonGenerationException, JsonMappingException, IOException {
+		deliverers.remove(getUserById(user.getUsername()));
+		serialize();
+	}
+	
 }

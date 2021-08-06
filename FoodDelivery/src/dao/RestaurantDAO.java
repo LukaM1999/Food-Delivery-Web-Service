@@ -108,4 +108,9 @@ public class RestaurantDAO {
 		getRestaurantById(ratingDto.restaurant).setRating(ratingDto.rating);
 		serialize();
 	}
+	
+	public void removeRestaurant(String name) throws JsonGenerationException, JsonMappingException, IOException {
+		restaurants.remove(getRestaurantById(name));
+		serialize();
+	}
 }

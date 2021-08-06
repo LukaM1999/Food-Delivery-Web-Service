@@ -50,7 +50,7 @@ Vue.component("restaurantPage", {
 			const ratingSum = ratings.reduce((total, rating) => {
 				return total + rating
 			}, 0)
-			this.r.rating = Math.round((ratingSum / ratings.length) * 10) / 10
+			this.r.rating = Math.round((ratingSum / ratings.length) * 10) / 10 || 0
 			this.ratingCount = ratings.length
 		},
 		refreshRating() {

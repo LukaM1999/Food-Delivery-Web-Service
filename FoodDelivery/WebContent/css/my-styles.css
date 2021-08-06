@@ -9,6 +9,16 @@
     /* <-- Apparently some margin are still there even though it's hidden */
 }
 
+table{
+    background: antiquewhite;
+}
+thead{
+    background: navajowhite;
+}
+.card-body, .card-footer{
+    background: antiquewhite !important;
+}
+
 .my-number {
     height: 29px;
     width: 100px;

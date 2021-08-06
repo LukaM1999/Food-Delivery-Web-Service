@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -20,6 +21,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import beans.DeliveryRequest;
 import dao.DeliveryRequestDAO;
+import dao.ManagerDAO;
+import dao.RestaurantDAO;
 
 @Path("/request")
 public class DeliveryRequestService {
@@ -80,6 +83,15 @@ public class DeliveryRequestService {
 	public void updateRequests(ArrayList<DeliveryRequest> requests) throws JsonGenerationException, JsonMappingException, IOException {
 		DeliveryRequestDAO requestDao = (DeliveryRequestDAO) ctx.getAttribute("requests");
 		requestDao.updateRequests(requests);
+		ctx.setAttribute("requests", requestDao);
+	}
+	
+	@DELETE
+	@Path("/removeRequests/{username}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void removeRequests(@PathParam(value = "username") String username) throws JsonGenerationException, JsonMappingException, IOException {
+		DeliveryRequestDAO requestDao = (DeliveryRequestDAO) ctx.getAttribute("requests");
+		requestDao.removeRequests(username);
 		ctx.setAttribute("requests", requestDao);
 	}
 }

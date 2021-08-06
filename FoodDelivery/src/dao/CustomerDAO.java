@@ -93,4 +93,9 @@ public class CustomerDAO {
 		serialize();
 		return true;
 	}
+	
+	public void removeCustomer(User user) throws JsonGenerationException, JsonMappingException, IOException {
+		customers.remove(getUserById(user.getUsername()));
+		serialize();
+	}
 }

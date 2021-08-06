@@ -88,4 +88,20 @@ public class ManagerDAO {
 		serialize();
 		return true;
 	}
+	
+	public void removeManager(User user) throws JsonGenerationException, JsonMappingException, IOException {
+		managers.remove(getUserById(user.getUsername()));
+		serialize();
+	}
+	
+	public void removeRestaurant(String name) throws JsonGenerationException, JsonMappingException, IOException {
+		for(Manager m : managers) {
+			if(m.getRestaurant().getName().equals(name)) {
+				m.setRestaurant(null);
+				break;
+			}
+				
+		}
+		serialize();
+	}
 }

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -170,6 +171,18 @@ public class RestaurantService {
 		RestaurantDAO dao = (RestaurantDAO) ctx.getAttribute("restaurants");
 		dao.updateRating(ratingDto);
 		ctx.setAttribute("restaurants", dao);
+	}
+	
+	@DELETE
+	@Path("/removeRestaurant/{name}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void removeRestaurant(@PathParam(value = "name") String name) throws JsonGenerationException, JsonMappingException, IOException {
+		RestaurantDAO restaurantDao = (RestaurantDAO) ctx.getAttribute("restaurants");
+		restaurantDao.removeRestaurant(name);
+		ctx.setAttribute("restaurants", restaurantDao);
+		ManagerDAO managerDao = (ManagerDAO) ctx.getAttribute("managers");
+		managerDao.removeRestaurant(name);
+		ctx.setAttribute("managers", managerDao);
 	}
 	
 }

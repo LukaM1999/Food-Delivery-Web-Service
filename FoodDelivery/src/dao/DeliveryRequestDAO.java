@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -72,6 +73,16 @@ public class DeliveryRequestDAO {
 	
 	public void updateRequests(ArrayList<DeliveryRequest> requests) throws JsonGenerationException, JsonMappingException, IOException {
 		this.requests = requests;
+		serialize();
+	}
+	
+	public void removeRequests(String username) throws JsonGenerationException, JsonMappingException, IOException {
+		Iterator<DeliveryRequest> i = requests.iterator();
+		while(i.hasNext()) {
+			DeliveryRequest r = i.next();
+			if(r.getDelivererUsername().equals(username)) 
+				i.remove();
+		}
 		serialize();
 	}
 }

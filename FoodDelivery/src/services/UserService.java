@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -230,4 +231,32 @@ public class UserService {
 		ctx.setAttribute("users", userDao);
 		return customerDao.getUserById(pointsDto.customerUsername).getType();
 	}
+	
+	@DELETE
+	@Path("/removeUser")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void removeUser(User user) throws IOException {
+		switch (user.getRole()) {
+		case CUSTOMER:
+			CustomerDAO customerDao = (CustomerDAO) ctx.getAttribute("customers");
+			customerDao.removeCustomer(user);
+			ctx.setAttribute("customers", customerDao);
+			break;
+		case DELIVERER:
+			DelivererDAO delivererDao = (DelivererDAO) ctx.getAttribute("deliverers");
+			delivererDao.removeDeliverer(user);
+			ctx.setAttribute("deliverers", delivererDao);
+			break;
+		case MANAGER:
+			ManagerDAO managerDao = (ManagerDAO) ctx.getAttribute("managers");
+			managerDao.removeManager(user);
+			ctx.setAttribute("managers", managerDao);
+		default:
+			break;
+		}
+		UserDAO userDao = (UserDAO) ctx.getAttribute("users");
+		userDao.deserialize();
+		ctx.setAttribute("users", userDao);
+	}
+	
 }

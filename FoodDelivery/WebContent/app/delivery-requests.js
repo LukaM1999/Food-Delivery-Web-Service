@@ -57,7 +57,7 @@ Vue.component('deliveryRequests', {
                             <td>{{r.orderPrice}}</td>
                             <td>{{r.delivererUsername}}</td>
                             <td class="text-center">
-                                <button class="btn btn-primary" style="margin-right: 5%;" @click="acceptRequest(r)">
+                                <button class="btn btn-warning" style="margin-right: 5%;" @click="acceptRequest(r)">
                                     Accept
                                 </button>
                                 <button class="btn btn-danger" @click="declineRequest(r)">
