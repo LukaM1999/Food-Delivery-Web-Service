@@ -83,7 +83,7 @@ Vue.component('shoppingCart', {
 
 	template: `
 	<div>
-		<button class="btn btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+		<button class="btn btn-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
 			<i class="fa fa-shopping-cart fa-5x"></i>
 		</button>
 		<div class="offcanvas offcanvas-end my-canvas" tabindex="-1" id="offcanvasRight" data-bs-scroll="true"  style="width: 50%;" aria-labelledby="offcanvasRightLabel">

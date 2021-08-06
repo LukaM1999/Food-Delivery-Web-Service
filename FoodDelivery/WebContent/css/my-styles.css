@@ -1,5 +1,5 @@
 .my-navbar {
-    background-color: #fb9dc7 !important;
+    background-color: hsl(0deg 0% 40% / 90%) !important;
 }
 
 .article-amount::-webkit-outer-spin-button, .article-amount::-webkit-inner-spin-button {

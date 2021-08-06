@@ -165,8 +165,7 @@ Vue.component("users", {
 
 	template: `
 	<div>
-		<a href="#" id="back-to-top" title="Back to top" style="display: none;"><i class="fa fa-angle-up" aria-hidden="true"></i></a>
-		<div class="row mb-5 mt-5">
+		<div class="row mb-5 mt-5 justify-content-center" style="padding-top: 3%;">
 			<div class="col-md-4">
 				<div class="form-floating">
 					<input type="text" class="form-control" id="userSearch" v-model="searchFilters">
@@ -222,9 +221,9 @@ Vue.component("users", {
 			</div>
 		</div>
 		<div class="col-md-12">
-			<table class="table table-bordered table-hover">
-				<thead>
-					<tr>
+			<table class="table table-bordered table-hover" style="background: antiquewhite;">
+				<thead style="background: navajowhite;">
+					<tr class="text-center">
 						<th>
 							Username
 						</th>
@@ -243,6 +242,9 @@ Vue.component("users", {
 						<th>
 							Customer type
 						</th>
+						<th>
+							Manage account
+						</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -253,6 +255,12 @@ Vue.component("users", {
 						<td>{{u.points}}</td>
 						<td>{{u.role | roleFormat}}</td>
 						<td>{{u.type.typeName}}</td>
+						<td>
+							<div class="d-flex justify-content-center" v-if="u.role !== 'ADMIN'" style="display:inline;">
+								<button class="btn btn-warning" style="margin-right: 5%;"> Block </button>
+								<button class="btn btn-danger"> Delete </button>
+							</div>
+						</td>
 					</tr>
 				</tbody>
 			</table>

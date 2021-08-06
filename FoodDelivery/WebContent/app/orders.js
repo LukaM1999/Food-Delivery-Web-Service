@@ -339,8 +339,8 @@ Vue.component('orders', {
         </div>
         <div v-if="orders.length > 0" class="row">
             <div class="col">
-                <table class="table table-bordered table-hover">
-                    <thead>
+                <table class="table table-bordered table-hover" style="background: antiquewhite;">
+                    <thead style="background: navajowhite;">
                         <tr class="text-center">
                             <th v-if="user.role !== 'MANAGER'">Restaurant</th>
                             <th v-if="user.role !== 'MANAGER'">Restaurant type</th>

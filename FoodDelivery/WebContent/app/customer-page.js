@@ -67,11 +67,11 @@ Vue.component('customerPage', {
 				<nav class="navbar my-navbar navbar-expand-lg navbar-light fixed-top">
 					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bs-example-navbar-collapse-1">
 						<span class="fa fa-3x fa-bars"></span>
-					</button> <a class="navbar-brand" href="http://localhost:8080/FoodDelivery/"><img src="images/quotations-button.png" width="80" height="80"></a>
+					</button> <a class="navbar-brand" href="http://localhost:8080/FoodDelivery/"><img src="images/logo.png" width="80" height="80"></a>
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 						<ul class="navbar-nav">						
 							<li class="nav-item active" style="padding: 5px;">
-								<button type="button" class="btn btn-secondary btn-lg" @click="openCartResetDialog('restaurantsView')">Restaurants</button>
+								<button type="button" class="btn btn-dark btn-lg" @click="openCartResetDialog('restaurantsView')">Restaurants</button>
 							</li>					
 						</ul>
 						<ul class="navbar-nav ms-auto">
@@ -79,7 +79,7 @@ Vue.component('customerPage', {
 								<shoppingCart @order-added="updateArticleAmount" ref="shoppingCart"></shoppingCart>
 							</li>
 							<li class="nav-item" style="padding: 5px;">
-								<button type="button" class="btn btn-secondary" @click="openCartResetDialog('profileView')"><i class="fa fa-user fa-5x"></i></button>
+								<button type="button" class="btn btn-dark" @click="openCartResetDialog('profileView')"><i class="fa fa-user fa-5x"></i></button>
 							</li>									
 						</ul>
 					</div>
