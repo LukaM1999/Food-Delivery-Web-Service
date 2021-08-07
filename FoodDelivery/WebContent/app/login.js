@@ -23,7 +23,7 @@ Vue.component("login", {
 		async userLogin() {
 			const loginDto = { username: this.usernameLogin, password: this.passwordLogin }
 			const response = await axios.post('rest/user/find', loginDto)
-			if (response.data) {
+			if (response.data && response.data.status !== 'BLOCKED') {
 				const user = await axios.get('rest/user/getUser/' + loginDto.username)
 				this.$root.$data.user = user.data
 				this.$router.push('/' + this.usernameLogin)

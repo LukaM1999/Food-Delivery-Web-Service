@@ -42,6 +42,7 @@ Vue.component("users", {
 				this.admins = response.data
 			});
 		this.initializeFilterDropdown()
+		this.initializeTooltips()
 	},
 
 	computed: {
@@ -156,6 +157,12 @@ Vue.component("users", {
 				}
 			})
 		},
+		initializeTooltips() {
+			var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+			var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+				return new bootstrap.Tooltip(tooltipTriggerEl)
+			})
+		},
 		removeUser(user) {
 			const { points, type, restaurant, orders, cart, ...u } = user
 			switch (user.role) {
@@ -177,13 +184,20 @@ Vue.component("users", {
 				default:
 					break
 			}
-		}
+		},
+		blockUser(user) {
+			user.status = 'BLOCKED'
+			axios.put('rest/user/setStatus', {
+				username: user.username, role: user.role, status: 'BLOCKED'
+		   })
+		   this.$root.showAlert(`Successfully blocked user with username: ${user.username}.`)
+		},
 	},
 
 	filters: {
 		roleFormat(role) {
 			return role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
-		}
+		},
 	},
 
 	template: `
@@ -243,50 +257,54 @@ Vue.component("users", {
 				</ul>
 			</div>
 		</div>
-		<div class="col-md-12">
-			<table class="table table-bordered table-hover" style="background: antiquewhite;">
-				<thead style="background: navajowhite;">
-					<tr class="text-center">
-						<th>
-							Username
-						</th>
-						<th>
-							Name
-						</th>
-						<th>
-							Surname
-						</th>
-						<th>
-							Points received
-						</th>
-						<th>
-							Role
-						</th>
-						<th>
-							Customer type
-						</th>
-						<th>
-							Manage account
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr v-for="u in filteredUsers">
-						<td>{{u.username}}</td>
-						<td>{{u.name}}</td>
-						<td>{{u.surname}}</td>
-						<td>{{u.points.toFixed(2)}}</td>
-						<td>{{u.role | roleFormat}}</td>
-						<td>{{u.type.typeName}}</td>
-						<td>
-							<div class="d-flex justify-content-center" v-if="u.role !== 'ADMIN'" style="display:inline;">
-								<button class="btn btn-warning" style="margin-right: 5%;"> Block </button>
-								<button class="btn btn-danger" @click="removeUser(u)"> Delete </button>
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+		<div class="row">
+			<div class="col-md-12">
+				<table class="table table-bordered table-hover" style="background: antiquewhite;">
+					<thead style="background: navajowhite;">
+						<tr class="text-center">
+							<th>
+								Username
+							</th>
+							<th>
+								Name
+							</th>
+							<th>
+								Surname
+							</th>
+							<th>
+								Points received
+							</th>
+							<th>
+								Role
+							</th>
+							<th>
+								Customer type
+							</th>
+							<th>
+								Manage account
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="u in filteredUsers" 
+						:style="[u.status === 'BLACKLISTED' ? {'background': 'darkgray'} : u.status === 'BLOCKED' ? {'background': 'red'} : {}]"
+						data-bs-toggle="tooltip" data-bs-placement="top" :title="u.status | roleFormat">
+							<td>{{u.username}}</td>
+							<td>{{u.name}}</td>
+							<td>{{u.surname}}</td>
+							<td>{{u.points.toFixed(2)}}</td>
+							<td>{{u.role | roleFormat}}</td>
+							<td>{{u.type.typeName}}</td>
+							<td>
+								<div class="d-flex justify-content-center" v-if="u.role !== 'ADMIN'" style="display:inline;">
+									<button v-if="u.status !== 'BLOCKED'" class="btn btn-warning" style="margin-right: 5%;" @click="blockUser(u)">Block</button>
+									<button class="btn btn-danger" @click="removeUser(u)">Delete</button>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 	`

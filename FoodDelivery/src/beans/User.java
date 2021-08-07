@@ -15,11 +15,12 @@ public class User {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy.")
 	private Date dateOfBirth;
 	private Role role;
+	private UserStatus status;
 	
 	public User() {}
 	
 	public User(String username, String password, String name, String surname, String gender, Date dateOfBirth,
-			Role role) {
+			Role role, UserStatus status) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -28,6 +29,7 @@ public class User {
 		this.gender = gender;
 		this.dateOfBirth = dateOfBirth;
 		this.role = role;
+		this.status = status; 
 	}
 
 	public String getUsername() {
@@ -84,6 +86,14 @@ public class User {
 
 	public void setRole(Role role) {
 		this.role = role;
+	}
+
+	public UserStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(UserStatus status) {
+		this.status = status;
 	}
 	
 }

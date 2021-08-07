@@ -8,8 +8,8 @@ public class Deliverer extends User {
 	private ArrayList<Order> orders = new ArrayList<Order>();
 	
 	public Deliverer(String username, String password, String name, String surname, String gender, Date dateOfBirth,
-			Role role) {
-		super(username, password, name, surname, gender, dateOfBirth, role);
+			Role role, UserStatus status) {
+		super(username, password, name, surname, gender, dateOfBirth, role, status);
 	}
 	
 	public Deliverer() {

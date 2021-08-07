@@ -33,6 +33,7 @@ import dao.UserDAO;
 import dto.CustomerPointsDTO;
 import dto.LoginDTO;
 import dto.ProfileDTO;
+import dto.UserStatusDTO;
 
 @Path("/user")
 public class UserService {
@@ -258,5 +259,33 @@ public class UserService {
 		userDao.deserialize();
 		ctx.setAttribute("users", userDao);
 	}
+	
+	@PUT
+	@Path("/setStatus")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void setStatus(UserStatusDTO statusDto) throws IOException {
+		switch (statusDto.role) {
+		case CUSTOMER:
+			CustomerDAO customerDao = (CustomerDAO) ctx.getAttribute("customers");
+			customerDao.setStatus(statusDto);
+			ctx.setAttribute("customers", customerDao);
+			break;
+		case DELIVERER:
+			DelivererDAO delivererDao = (DelivererDAO) ctx.getAttribute("deliverers");
+			delivererDao.setStatus(statusDto);
+			ctx.setAttribute("deliverers", delivererDao);
+			break;
+		case MANAGER:
+			ManagerDAO managerDao = (ManagerDAO) ctx.getAttribute("managers");
+			managerDao.setStatus(statusDto);
+			ctx.setAttribute("managers", managerDao);
+		default:
+			break;
+		}
+		UserDAO userDao = (UserDAO) ctx.getAttribute("users");
+		userDao.deserialize();
+		ctx.setAttribute("users", userDao);
+	}
+	
 	
 }

@@ -12,10 +12,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
+import beans.Customer;
 import beans.Deliverer;
 import beans.User;
+import beans.UserStatus;
 import dto.LoginDTO;
 import dto.ProfileDTO;
+import dto.UserStatusDTO;
 
 public class DelivererDAO {
 
@@ -45,7 +48,7 @@ public class DelivererDAO {
 	public boolean addDeliverer(User deliverer) throws JsonGenerationException, JsonMappingException, IOException {
 		if (new UserDAO().alreadyRegistered(deliverer.getUsername())) return false;
 		deliverers.add(new Deliverer(deliverer.getUsername(), deliverer.getPassword(), deliverer.getName(), 
-				deliverer.getSurname(), deliverer.getGender(), deliverer.getDateOfBirth(), deliverer.getRole()));
+				deliverer.getSurname(), deliverer.getGender(), deliverer.getDateOfBirth(), deliverer.getRole(), UserStatus.REGULAR));
 		serialize();
 		return true;
 	}
@@ -82,4 +85,13 @@ public class DelivererDAO {
 		serialize();
 	}
 	
+	public void setStatus(UserStatusDTO statusDto) throws JsonGenerationException, JsonMappingException, IOException {
+		for (Deliverer d : deliverers) {
+			if (d.getUsername().equals(statusDto.username)) {
+				d.setStatus(statusDto.status);
+				break;
+			}
+		}
+		serialize();
+	}
 }

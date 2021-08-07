@@ -100,8 +100,20 @@ Vue.component('orders', {
         },
         updateOrderStatus(order, newStatus) {
             order.status = newStatus
-            if (newStatus === 'CANCELLED') this.updatePoints(order)
+            if (newStatus === 'CANCELLED') {
+                this.updatePoints(order)
+                if (this.maxCancellations() > 5 && this.user.status !== 'BLACKLISTED')
+                    axios.put('rest/user/setStatus', {
+                         username: order.customerName, role: this.user.role, status: 'BLACKLISTED'
+                    })
+            }
             axios.put('rest/order/updateStatus', { orderId: order.id, status: newStatus })
+        },
+        maxCancellations() {
+            const cancellations = this.orders.filter(order => {
+                return moment(order.orderTime, 'DD.MM.YYYY. HH:mm:ss') >= moment().subtract(1, 'months') && order.status === 'CANCELLED'
+            }).length
+            return cancellations
         },
         async sendRequest(o) {
             const request = {
@@ -146,21 +158,22 @@ Vue.component('orders', {
             return this.$root.$data.comments.filter(c => c.orderId === orderId).length > 0
         },
         initializeFilterDropdown() {
-			$(".checkbox-menu").on("change", "input[type='checkbox']", function () {
-				$(this).closest("li").toggleClass("active", this.checked)
-			})
-			$('.dropdown-menu.keep-open').on({"click": function (e) {
-					e.stopPropagation()
-					this.closable = false
-				}
-			})
-		}
+            $(".checkbox-menu").on("change", "input[type='checkbox']", function () {
+                $(this).closest("li").toggleClass("active", this.checked)
+            })
+            $('.dropdown-menu.keep-open').on({
+                "click": function (e) {
+                    e.stopPropagation()
+                    this.closable = false
+                }
+            })
+        }
     },
 
     computed: {
         filteredOrders() {
             let tempOrders = this.orders
-            
+
             let filteredOrders = []
             const statuses = this.statuses.filter((status, index) => this.statusFilters[index] === true)
             if (statuses.includes('Not delivered')) {
@@ -168,7 +181,7 @@ Vue.component('orders', {
                     return !o.status.includes('DELIVERED')
                 })
             }
-            
+
             if (statuses.length > 1 && statuses.includes('Not delivered')) {
                 const delivered = new Map()
                 for (let i = 0; i < statuses.length; i++) {
@@ -187,8 +200,8 @@ Vue.component('orders', {
                 }
                 tempOrders = filteredOrders
             }
-            
-            
+
+
             filteredOrders = []
             const types = Array.from(this.restaurantTypes.values()).filter((type, index) => this.typeFilters[index] === true)
             if (types.length > 0) {

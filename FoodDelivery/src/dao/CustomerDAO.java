@@ -16,9 +16,11 @@ import beans.Customer;
 import beans.CustomerType;
 import beans.Order;
 import beans.User;
+import beans.UserStatus;
 import dto.CustomerPointsDTO;
 import dto.LoginDTO;
 import dto.ProfileDTO;
+import dto.UserStatusDTO;
 
 public class CustomerDAO {
 
@@ -50,7 +52,7 @@ public class CustomerDAO {
 			return false;
 		customers.add(new Customer(customer.getUsername(), customer.getPassword(), customer.getName(),
 				customer.getSurname(), customer.getGender(), customer.getDateOfBirth(), customer.getRole(),
-				new ArrayList<Order>(), null, 0, new CustomerType("Bronze", 0, 3000)));
+				UserStatus.REGULAR, new ArrayList<Order>(), null, 0, new CustomerType("Bronze", 0, 3000)));
 		serialize();
 		return true;
 	}
@@ -85,17 +87,30 @@ public class CustomerDAO {
 		return true;
 	}
 
-	public boolean updatePoints(CustomerPointsDTO pointsDto) throws JsonGenerationException, JsonMappingException, IOException {
-		if (getUserById(pointsDto.customerUsername) == null) return false;
-		if (pointsDto.points < 0) pointsDto.points = 0;
+	public boolean updatePoints(CustomerPointsDTO pointsDto)
+			throws JsonGenerationException, JsonMappingException, IOException {
+		if (getUserById(pointsDto.customerUsername) == null)
+			return false;
+		if (pointsDto.points < 0)
+			pointsDto.points = 0;
 		getUserById(pointsDto.customerUsername).setPoints(pointsDto.points);
 		getUserById(pointsDto.customerUsername).getType().determineType(pointsDto.points);
 		serialize();
 		return true;
 	}
-	
+
 	public void removeCustomer(User user) throws JsonGenerationException, JsonMappingException, IOException {
 		customers.remove(getUserById(user.getUsername()));
+		serialize();
+	}
+
+	public void setStatus(UserStatusDTO statusDto) throws JsonGenerationException, JsonMappingException, IOException {
+		for (Customer c : customers) {
+			if (c.getUsername().equals(statusDto.username)) {
+				c.setStatus(statusDto.status);
+				break;
+			}
+		}
 		serialize();
 	}
 }
