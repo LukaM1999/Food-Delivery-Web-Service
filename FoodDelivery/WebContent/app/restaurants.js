@@ -26,27 +26,24 @@ Vue.component("restaurants", {
 
 	},
 
-	mounted() {
-		axios
-			.get('rest/restaurant/getAllRestaurants')
-			.then(response => {
-				this.restaurants = response.data
-				this.restaurants
-					.sort(function (a, b) {
-						if (a.status < b.status) return 1;
-						if (a.status > b.status) return -1;
-						return 0;
-					})
-				this.restaurants.forEach(r => {
-					if (this.allTypes.filter((type) => { type.toLowerCase() == r.type.toLowerCase() }).length == 0) {
-						this.allTypes.push(r.type)
-						this.typeCheckboxes.push(false)
-					}
-				});
-			});
+	async mounted() {
+		const restaurants = await axios.get('rest/restaurant/getAllRestaurants')
+		this.restaurants = restaurants.data
+		this.restaurants.sort(function (a, b) {
+				if (a.status < b.status) return 1;
+				if (a.status > b.status) return -1;
+				return 0;
+			})
+		this.restaurants.forEach(r => {
+			if (this.allTypes.filter((type) => { type.toLowerCase() == r.type.toLowerCase() }).length == 0) {
+				this.allTypes.push(r.type)
+				this.typeCheckboxes.push(false)
+			}
+		})
 		this.singleRestaurant = false
 		this.allRestaurants = true
 		this.initializeFilterDropdown()
+		this.$nextTick(() => this.initializeRating())
 	},
 
 	computed: {
@@ -80,7 +77,7 @@ Vue.component("restaurants", {
 
 			if (this.ratingSearch != '') {
 				tempRestaurants = tempRestaurants.filter((r) => {
-					return r.rating >= this.ratingSearch
+					return Math.round(r.rating) === Math.round(this.ratingSearch)
 				})
 			}
 
@@ -136,98 +133,120 @@ Vue.component("restaurants", {
 			$(".checkbox-menu").on("change", "input[type='checkbox']", function () {
 				$(this).closest("li").toggleClass("active", this.checked)
 			})
-			$('.dropdown-menu.keep-open').on({"click": function (e) {
+			$('.dropdown-menu.keep-open').on({
+				"click": function (e) {
 					e.stopPropagation()
 					this.closable = false
 				}
 			})
+		},
+		initializeRating() {
+			$('.rating').each(function () {
+				$(this).rating({ showCaption: false, displayOnly: true, step: 0.1 })
+			})
+		},
+		removeRestaurant(restaurant) {
+			this.restaurants = this.restaurants.filter(r => r.name !== restaurant.name)
+			const manager = this.$parent.$data.managers.find(manager => manager.restaurant?.name === restaurant.name)
+			this.$parent.$data.managers.find(manager => manager.restaurant?.name === restaurant.name).restaurant = null
+			axios.delete(`rest/restaurant/removeRestaurant/${restaurant.name}`)
+			this.$parent.updateManagerSelect(manager)
+			this.$root.showAlert(`Successfully removed restaurant ${restaurant.name}!`)
 		}
 	},
 
 	template: `
-		<div class="row">
-			<div class="col-md-12" v-if="allRestaurants">
-				<div class="menu-box">
-					<div class="container">
-						<div class="row">
-							<div class="col-lg-12">
-								<div class="heading-title text-center">
-									<h2>Restaurants</h2>
-								</div>
-							</div>
-						</div>
-						<div class="row mb-5">
-							<div class="col-md-2">
-								<div class="form-floating">
-									<input type="text" class="form-control" id="restaurantName" v-model="nameSearch">
-									<label for="restaurantName">Restaurant name</label>
-								</div>
-							</div>
-							<div class="col-md-2">
-								<div class="form-floating">
-									<input type="text" class="form-control" id="restaurantLocation" v-model="locationSearch">
-									<label for="restaurantLocation">Location</label>
-								</div>
-							</div>
-							<div class="col-md-2 d-flex justify-content-center">
-								<button class="btn btn-lg btn-primary dropdown-toggle" type="button" 
-								id="dropdownMenu1" data-bs-toggle="dropdown" 
-								aria-haspopup="true" aria-expanded="true">
-									Select types
-								</button>
-								<ul class="dropdown-menu checkbox-menu allow-focus keep-open" aria-labelledby="dropdownMenu1">
-									<li v-for="(type, i) in allTypes">
-										<label>
-											<input type="checkbox" v-model="typeCheckboxes[i]">
-											{{type}}
-										</label>
-									</li>
-								</ul>
-							</div>
-							<div class="col-md-1">
-								<div class="form-floating">
-									<input type="number" class="form-control" id="restaurantRating" v-model.number="ratingSearch" max="5" min="0">
-									<label for="restaurantRating">Rating</label>
-								</div>
-							</div>
-							<div class="col-md-2">
-								<div class="form-floating">
-									<select v-model="sortBy" class="form-select" id="restaurantSort">
-										<option value="">None</option>
-										<option value="Name">Name</option>
-										<option value="Location" selected>Location</option>
-										<option value="Rating">Rating</option>									
-									</select>
-									<label for="restaurantSort">Sort by</label>
-								</div>
-							</div>
-							<div class="col-md-1 align-self-center d-flex justify-content-center">
-								<button class="btn btn-primary" @click="setSortOrder">
-      								<i :class="[ascending ? 'fa fa-sort-up' : 'fa fa-sort-down']"></i>
-    							</button>
-							</div>
-							<div class="col-md-2 align-self-center">
-								<input type="checkbox" class="form-check-input" id="onlyOpen" v-model="onlyOpen">
-								<label for="onlyOpen">Only open</label>
-							</div>
-						</div>
-						<a href="#" id="back-to-top" title="Back to top" style="display: none;"><i class="fa fa-angle-up" aria-hidden="true"></i></a>
-						<div class="row inner-menu-box">
-							<div class="col-20">
-								<div class="tab-content" id="v-pills-tabContent">
-									<div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-										<div class="row">
-											<div class="col-lg-4 col-md-6 special-grid drinks" v-for="r in filteredRestaurants">
-												<div @click="viewRestaurant(r)" class="gallery-single fix" style="cursor: pointer; text-align:center;" >
-													<img :style="[ r.status === 'CLOSED' ? {opacity:0.2} : {opacity:1} ]" :src="'data:image/png;base64,' + r.logo" class="img-fluid" alt="Image">
-													<div class="why-text">
-														<h2 style="color: white;">{{r.name}}</h2>
-														<h6 style="color: white;"><i>{{r.type}}</i></h6>
-														<h5>{{r.location.address | addressFormat}}</h5>
-														<h6 style="color: gray;">{{r.location | locationFormat}}</h6>
-														<p></p>
-														<h5 style="color: black;"><i>{{r.status}}</i></h5>
-													</div>
+	<div>
+		<div v-if="allRestaurants">
+			<h1 class="text-center">Restaurants</h1>
+			<div class="row mt-5 justify-content-center">
+				<div class="col-md-2">
+					<div class="form-floating">
+						<input type="text" class="form-control" id="restaurantName" v-model="nameSearch">
+						<label for="restaurantName">Restaurant name</label>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-floating">
+						<input type="text" class="form-control" id="restaurantLocation" v-model="locationSearch">
+						<label for="restaurantLocation">Location</label>
+					</div>
+				</div>
+				<div class="col-md-2 d-flex justify-content-center">
+					<button class="btn btn-lg btn-primary dropdown-toggle" type="button" id="dropdownMenu1"
+						data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+						Select types
+					</button>
+					<ul class="dropdown-menu checkbox-menu allow-focus keep-open" aria-labelledby="dropdownMenu1">
+						<li v-for="(type, i) in allTypes">
+							<label>
+								<input type="checkbox" v-model="typeCheckboxes[i]">
+								{{type}}
+							</label>
+						</li>
+					</ul>
+				</div>
+				<div class="col-md-1">
+					<div class="form-floating">
+						<input type="number" class="form-control" id="restaurantRating" v-model.number="ratingSearch" max="5"
+							min="0">
+						<label for="restaurantRating">Rating</label>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-floating">
+						<select v-model="sortBy" class="form-select" id="restaurantSort">
+							<option value="">None</option>
+							<option value="Name">Name</option>
+							<option value="Location" selected>Location</option>
+							<option value="Rating">Rating</option>
+						</select>
+						<label for="restaurantSort">Sort by</label>
+					</div>
+				</div>
+				<div class="col-md-1 align-self-center d-flex justify-content-center">
+					<button class="btn btn-primary" @click="setSortOrder">
+						<i :class="[ascending ? 'fa fa-sort-up' : 'fa fa-sort-down']"></i>
+					</button>
+				</div>
+				<div class="col-md-1 align-self-center">
+					<input type="checkbox" class="form-check-input" id="onlyOpen" v-model="onlyOpen">
+					<label for="onlyOpen">Only open</label>
+				</div>
+			</div>
+			<a href="#" id="back-to-top" title="Back to top" style="display: none;">
+				<i class="fa fa-angle-up" aria-hidden="true"></i>
+			</a>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="menu-box">
+						<div class="container">
+							<div class="row">
+								<div v-for="r in filteredRestaurants" class="col-md-4 mb-4">
+									<div class="card text-center h-100 my-shadow" style="width: 20rem; cursor: pointer;" 
+									@click="viewRestaurant(r)">
+										<button class="btn btn-danger top-0 position-absolute start-100 translate-middle"
+											style="z-index: 10;" title="Delete" v-if="$root.user?.role === 'ADMIN'"
+											@click.stop="removeRestaurant(r)">
+											<span class="fa fa-trash fa-2x"></span>
+										</button>
+										<div class="card-body">
+											<div class="embed-responsive embed-responsive-16by9">
+												<img :src="'data:image/png;base64,' + r.logo"
+													class="card-img-top embed-responsive-item" alt="Image">
+											</div>
+											<h2 class="card-title">{{r.name}}</h2>
+											<h6 style="color: white;"><i>{{r.type}}</i></h6>
+											<h5>{{r.location.address | addressFormat}}</h5>
+											<h6 style="color: gray;">{{r.location | locationFormat}}</h6>
+											<h5 style="color: black;"><i>{{r.status}}</i></h5>
+										</div>
+										<div class="card-footer">
+											<div class="row">
+												<div class="col align-self-center">
+													<input class="rating rating-loading"
+														v-model="r.rating" data-min="0" data-max="5" data-step="0.1">
+													<h5>{{r?.rating.toFixed(1)}}</h5>
 												</div>
 											</div>
 										</div>
@@ -236,10 +255,10 @@ Vue.component("restaurants", {
 							</div>
 						</div>
 					</div>
-				</div>	
+				</div>
 			</div>
-			<restaurantPage v-if="singleRestaurant" ref="restaurantPage" :restaurant="restaurant"></restaurantPage>
 		</div>
+		<restaurantPage v-if="singleRestaurant" ref="restaurantPage" :restaurant="restaurant"></restaurantPage>
 	</div>
 	`
 });

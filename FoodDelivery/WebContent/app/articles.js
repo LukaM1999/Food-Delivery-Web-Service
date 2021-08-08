@@ -48,6 +48,16 @@ Vue.component("articles", {
 				ownerUsername: this.$root.$data.user.username,
 				articles: this.articles
 			}
+		},
+		async removeArticle(article) {
+			const { amount, ...a} = article
+			const articles = this.articles.flatMap(a => {
+				const { amount, ...formattedArticle } = a
+				return a.name !== article.name ? formattedArticle : []
+			})
+			this.articles = this.articles.filter(a => a.name !== article.name)
+			await axios.put('rest/restaurant/updateArticles', articles)
+			this.$root.showAlert(`Successfully removed article ${article.name}!`)
 		}
 	},
 
@@ -62,6 +72,10 @@ Vue.component("articles", {
 								<div class="card text-center h-100 my-shadow" style="width: 20rem;">
 									<articleEdit v-if="$root.user?.role === 'MANAGER' && a && singleRestaurant === $root.user?.restaurant?.name" 
 									:articleProp="a" :key="a.name" @article-updated="updateArticle"></articleEdit>
+									<button class="btn btn-danger position-absolute start-100 translate-middle" style="top: 50px; z-index: 10;" title="Delete"
+									v-if="$root.user?.role === 'MANAGER' && a && singleRestaurant === $root.user?.restaurant?.name" @click="removeArticle(a)">
+										<span class="fa fa-trash fa-2x"></span>
+									</button> 
 									<div class="card-body">
 										<div class="embed-responsive embed-responsive-16by9">
 											<img :src="'data:image/png;base64,' + a.image" class="card-img-top embed-responsive-item" alt="Image">

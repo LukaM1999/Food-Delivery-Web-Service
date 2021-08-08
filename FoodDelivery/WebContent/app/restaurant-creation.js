@@ -2,7 +2,7 @@ const googleMap = { template: '<googleMap></googleMap>' }
 
 Vue.component("restaurantCreation", {
 
-	data: function () {
+	data() {
 		return {
 			name: '',
 			type: '',
@@ -14,7 +14,6 @@ Vue.component("restaurantCreation", {
 			streetNumber: '',
 			city: '',
 			zipCode: '',
-			alert: '',
 		}
 	},
 
@@ -65,23 +64,24 @@ Vue.component("restaurantCreation", {
 				type: this.type,
 				location: this.loc,
 				logo: this.logo,
-				status: "OPEN"
+				status: "OPEN",
+				rating: 0
 			}
 			const dto = {
 				restaurant: restaurant,
 				manager: this.manager
 			}
-			const success =  await axios.post('rest/restaurant/createRestaurant', dto)
+			const success = await axios.post('rest/restaurant/createRestaurant', dto)
 			if (success.data) {
-				this.alert = "Successfully created restaurant!"
+				this.$root.showAlert(`Successfully created restaurant ${restaurant.name}!`)
 				$("#restaurantModal .btn-close").click()
 				this.setFreeManagers()
+				this.$emit('restaurant-created', dto)
 			}
 			else {
-				this.alert = "A restaurant with the name " + this.name + " already exists"
+				this.$root.showAlert(`A restaurant with the name ${restaurant.name} already exists.`)
 				$('#restaurantModal').modal('hide')
 			}
-			$('#restaurantCreationAlert').fadeIn(300).delay(5000).fadeOut(300)
 		},
 		getImage(e) {
 			var files = e.target.files || e.dataTransfer.files;
@@ -231,10 +231,6 @@ Vue.component("restaurantCreation", {
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="alert alert-warning fixed-bottom" style="display:none; z-index: 10000;" role="alert"
-			id="restaurantCreationAlert">
-			<p>{{alert}}</p>
 		</div>
 	</div>
 	`

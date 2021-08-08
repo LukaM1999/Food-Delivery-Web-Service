@@ -93,3 +93,7 @@ thead{
 .checkbox-menu li.active label:hover, .checkbox-menu li.active label:focus {
     background-color: #b8b8ff;
 }
+
+.btn-primary{
+    background-color: #ffa900 !important;
+}

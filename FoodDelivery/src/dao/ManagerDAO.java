@@ -104,9 +104,11 @@ public class ManagerDAO {
 
 	public void removeRestaurant(String name) throws JsonGenerationException, JsonMappingException, IOException {
 		for (Manager m : managers) {
-			if (m.getRestaurant().getName().equals(name)) {
-				m.setRestaurant(null);
-				break;
+			if (m.getRestaurant() != null) {
+				if (m.getRestaurant().getName().equals(name)) {
+					m.setRestaurant(null);
+					break;
+				}
 			}
 		}
 		serialize();

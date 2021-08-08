@@ -185,4 +185,13 @@ public class RestaurantService {
 		ctx.setAttribute("managers", managerDao);
 	}
 	
+	@PUT
+	@Path("/updateArticles")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void updateArticles(ArrayList<Article> articles) throws JsonGenerationException, JsonMappingException, IOException {
+		RestaurantDAO restaurantDao = (RestaurantDAO) ctx.getAttribute("restaurants");
+		restaurantDao.updateArticles(articles);
+		ctx.setAttribute("restaurants", restaurantDao);
+	}
+	
 }

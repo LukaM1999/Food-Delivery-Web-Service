@@ -14,8 +14,7 @@ Vue.component("restaurantPage", {
 	async mounted() {
 		await axios.post('rest/restaurant/setLocation', this.restaurant.location)
 		this.r = this.restaurant
-		this.calculateRating()
-		this.initializeRatingOverId()
+		this.refreshRating()
 	},
 
 	props: {
@@ -97,7 +96,7 @@ Vue.component("restaurantPage", {
 												<div v-show="r !== null" class="row">
 													<div class="col align-self-center">
 														<input id="restaurantRating" class="rating rating-loading" :value="r?.rating" data-min="0" data-max="5" data-step="0.1">
-														<h5 style="margin-top:-4%;">{{r?.rating.toFixed(1)}} ({{ratingCount}})</h5>
+														<h5>{{r?.rating.toFixed(1)}} ({{ratingCount}})</h5>
 													</div>
 												</div>
 											</div>

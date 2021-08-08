@@ -113,4 +113,9 @@ public class RestaurantDAO {
 		restaurants.remove(getRestaurantById(name));
 		serialize();
 	}
+	
+	public void updateArticles(ArrayList<Article> articles) throws JsonGenerationException, JsonMappingException, IOException {
+		getRestaurantById(articles.get(0).getRestaurant()).setArticles(articles);
+		serialize();
+	}
 }

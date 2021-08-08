@@ -37,7 +37,6 @@ Vue.component("adminPage", {
 			.then(response => {
 				this.admins = response.data
 			});
-		//this.$router.push({ name: 'users'});
 	},
 
 	methods: {
@@ -50,8 +49,18 @@ Vue.component("adminPage", {
 			this.deliverers.push(deliverer)
 			this.usersKey += 1
 		},
-		addRestaurant(restaurant) {
-			this.$refs.restaurantsRef.$data.restaurants.push(restaurant)
+		addRestaurant(restaurantDto) {
+			this.$refs.restaurantsRef.$data.restaurants.push(restaurantDto.restaurant)
+			this.managers.find(m => m.username === restaurantDto.manager.username).restaurant = restaurantDto.restaurant
+			this.$nextTick(() => {
+				$('.rating').each(function () {
+					$(this).rating({ showCaption: false, displayOnly: true, step: 0.1 })
+				})
+			})
+		},
+		updateManagerSelect(manager){
+			if (typeof(manager) !== 'undefined')
+				this.$refs.restaurantCreation.addManager(manager)
 		},
 		viewRestaurants() {
 			this.showRestaurants = true
