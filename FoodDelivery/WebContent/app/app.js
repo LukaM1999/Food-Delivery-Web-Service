@@ -34,6 +34,24 @@ const router = new VueRouter({
 	routes
 });
 
+
+window.onscroll = function () {
+	scroll()
+}
+
+function scroll() {
+	var body = document.body,
+		html = document.documentElement
+
+	var height = Math.max(body.scrollHeight, body.offsetHeight,
+		html.clientHeight, html.scrollHeight, html.offsetHeight, html.getBoundingClientRect().height)
+
+	if (body.scrollTop > height * 0.2 || html.scrollTop > height * 0.2)
+		$('#back-to-top').fadeIn(500)
+	else
+		$('#back-to-top').fadeOut(500)
+}
+
 var app = new Vue({
 	router,
 	el: '#app',
@@ -53,7 +71,7 @@ var app = new Vue({
 			this.alert = alert
 			$('#alertGlobal').fadeIn(300).delay(5000).fadeOut(300)
 		},
-		addOrder(order){
+		addOrder(order) {
 			this.orders.push(order)
 		},
 	}

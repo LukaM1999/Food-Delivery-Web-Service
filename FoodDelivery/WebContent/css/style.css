@@ -1466,6 +1466,7 @@ blockquote {
 
 #back-to-top {
     position: fixed;
+    display: none;
     bottom: 40px;
     right: 40px;
     z-index: 9999;
@@ -1473,12 +1474,12 @@ blockquote {
     height: 40px;
     text-align: center;
     line-height: 40px;
-    background: #d65106;
-    color: #ffffff;
+    background: gold;
+    color: black;
     cursor: pointer;
     border: 0;
     border-radius: 2px;
     text-decoration: none;
-    transition: opacity 0.2s ease-out;
+    transition: opacity ease-out;
     font-size: 30px;
 }

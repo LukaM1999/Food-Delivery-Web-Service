@@ -214,9 +214,6 @@ Vue.component("restaurants", {
 					<label for="onlyOpen">Only open</label>
 				</div>
 			</div>
-			<a href="#" id="back-to-top" title="Back to top" style="display: none;">
-				<i class="fa fa-angle-up" aria-hidden="true"></i>
-			</a>
 			<div class="row">
 				<div class="col-md-12">
 					<div class="menu-box">

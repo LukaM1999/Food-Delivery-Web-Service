@@ -9,13 +9,15 @@
     /* <-- Apparently some margin are still there even though it's hidden */
 }
 
-table{
+table {
     background: antiquewhite;
 }
-thead{
+
+thead {
     background: navajowhite;
 }
-.card-body, .card-footer{
+
+.card-body, .card-footer {
     background: antiquewhite !important;
 }
 
@@ -94,6 +96,6 @@ thead{
     background-color: #b8b8ff;
 }
 
-.btn-primary{
+.btn-primary {
     background-color: #ffa900 !important;
 }
