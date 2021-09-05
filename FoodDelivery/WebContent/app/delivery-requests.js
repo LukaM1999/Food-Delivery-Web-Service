@@ -35,7 +35,7 @@ Vue.component('deliveryRequests', {
     <div>
         <div class="row">
             <div class="col d-flex justify-content-center">
-                <h2>Delivery requests</h2>
+                <h2 style="color:white; padding-top:5%;">Delivery requests</h2>
             </div>
         </div>
         <div v-if="requests.length > 0" class="row">

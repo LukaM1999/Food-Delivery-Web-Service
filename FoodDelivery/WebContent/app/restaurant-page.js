@@ -81,7 +81,7 @@ Vue.component("restaurantPage", {
 				<div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="info-tab">
 					<div class="row">
 						<div class="col">
-							<h1 class="text-center">Restaurant overview</h1>
+							<h1 class="text-center" style="color:white;">Restaurant overview</h1>
 							<div class="menu-box">
 								<div class="container">
 									<div class="row" style="text-align: center;">
@@ -90,20 +90,20 @@ Vue.component("restaurantPage", {
 												<img v-if="restaurant" :src="'data:image/jpeg;base64,' + restaurant.logo" class="img-fluid" alt="Image">
 											</div>
 											<div class="col-md-6 align-self-center">
-												<h1>{{restaurant.name}}</h1>
-												<h5>{{restaurant.type}}</h5>
-												<h5>{{restaurant.status}}</h5>
+												<h1 style="color:white;">{{restaurant.name}}</h1>
+												<h5 style="color:gray;">{{restaurant.type}}</h5>
+												<h5 style="color:gray;">{{restaurant.status}}</h5>
 												<div v-show="r !== null" class="row">
 													<div class="col align-self-center">
 														<input id="restaurantRating" class="rating rating-loading" :value="r?.rating" data-min="0" data-max="5" data-step="0.1">
-														<h5>{{r?.rating.toFixed(1)}} ({{ratingCount}})</h5>
+														<h5 style="color:gray;">{{r?.rating.toFixed(1)}} ({{ratingCount}})</h5>
 													</div>
 												</div>
 											</div>
 										</div>
 										<div class="row mt-5 justify-content-center">
 											<div class="col-md-12 align-self-center">
-												<h3>{{restaurant.location.address | addressFormat}}</h3>
+												<h3 style="color:white;">{{restaurant.location.address | addressFormat}}</h3>
 											</div>
 										</div>
 										<div class="row justify-content-center">

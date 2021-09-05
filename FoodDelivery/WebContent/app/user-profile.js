@@ -70,13 +70,13 @@ Vue.component("userProfile", {
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col text-center">
-				<h1 style="padding-top: 60px;">{{oldProfile.name}}'s profile</h1>
+				<h1 style="padding-top: 60px; color:white;">{{oldProfile.name}}'s profile</h1>
 				<div v-if="oldProfile.role === 'CUSTOMER'" class="row mb-3">
 					<div class="col">
-						<h3>{{oldProfile.type.typeName}} tier</h3>
-						<h5 class="text-muted">{{oldProfile.points.toFixed(2)}} points</h5>
-						<h5 class="text-muted" v-if="oldProfile.points < 3000">{{(3000 - oldProfile.points).toFixed(2)}} points to Silver tier</h5>
-						<h5 class="text-muted" v-if="oldProfile.points >= 3000 && oldProfile.points < 7000">{{(7000 - oldProfile.points).toFixed(2)}} points to Gold tier</h5>
+						<h3 style="color:navajowhite;">{{oldProfile.type.typeName}} tier</h3>
+						<h5 style="color:navajowhite;">{{oldProfile.points.toFixed(2)}} points</h5>
+						<h5 style="color:navajowhite;" v-if="oldProfile.points < 3000">{{(3000 - oldProfile.points).toFixed(2)}} points to Silver tier</h5>
+						<h5 style="color:navajowhite;" v-if="oldProfile.points >= 3000 && oldProfile.points < 7000">{{(7000 - oldProfile.points).toFixed(2)}} points to Gold tier</h5>
 						<div class="row justify-content-center">
 							<div class="col-md-4">
 								<div class="progress" style="height: 20px; border-radius: 10px;">

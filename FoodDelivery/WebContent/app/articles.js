@@ -6,6 +6,7 @@ Vue.component("articles", {
 		return {
 			articles: [],
 			articleForEdit: null,
+			restaurant: {}
 		}
 	},
 
@@ -16,7 +17,9 @@ Vue.component("articles", {
 	},
 
 	mounted() {
-		if (this.singleRestaurant) this.getArticles()
+		if (!this.singleRestaurant) return
+		this.getRestaurant()
+		this.getArticles()
 	},
 
 	methods: {
@@ -24,6 +27,10 @@ Vue.component("articles", {
 			const articles = await axios.get(`rest/restaurant/${this.singleRestaurant}/getArticles`)
 			this.articles = articles.data
 			this.updateArticleAmount()
+		},
+		async getRestaurant() {
+			const restaurant = await axios.get(`rest/restaurant/getRestaurant/${this.singleRestaurant}`)
+			this.restaurant = restaurant.data
 		},
 		updateArticleAmount() {
 			this.articles = this.articles.map(article => { return { ...article, amount: 0 } })
@@ -64,7 +71,7 @@ Vue.component("articles", {
 	template: `
 		<div class="row">
 			<div class="col-md-12">
-				<h1 class="text-center">Articles</h1>
+				<h1 class="text-center" style="color:white;">Articles</h1>
 				<div class="menu-box">
 					<div class="container">
 						<div class="row">
@@ -90,11 +97,11 @@ Vue.component("articles", {
 										<h3>{{a.price}} RSD</h3>
 										<div v-if="$root.$data.user?.role === 'CUSTOMER' " class="row mb-3">									
 											<div class="number">
-												<button class="btn btn-primary btn-sm" @click="decrementAmount(a)">
+												<button class="btn btn-primary btn-sm" @click="decrementAmount(a)" :disabled="restaurant.status === 'CLOSED'">
 													<span class="fa fa-minus"></span>
 												</button>
-												<input type="number" min="0" class="article-amount my-number" :value="a.amount"/>
-												<button class="btn btn-primary btn-sm" @click="incrementAmount(a)">
+												<input type="number" min="0" class="article-amount my-number" :value="a.amount" :disabled="restaurant.status === 'CLOSED'"/>
+												<button class="btn btn-primary btn-sm" @click="incrementAmount(a)" :disabled="restaurant.status === 'CLOSED'">
 													<span class="fa fa-plus"></span>
 												</button>
 											</div>

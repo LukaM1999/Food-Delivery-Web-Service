@@ -67,8 +67,9 @@ Vue.component('customerPage', {
 				<nav class="navbar my-navbar navbar-expand-lg navbar-light fixed-top">
 					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bs-example-navbar-collapse-1">
 						<span class="fa fa-3x fa-bars"></span>
-					</button> <a class="navbar-brand" href="http://localhost:8080/FoodDelivery/"><img src="images/logo.png" width="80" height="80"></a>
-					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					</button> 
+					<a class="navbar-brand" style="padding-left:1%;" href="http://localhost:8080/FoodDelivery/"><img src="images/logo.png" width="80" height="80"></a>
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="padding-right:1%;">
 						<ul class="navbar-nav">						
 							<li class="nav-item active" style="padding: 5px;">
 								<button type="button" class="btn btn-dark btn-lg" @click="openCartResetDialog('restaurantsView')">Restaurants</button>
@@ -80,6 +81,9 @@ Vue.component('customerPage', {
 							</li>
 							<li class="nav-item" style="padding: 5px;">
 								<button type="button" class="btn btn-dark" @click="openCartResetDialog('profileView')"><i class="fa fa-user fa-5x"></i></button>
+							</li>	
+							<li class="nav-item" style="padding: 5px;">
+								<button type="button" class="btn btn-dark" @click=""><i class="fa fa-sign-out fa-5x"></i></button>
 							</li>									
 						</ul>
 					</div>

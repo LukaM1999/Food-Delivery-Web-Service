@@ -88,7 +88,7 @@ Vue.component('shoppingCart', {
 		</button>
 		<div class="offcanvas offcanvas-end my-canvas" tabindex="-1" id="offcanvasRight" data-bs-scroll="true"  style="width: 50%;" aria-labelledby="offcanvasRightLabel">
 			<div class="offcanvas-header">
-				<h5 id="offcanvasRightLabel">Shopping cart</h5>
+				<h3 id="offcanvasRightLabel">Shopping cart</h3>
 				<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 			</div>
 			<div class="offcanvas-body" style="margin-right: -15px; padding-bottom: 16%">
@@ -111,7 +111,7 @@ Vue.component('shoppingCart', {
 						</div>
 					</div>
 					<div class="col-md-7">
-						<div class="card mb-3" style="max-width: 540px; height: 200px;">
+						<div class="card mb-3" style="max-width: 540px; height: 200px; background-color:antiquewhite;">
 							<div class="row g-0 h-100">
 								<div class="col-md-8 align-self-center">
 									<div class="card-body">
@@ -138,7 +138,7 @@ Vue.component('shoppingCart', {
 								</h5>
 							</div>
 							<div class="col-md-4 d-flex justify-content-center align-items-center">
-								<button class="btn btn-secondary btn-lg" :disabled="totalPrice === 0" @click="confirmOrder">Confirm order</button>
+								<button class="btn btn-primary btn-lg" :disabled="totalPrice === 0" @click="confirmOrder">Confirm order</button>
 							</div>
 						</div>
 						<div class="row" v-if="$root.$data.user.type.discount > 0">

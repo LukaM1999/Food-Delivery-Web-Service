@@ -148,7 +148,8 @@ Vue.component("restaurants", {
 		removeRestaurant(restaurant) {
 			this.restaurants = this.restaurants.filter(r => r.name !== restaurant.name)
 			const manager = this.$parent.$data.managers.find(manager => manager.restaurant?.name === restaurant.name)
-			this.$parent.$data.managers.find(manager => manager.restaurant?.name === restaurant.name).restaurant = null
+			if (manager != null)
+				this.$parent.$data.managers.find(manager => manager.restaurant?.name === restaurant.name).restaurant = null
 			axios.delete(`rest/restaurant/removeRestaurant/${restaurant.name}`)
 			this.$parent.updateManagerSelect(manager)
 			this.$root.showAlert(`Successfully removed restaurant ${restaurant.name}!`)
@@ -157,8 +158,8 @@ Vue.component("restaurants", {
 
 	template: `
 	<div>
-		<div v-if="allRestaurants">
-			<h1 class="text-center">Restaurants</h1>
+		<div v-if="allRestaurants" style="padding-top:5%;">
+			<h1 class="text-center" style="color:white;">Restaurants</h1>
 			<div class="row mt-5 justify-content-center">
 				<div class="col-md-2">
 					<div class="form-floating">
@@ -211,7 +212,7 @@ Vue.component("restaurants", {
 				</div>
 				<div class="col-md-1 align-self-center">
 					<input type="checkbox" class="form-check-input" id="onlyOpen" v-model="onlyOpen">
-					<label for="onlyOpen">Only open</label>
+					<label for="onlyOpen" style="color:white;">Only open</label>
 				</div>
 			</div>
 			<div class="row">
@@ -220,7 +221,7 @@ Vue.component("restaurants", {
 						<div class="container">
 							<div class="row">
 								<div v-for="r in filteredRestaurants" class="col-md-4 mb-4">
-									<div class="card text-center h-100 my-shadow" style="width: 20rem; cursor: pointer;" 
+									<div class="card text-center h-100 my-shadow restaurant-card" :style="[r.status === 'CLOSED' ? {opacity:0.5} : {}]" 
 									@click="viewRestaurant(r)">
 										<button class="btn btn-danger top-0 position-absolute start-100 translate-middle"
 											style="z-index: 10;" title="Delete" v-if="$root.user?.role === 'ADMIN'"
@@ -233,7 +234,7 @@ Vue.component("restaurants", {
 													class="card-img-top embed-responsive-item" alt="Image">
 											</div>
 											<h2 class="card-title">{{r.name}}</h2>
-											<h6 style="color: white;"><i>{{r.type}}</i></h6>
+											<h6 style="color: gray;"><i>{{r.type}}</i></h6>
 											<h5>{{r.location.address | addressFormat}}</h5>
 											<h6 style="color: gray;">{{r.location | locationFormat}}</h6>
 											<h5 style="color: black;"><i>{{r.status}}</i></h5>

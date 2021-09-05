@@ -264,7 +264,7 @@ Vue.component('orders', {
     <div :style="[insideProfile ? {} : {'paddingTop': '70px'}]">
         <div class="row mb-3">
             <div class="col d-flex justify-content-center">
-                <h2>Orders</h2>
+                <h2 style="color:white;">Orders</h2>
             </div>
         </div>
         <div class="row mb-3 justify-content-center">
@@ -309,7 +309,7 @@ Vue.component('orders', {
                         <input type="text" class="form-control" id="minDate" v-model="dateRangeMin">
                         <label for="minDate">Min date</label>
                     </div>
-                    <span class="input-group-text">to</span>
+                    <span class="input-group-text" style="background-color:white;">to</span>
                     <div class="form-floating">
                         <input type="text" class="form-control" id="maxDate" v-model="dateRangeMax">
                         <label for="maxDate">Max date</label>

@@ -47,7 +47,7 @@ Vue.component("comments", {
 	template: `
 		<div class="row" style="padding-top:15px; padding-left:15px;">
 			<div class="col">
-				<h1 class="text-center">Comments</h1>
+				<h1 class="text-center" style="color:white;">Comments</h1>
 				<div class="menu-box">
 					<div class="container">
 						<div class="row">

@@ -80,7 +80,7 @@ Vue.component("articleEdit", {
 	template: `
 	<div>
         <button v-if="oldArticle" type="button" style="z-index: 10;" title="Edit article" 
-        class="btn btn-secondary position-absolute top-0 start-100 translate-middle"
+        class="btn btn-dark position-absolute top-0 start-100 translate-middle"
         data-bs-toggle="modal" :data-bs-target="'#' + oldArticle.name | trimWhitespaces" 
 		@mouseover="hasListeners ? '' : addListeners()">
             <i class="fa fa-edit fa-2x"></i>
