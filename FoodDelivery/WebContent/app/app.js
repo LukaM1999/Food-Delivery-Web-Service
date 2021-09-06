@@ -74,5 +74,21 @@ var app = new Vue({
 		addOrder(order) {
 			this.orders.push(order)
 		},
+		initializeRating(){
+			$('.rating').each(function () {
+				$(this).rating({ showCaption: false, displayOnly: true, step: 0.1 })
+			})
+		},
+		logOut(){
+			this.user = null
+			this.orders = []
+			this.deliveryRequests = []
+			this.comments = []
+			this.cart = {
+				ownerUsername: '',
+				articles: []
+			}
+			this.$router.push('/')
+		},
 	}
 });

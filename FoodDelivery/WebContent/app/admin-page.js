@@ -66,6 +66,11 @@ Vue.component("adminPage", {
 			this.showRestaurants = true
 			this.showUsers = false
 			this.profileView = false
+			if (this.$refs.restaurantsRef) {
+				this.$refs.restaurantsRef.$data.singleRestaurant = false
+				this.$refs.restaurantsRef.$data.allRestaurants = true
+			}
+			this.$nextTick(() => this.$root.initializeRating())
 		},
 		viewUsers() {
 			this.showRestaurants = false

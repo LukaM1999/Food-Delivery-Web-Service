@@ -26,6 +26,7 @@ Vue.component('delivererPage', {
 				this.$refs.restaurantsRef.$data.singleRestaurant = false
 				this.$refs.restaurantsRef.$data.allRestaurants = true
 			}
+			this.$nextTick(() => this.$root.initializeRating())
 		},
 		viewOrders() { 
             this.ordersView = true
