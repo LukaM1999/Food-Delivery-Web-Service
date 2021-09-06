@@ -43,6 +43,7 @@ Vue.component('customerPage', {
 				this.$refs.restaurantsRef.$data.allRestaurants = true
 			}
 			this.$nextTick(() => this.$root.initializeRating())
+			document.documentElement.scrollTop = document.body.scrollTop = 0
 		},
 		viewProfile(){
 			this.profileView = true
@@ -51,6 +52,7 @@ Vue.component('customerPage', {
 				ownerUsername: this.customer.username,
 				articles: []
 			}
+			document.documentElement.scrollTop = document.body.scrollTop = 0
 		},
 		dismissCartModal(){
 			$('#cartModal').modal('hide')
@@ -82,10 +84,10 @@ Vue.component('customerPage', {
 								<shoppingCart @order-added="updateArticleAmount" ref="shoppingCart"></shoppingCart>
 							</li>
 							<li class="nav-item" style="padding: 5px;">
-								<button type="button" class="btn btn-dark" @click="openCartResetDialog('profileView')"><i class="fa fa-user fa-5x"></i></button>
+								<button type="button" class="btn btn-dark" @click="openCartResetDialog('profileView')" title="Profile"><i class="fa fa-user fa-5x"></i></button>
 							</li>	
 							<li class="nav-item" style="padding: 5px;">
-								<button type="button" class="btn btn-dark" @click="openCartResetDialog('logoutView')"><i class="fa fa-sign-out fa-5x"></i></button>
+								<button type="button" class="btn btn-dark" @click="openCartResetDialog('logoutView')" title="Log out"><i class="fa fa-sign-out fa-5x"></i></button>
 							</li>									
 						</ul>
 					</div>

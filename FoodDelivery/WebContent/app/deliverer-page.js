@@ -11,12 +11,6 @@ Vue.component('delivererPage', {
 		}
 	},
 
-
-	async mounted() {
-        //this.orders = this.$root.$data.orders
-	},
-
-
 	methods: {
 		viewRestaurants() {
 			this.ordersView = false
@@ -27,16 +21,19 @@ Vue.component('delivererPage', {
 				this.$refs.restaurantsRef.$data.allRestaurants = true
 			}
 			this.$nextTick(() => this.$root.initializeRating())
+			document.documentElement.scrollTop = document.body.scrollTop = 0
 		},
 		viewOrders() { 
             this.ordersView = true
 			this.restaurantsView = false
 			this.profileView = false
+			document.documentElement.scrollTop = document.body.scrollTop = 0
 		},
 		viewProfile() {
 			this.ordersView = false
 			this.restaurantsView = false
 			this.profileView = true
+			document.documentElement.scrollTop = document.body.scrollTop = 0
 		},
 	},
 

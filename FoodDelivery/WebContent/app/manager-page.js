@@ -28,6 +28,7 @@ Vue.component('managerPage', {
 			this.ordersView = false
 			this.requestsView = false
 			this.profileView = false
+			document.documentElement.scrollTop = document.body.scrollTop = 0
 		},
 		viewRestaurants() {
 			this.restaurantView = false
@@ -40,6 +41,7 @@ Vue.component('managerPage', {
 				this.$refs.restaurantsRef.$data.allRestaurants = true
 			}
 			this.$nextTick(() => this.$root.initializeRating())
+			document.documentElement.scrollTop = document.body.scrollTop = 0
 		},
 		viewOrders() {
 			this.restaurantView = false
@@ -47,6 +49,7 @@ Vue.component('managerPage', {
 			this.ordersView = true
 			this.requestsView = false
 			this.profileView = false
+			document.documentElement.scrollTop = document.body.scrollTop = 0
 		},
 		viewRequests() {
 			this.restaurantView = false
@@ -54,6 +57,7 @@ Vue.component('managerPage', {
 			this.ordersView = false
 			this.requestsView = true
 			this.profileView = false
+			document.documentElement.scrollTop = document.body.scrollTop = 0
 		},
 		viewProfile() {
 			this.restaurantView = false
@@ -61,6 +65,7 @@ Vue.component('managerPage', {
 			this.ordersView = false
 			this.requestsView = false
 			this.profileView = true
+			document.documentElement.scrollTop = document.body.scrollTop = 0
 		},
 		addArticle(article) {
 			this.$refs.restaurantPage.addArticle(article)

@@ -122,6 +122,7 @@ Vue.component("restaurants", {
 			this.restaurant = r
 			this.singleRestaurant = true
 			this.allRestaurants = false
+			document.documentElement.scrollTop = 0
 		},
 		setSortOrder() {
 			this.ascending = !this.ascending

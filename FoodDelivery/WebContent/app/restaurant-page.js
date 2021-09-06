@@ -8,6 +8,7 @@ Vue.component("restaurantPage", {
 		return {
 			r: null,
 			ratingCount: 0,
+			navbarHeight: 0,
 		}
 	},
 
@@ -15,6 +16,10 @@ Vue.component("restaurantPage", {
 		await axios.post('rest/restaurant/setLocation', this.restaurant.location)
 		this.r = this.restaurant
 		this.refreshRating()
+		this.$nextTick(() => {
+			const navbar = document.getElementsByClassName('my-navbar')
+			this.navbarHeight = navbar[0].offsetHeight
+		})
 	},
 
 	props: {
@@ -55,6 +60,9 @@ Vue.component("restaurantPage", {
 		refreshRating() {
 			this.calculateRating()
 			this.initializeRatingOverId()
+		},
+		toTop() {
+			window.scrollTo(0, 0)
 		}
 	},
 
@@ -70,13 +78,17 @@ Vue.component("restaurantPage", {
 	template: `
 	<div class="row">
 		<div class="col-md-12" style="padding-top:3%; padding-left:1%;">
-			<nav>
-				<div class="nav nav-tabs" id="nav-tab" role="tablist">
+			<ul class="nav nav-tabs sticky-top" @click="toTop" id="nav-tab" role="tablist" :style="{top: navbarHeight + 'px', marginLeft: -1 + '%', opacity: 0.9}">
+				<li class="nav-item" role="presentation">
 					<button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab" aria-controls="info" aria-selected="true" @click="refreshRating">Information</button>
-					<button class="nav-link" id="articles-tab" data-bs-toggle="tab" data-bs-target="#articles" type="button" role="tab" aria-controls="articles" aria-selected="true">Articles</button>
+				</li>
+				<li class="nav-item" role="presentation">
+					<button class="nav-link" id="articles-tab" data-bs-toggle="tab" data-bs-target="#articles" type="button" role="tab" aria-controls="articles" aria-selected="false">Articles</button>
+				</li>
+				<li class="nav-item" role="presentation">
 					<button class="nav-link" id="comments-tab" data-bs-toggle="tab" data-bs-target="#comments" type="button" role="tab" aria-controls="comments" aria-selected="false" @click="initializeRating">Comments</button>
-				</div>	
-			</nav>
+				</li>
+			</ul>
 			<div v-if="restaurant" class="tab-content" id="nav-tabContent">
 				<div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="info-tab">
 					<div class="row">

@@ -71,16 +71,19 @@ Vue.component("adminPage", {
 				this.$refs.restaurantsRef.$data.allRestaurants = true
 			}
 			this.$nextTick(() => this.$root.initializeRating())
+			document.documentElement.scrollTop = document.body.scrollTop = 0
 		},
 		viewUsers() {
 			this.showRestaurants = false
 			this.profileView = false
 			this.showUsers = true
+			document.documentElement.scrollTop = document.body.scrollTop = 0
 		},
 		viewProfile() {
 			this.showRestaurants = false
 			this.showUsers = false
 			this.profileView = true
+			document.documentElement.scrollTop = document.body.scrollTop = 0
 		},
 	},
 
