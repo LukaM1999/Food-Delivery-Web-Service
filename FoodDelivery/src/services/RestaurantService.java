@@ -93,22 +93,6 @@ public class RestaurantService {
 	}
 	
 	@GET
-	@Path("/getLogo")
-	@Produces(MediaType.APPLICATION_FORM_URLENCODED)
-	public String getLogo() throws UnsupportedEncodingException {
-		return URLEncoder.encode((String) ctx.getAttribute("logo"), StandardCharsets.UTF_8.name());
-	}
-	
-	@POST
-	@Path("/setLogo")
-	@Produces(MediaType.TEXT_PLAIN)
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String setLogo(String logo) throws UnsupportedEncodingException {
-		ctx.setAttribute("logo", URLDecoder.decode(logo, StandardCharsets.UTF_8.name()));
-		return logo;
-	}
-	
-	@GET
 	@Path("/getLocation")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Location getLocation() {

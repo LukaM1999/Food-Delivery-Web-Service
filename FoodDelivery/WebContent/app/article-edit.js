@@ -31,50 +31,28 @@ Vue.component("articleEdit", {
 		addListeners() {
 			let self = this
 			let selector = self.articleProp.name.replace(/\s/g, "")
-			console.log(selector.toLowerCase())
 			let articleModal = document.getElementById(selector.toLowerCase())
 			articleModal.addEventListener('hidden.bs.modal', function (event) {
 				self.article = Object.assign({}, self.oldArticle)
 			})
 			this.hasListeners = true;
 		},
-		
+
 		async editArticle() {
-			var self = this
-			if (this.article.image == '') this.article.image = this.oldArticle.image
-			axios
-				.put('rest/restaurant/editArticle', { article: this.article, oldName: this.oldArticle.name })
-				.then(response => {
-					let oldArticleName = this.oldArticle.name
-					if (response.data) {
-						let selector = "#" + self.oldArticle.name.replace(/\s/g, "").toLowerCase()
-						$(selector + " .btn-close").click()
-						this.$emit('article-updated', { article: this.article, oldName: this.oldArticle.name })
-						this.oldArticle = response.data
-					}
-					else {
-						self.alert = `An article with the name ${this.article.name} already exists.`;
-						$('#alert' + oldArticleName).fadeIn(300).delay(5000).fadeOut(300);
-					}
-				})
-		},
-
-		getImage(e) {
-			var self = this
-			var files = e.target.files || e.dataTransfer.files;
-			if (!files.length)
-				return;
-			var file = files[0];
-			var reader = new FileReader();
-			reader.onloadend = function () {
-				var imgType = file.type.split('/');
-				self.article.image = reader.result.replace('data:image/' + imgType[1] + ';base64,', '');
-				axios
-					.post('rest/restaurant/setLogo', self.article.image.replace('+', '%2B'))
+			var fileInput = document.getElementById(`${this.oldArticle.name}-image`)
+			if (fileInput.files.length === 0 && this.oldArticle.image == '') return
+			this.article.image = fileInput.files[0]?.name || this.oldArticle.image
+			const {amount, ...editedArticle} = this.article
+			const response = await axios.put('rest/restaurant/editArticle', { article: editedArticle, oldName: this.oldArticle.name })
+			if (response.data) {
+				let selector = "#" + this.oldArticle.name.replace(/\s/g, "").toLowerCase()
+				$(selector + " .btn-close").click()
+				this.$emit('article-updated', { article: this.article, oldName: this.oldArticle.name })
+				this.oldArticle = response.data
 			}
-			reader.readAsDataURL(file);
+			else
+				this.$root.showAlert(`An article with the name ${this.article.name} already exists.`)
 		},
-
 	},
 
 	template: `
@@ -125,9 +103,9 @@ Vue.component("articleEdit", {
 							</div>
 							<div class="row mb-3">
 								<div class="col">
-									<label for="imageFile" class="form-label">Image</label>
-									<input class="form-control" type="file" :required="article.image === ''" id="imageFile" v-on:change="getImage"
-										accept="image/*">
+									<label :for="oldArticle.name + '-image'" class="form-label">New image</label>
+									<input class="form-control" type="file" :required="article.image === ''" :id="oldArticle.name + '-image'" accept="image/*">
+									<label :for="oldArticle.name + '-image'">Old image: {{oldArticle.image}}</label>
 								</div>
 							</div>
 							<div class="row mb-3">
@@ -161,10 +139,6 @@ Vue.component("articleEdit", {
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="alert alert-warning fixed-bottom" style="display:none; z-index: 10000;" role="alert"
-			:id="'alert' + oldArticle.name">
-			<p>{{alert}}</p>
 		</div>
 	</div>
 	`

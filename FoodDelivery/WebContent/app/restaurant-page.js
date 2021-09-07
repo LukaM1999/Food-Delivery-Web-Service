@@ -78,14 +78,14 @@ Vue.component("restaurantPage", {
 	template: `
 	<div class="row">
 		<div class="col-md-12" style="padding-top:3%; padding-left:1%;">
-			<ul class="nav nav-tabs sticky-top" @click="toTop" id="nav-tab" role="tablist" :style="{top: navbarHeight + 'px', marginLeft: -1 + '%', opacity: 0.9}">
-				<li class="nav-item" role="presentation">
+			<ul class="nav nav-tabs sticky-top my-tabs" id="nav-tab" role="tablist" :style="{top: navbarHeight + 'px'}">
+				<li class="nav-item" role="presentation" @click="toTop">
 					<button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab" aria-controls="info" aria-selected="true" @click="refreshRating">Information</button>
 				</li>
-				<li class="nav-item" role="presentation">
+				<li class="nav-item" role="presentation" @click="toTop">
 					<button class="nav-link" id="articles-tab" data-bs-toggle="tab" data-bs-target="#articles" type="button" role="tab" aria-controls="articles" aria-selected="false">Articles</button>
 				</li>
-				<li class="nav-item" role="presentation">
+				<li class="nav-item" role="presentation" @click="toTop">
 					<button class="nav-link" id="comments-tab" data-bs-toggle="tab" data-bs-target="#comments" type="button" role="tab" aria-controls="comments" aria-selected="false" @click="initializeRating">Comments</button>
 				</li>
 			</ul>
@@ -99,7 +99,7 @@ Vue.component("restaurantPage", {
 									<div class="row" style="text-align: center;">
 										<div class="row justify-content-center">
 											<div class="col-md-6 align-self-center special-grid drinks" >
-												<img v-if="restaurant" :src="'data:image/jpeg;base64,' + restaurant.logo" class="img-fluid" alt="Image">
+												<img v-if="restaurant" :src="'http://localhost:8080/FoodDelivery/images/' + restaurant.logo" class="img-fluid" alt="Image">
 											</div>
 											<div class="col-md-6 align-self-center">
 												<h1 style="color:white;">{{restaurant.name}}</h1>

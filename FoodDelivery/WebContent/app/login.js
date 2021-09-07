@@ -10,7 +10,9 @@ Vue.component("login", {
 	},
 
 	async mounted() {
-		//$('.my-background').css('background-image', "url('images/login-background.png')")
+		$('.modal').on('shown.bs.modal', function () {
+			$(this).find('[autofocus]').focus()
+		})
 		var self = this
 		$('.modal').on('show.bs.modal', async function () {
 			let backdrop = await self.getBackdrop()
@@ -96,7 +98,7 @@ Vue.component("login", {
 							<div class="row mb-3">
 								<div class="col">
 									<div class="form-floating">
-										<input type="text" class="form-control" id="floatingUsername" v-model="usernameLogin" required>
+										<input type="text" class="form-control" id="floatingUsername" v-model="usernameLogin" required autofocus>
 										<label for="floatingNameManager">Username*</label>
 									</div>		
 								</div>

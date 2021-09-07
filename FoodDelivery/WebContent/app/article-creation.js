@@ -25,67 +25,29 @@ Vue.component("articleCreation", {
 		});
 	},
 
-	components: {
-
-	},
-
 	methods: {
 		async addArticle() {
-			var self = this
-			const article = await this.getArticle()
-			axios
-				.post('rest/restaurant/addArticle', article)
-				.then(response => {
-					if (response.data) {
-						self.alert = "Successfully created article!"
-						this.$emit('article-created', article)
-						$("#articleModal .btn-close").click()
-					}
-					else {
-						self.alert = "An article with the name " + self.name + " already exists";
-					}
-					$('#articleCreationAlert').fadeIn(300).delay(5000).fadeOut(300);
-				})
-		},
-
-		getArticle() {
-			return new Promise((resolve, reject) => {
-				axios
-					.get('rest/restaurant/getLogo')
-					.then(response => {
-						this.image = response.data
-						var article = {
-							name: this.name,
-							price: this.price,
-							type: this.type,
-							restaurant: this.restaurant.name,
-							quantity: this.quantity,
-							description: this.description,
-							image: this.image,
-						}
-						console.log(article)
-						resolve(article)
-					})
-			})
-		},
-
-		getImage(e) {
-			var files = e.target.files || e.dataTransfer.files;
-			if (!files.length)
-				return;
-			var file = files[0];
-			var reader = new FileReader();
-			reader.onloadend = function () {
-				var imgType = file.type.split('/');
-				var self = this;
-				self.logo = reader.result.replace('data:image/' + imgType[1] + ';base64,', '');
-
-				axios
-					.post('rest/restaurant/setLogo', self.logo.replace('+', '%2B'))
+			var fileInput = document.getElementById('imageFile')
+			if (fileInput.files.length === 0 ) return
+			const filename = fileInput.files[0].name;
+			const article = {
+				name: this.name,
+				price: this.price,
+				type: this.type,
+				restaurant: this.restaurant.name,
+				quantity: this.quantity,
+				description: this.description,
+				image: filename,
 			}
-			reader.readAsDataURL(file);
+			const response = await axios.post('rest/restaurant/addArticle', article)
+			if (response.data) {
+				this.$root.showAlert("Successfully created article!")
+				this.$emit('article-created', article)
+				$("#articleModal .btn-close").click()
+			}
+			else 
+				this.$root.showAlert("An article with the name " + this.name + " already exists")
 		},
-
 	},
 
 	template: `
@@ -105,7 +67,7 @@ Vue.component("articleCreation", {
 								<div class="col">
 									<div class="form-floating">
 										<input type="text" class="form-control" id="floatingNameArticle" v-model="name"
-											required>
+											required autofocus>
 										<label for="floatingNameArticle">Article name*</label>
 									</div>
 								</div>
@@ -133,8 +95,7 @@ Vue.component("articleCreation", {
 							<div class="row mb-3">
 								<div class="col">
 									<label for="imageFile" style="color: white;" class="form-label">Image*</label>
-									<input class="form-control" type="file" id="imageFile" v-on:change="getImage"
-										accept="image/*">
+									<input class="form-control" type="file" id="imageFile" required accept="image/*">
 								</div>
 							</div>
 							<div class="row mb-3">
@@ -168,10 +129,6 @@ Vue.component("articleCreation", {
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="alert alert-warning fixed-bottom" style="display:none; z-index: 10000;" role="alert"
-			id="articleCreationAlert">
-			<p>{{alert}}</p>
 		</div>
 	</div>
 	`

@@ -1,7 +1,7 @@
 const login = {
 	template: '<login></login>',
 	beforeRouteUpdate(to, from, next) {
-		if (to.name !== 'login' && this.$root.$data.user.username !== to.params.username) next(false);
+		if (to.name !== 'login' && this.$root.$data.user.username !== to.params.username) next(false)
 		next();
 
 	},
@@ -51,6 +51,10 @@ function scroll() {
 	else
 		$('#back-to-top').fadeOut(500)
 }
+
+$('.modal').on('shown.bs.modal', function () {
+    $(this).find('[autofocus]').focus()
+})
 
 var app = new Vue({
 	router,

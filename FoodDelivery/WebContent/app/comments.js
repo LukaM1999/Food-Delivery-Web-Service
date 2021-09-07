@@ -69,8 +69,8 @@ Vue.component("comments", {
 										</div>	
 									</div>
 									<div class="card-footer" v-show="c.approval === 'PROCESSING' && $root.$data.user?.role === 'MANAGER'" style="display:inline;">
-										<button class="btn btn-primary" @click="setCommentApproval(c, 'APPROVED')"><i class="fa fa-2x fa-check"></i></button>
-										<button class="btn btn-danger" @click="setCommentApproval(c, 'REJECTED')"><i class="fa fa-2x fa-times"></i></button>
+										<button class="btn btn-primary" title="Approve comment" @click="setCommentApproval(c, 'APPROVED')"><i class="fa fa-2x fa-check"></i></button>
+										<button class="btn btn-danger" title="Reject comment" @click="setCommentApproval(c, 'REJECTED')"><i class="fa fa-2x fa-times"></i></button>
 									</div>
 								</div>
 							</div>

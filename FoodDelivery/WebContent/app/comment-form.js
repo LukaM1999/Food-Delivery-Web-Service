@@ -26,6 +26,9 @@ Vue.component('commentForm', {
 			let backdrop = await self.getBackdrop()
 			backdrop[0]?.parentNode?.removeChild(backdrop[0])
 		})
+        $('.modal').on('shown.bs.modal', function () {
+			$(this).find('[autofocus]').focus()
+		})
     },
 
     methods: {
@@ -58,7 +61,7 @@ Vue.component('commentForm', {
 
     template: `
         <div>
-            <button type="button" class="btn btn-secondary btn-lg" data-bs-toggle="modal"
+            <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
                 data-bs-target="#commentModal">Post a comment</button>
             <div class="modal fade" role="dialog" id="commentModal">
                 <div class="modal-dialog modal-dialog-centered" style="width: auto;">
@@ -72,7 +75,7 @@ Vue.component('commentForm', {
                                 <div class="row mb-3">
                                     <div class="col">
                                         <div class="form-floating">
-                                            <textarea type="text" class="form-control" id="floatingContent" rows="3" v-model="content" required/>
+                                            <textarea type="text" class="form-control" id="floatingContent" rows="3" v-model="content" required autofocus/>
                                             <label for="floatingContent">Content*</label>
                                         </div>
                                     </div>

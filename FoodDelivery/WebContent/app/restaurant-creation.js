@@ -23,7 +23,7 @@ Vue.component("restaurantCreation", {
 			$(this).find('form').trigger('reset');
 			$('#managerAssign').removeClass('show')
 			$('#googleMap').removeClass('show')
-		});
+		})
 	},
 
 	components: {
@@ -39,9 +39,9 @@ Vue.component("restaurantCreation", {
 					this.managers = []
 					mngrs.forEach(element => {
 						if (element.restaurant === null) {
-							this.managers.push(element);
+							this.managers.push(element)
 						}
-					});
+					})
 					this.manager = this.managers[0]
 				});
 		},
@@ -57,13 +57,13 @@ Vue.component("restaurantCreation", {
 				&key=AIzaSyBk-FoX9VMB6msn3skG2-P0xM6JMRhPH3k`)
 			this.loc.latitude = geoLocation.data.results[0].geometry.location.lat
 			this.loc.longitude = geoLocation.data.results[0].geometry.location.lng
-			const logo = await axios.get('rest/restaurant/getLogo')
-			this.logo = logo.data
+			var fileInput = document.getElementById('imageFile')
+			if (fileInput.files.length === 0 ) return
 			const restaurant = {
 				name: this.name,
 				type: this.type,
 				location: this.loc,
-				logo: this.logo,
+				logo: fileInput.files[0].name,
 				status: "OPEN",
 				rating: 0
 			}
@@ -71,8 +71,8 @@ Vue.component("restaurantCreation", {
 				restaurant: restaurant,
 				manager: this.manager
 			}
-			const success = await axios.post('rest/restaurant/createRestaurant', dto)
-			if (success.data) {
+			const response = await axios.post('rest/restaurant/createRestaurant', dto)
+			if (response.data) {
 				this.$root.showAlert(`Successfully created restaurant ${restaurant.name}!`)
 				$("#restaurantModal .btn-close").click()
 				this.setFreeManagers()
@@ -82,22 +82,6 @@ Vue.component("restaurantCreation", {
 				this.$root.showAlert(`A restaurant with the name ${restaurant.name} already exists.`)
 				$('#restaurantModal').modal('hide')
 			}
-		},
-		getImage(e) {
-			var files = e.target.files || e.dataTransfer.files;
-			if (!files.length)
-				return;
-			var file = files[0];
-			var reader = new FileReader();
-			reader.onloadend = function () {
-				var imgType = file.type.split('/');
-				var self = this;
-				self.logo = reader.result.replace('data:image/' + imgType[1] + ';base64,', '');
-
-				axios
-					.post('rest/restaurant/setLogo', self.logo.replace('+', '%2B'))
-			}
-			reader.readAsDataURL(file);
 		},
 		addManager(manager) {
 			this.managers.push(manager)
@@ -132,7 +116,7 @@ Vue.component("restaurantCreation", {
 								<div class="col">
 									<div class="form-floating">
 										<input type="text" class="form-control" id="floatingNameManager" v-model="name"
-											required>
+											required autofocus>
 										<label for="floatingNameManager">Restaurant name*</label>
 									</div>
 								</div>
@@ -191,8 +175,7 @@ Vue.component("restaurantCreation", {
 							<div class="row mb-3">
 								<div class="col">
 									<label for="imageFile" class="form-label">Logo image*</label>
-									<input class="form-control" type="file" id="imageFile" v-on:change="getImage"
-										accept="image/*">
+									<input class="form-control" type="file" id="imageFile" accept="image/*" required>
 								</div>
 							</div>
 							<div class="row mb-3">

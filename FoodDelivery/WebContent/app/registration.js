@@ -50,7 +50,7 @@ Vue.component("registration", {
 							<div class="row mb-3">
 								<div class="col">
 									<div class="form-floating">
-										<input type="text" class="form-control" id="floatingUsername" v-model="username" required>
+										<input type="text" class="form-control" id="floatingUsername" v-model="username" required autofocus>
 										<label for="floatingUsername">Username*</label>
 									</div>		
 								</div>

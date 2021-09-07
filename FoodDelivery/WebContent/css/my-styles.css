@@ -118,3 +118,9 @@ thead {
 .nav-link {
     background-color: oldlace !important;
 }
+
+.my-tabs {
+    margin-left: -1%;
+    opacity: 0.9;
+    width: fit-content;
+}

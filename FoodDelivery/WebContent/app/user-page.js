@@ -19,6 +19,9 @@ Vue.component("userPage", {
 	},
 
 	async mounted() {
+		$('.modal').on('shown.bs.modal', function () {
+			$(this).find('[autofocus]').focus()
+		})
 		$('.my-background').css('background-image', "url('images/main-background.jfif')");
 		var self = this
 		$('.modal').on('show.bs.modal', async function () {

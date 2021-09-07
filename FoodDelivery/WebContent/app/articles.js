@@ -85,7 +85,7 @@ Vue.component("articles", {
 									</button> 
 									<div class="card-body">
 										<div class="embed-responsive embed-responsive-16by9">
-											<img :src="'data:image/png;base64,' + a.image" class="card-img-top embed-responsive-item" alt="Image">
+											<img :src="'http://localhost:8080/FoodDelivery/images/' + a.image" class="card-img-top embed-responsive-item" alt="Image">
 										</div>
 										<h1 class="card-title">{{a.name}}</h1>
 										<h5 class="card-subtitle mb-2 text-muted"><i>{{a.type}}</i></h5>

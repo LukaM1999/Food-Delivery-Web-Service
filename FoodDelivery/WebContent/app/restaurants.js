@@ -22,10 +22,6 @@ Vue.component("restaurants", {
 		}
 	},
 
-	props: {
-
-	},
-
 	async mounted() {
 		const restaurants = await axios.get('rest/restaurant/getAllRestaurants')
 		this.restaurants = restaurants.data
@@ -231,7 +227,7 @@ Vue.component("restaurants", {
 										</button>
 										<div class="card-body">
 											<div class="embed-responsive embed-responsive-16by9">
-												<img :src="'data:image/png;base64,' + r.logo"
+												<img :src="'http://localhost:8080/FoodDelivery/images/' + r.logo"
 													class="card-img-top embed-responsive-item" alt="Image">
 											</div>
 											<h2 class="card-title">{{r.name}}</h2>

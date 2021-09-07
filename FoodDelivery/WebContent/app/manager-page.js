@@ -101,7 +101,7 @@ Vue.component('managerPage', {
 						</ul>
 						<ul class="navbar-nav ms-auto">
 							<li class="nav-item" style="padding: 5px;">
-								<button type="button" class="btn btn-dark" @click="viewProfile"><i class="fa fa-user fa-5x"></i></button>
+								<button type="button" class="btn btn-dark" @click="viewProfile" title="Profile"><i class="fa fa-user fa-5x"></i></button>
 							</li>	
 							<li class="nav-item" style="padding: 5px;">
 								<button type="button" class="btn btn-dark" @click="$root.logOut()" title="Log out"><i class="fa fa-sign-out fa-5x"></i></button>
