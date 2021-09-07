@@ -44,20 +44,24 @@ Vue.component('delivererPage', {
 				<nav class="navbar my-navbar navbar-expand-lg navbar-light fixed-top">
 					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bs-example-navbar-collapse-1">
 						<span class="fa fa-3x fa-bars"></span>
-					</button> <a class="navbar-brand" href="http://localhost:8080/FoodDelivery/"><img src="images/quotations-button.png" width="80" height="80"></a>
-					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					</button> 
+					<div class="navbar-brand" style="padding-left:1%; cursor:pointer;" @click="viewOrders"><img src="images/logo.png" width="80" height="80"></div>
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="padding-right:1%;">
 						<ul class="navbar-nav">	
                             <li class="nav-item" style="padding: 5px;">
-                                <button type="button" class="btn btn-secondary btn-lg" @click="viewOrders">Orders</button>
+                                <button type="button" class="btn btn-dark btn-lg" @click="viewOrders">Orders</button>
                             </li>	
 							<li class="nav-item active" style="padding: 5px;">
-								<button type="button" class="btn btn-secondary btn-lg" @click="viewRestaurants">Restaurants</button>
+								<button type="button" class="btn btn-dark btn-lg" @click="viewRestaurants">Restaurants</button>
 							</li>					
 						</ul>
 						<ul class="navbar-nav ms-auto">
 							<li class="nav-item" style="padding: 5px;">
-								<button type="button" class="btn btn-secondary" @click="viewProfile"><i class="fa fa-user fa-5x"></i></button>
-							</li>									
+								<button type="button" class="btn btn-dark" @click="viewProfile"><i class="fa fa-user fa-5x"></i></button>
+							</li>		
+							<li class="nav-item" style="padding: 5px;">
+								<button type="button" class="btn btn-dark" @click="$root.logOut()" title="Log out"><i class="fa fa-sign-out fa-5x"></i></button>
+							</li>							
 						</ul>
 					</div>
 				</nav>

@@ -90,7 +90,7 @@ Vue.component("articleCreation", {
 
 	template: `
 	<div>
-		<button type="button" class="btn btn-secondary btn-lg" data-bs-toggle="modal"
+		<button type="button" class="btn btn-dark btn-lg" data-bs-toggle="modal"
 			data-bs-target="#articleModal">Add article</button>
 		<div class="modal fade" role="dialog" id="articleModal">
 			<div class="modal-dialog modal-dialog-centered" style="width: auto;">

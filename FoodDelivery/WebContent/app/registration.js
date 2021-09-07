@@ -37,7 +37,7 @@ Vue.component("registration", {
 
 	template: `
 	<div>
-		<button type="button" class="btn btn-primary btn-lg" style="position: absolute; top: 8px; right: 16px;" data-bs-toggle="modal" data-bs-target="#myModal">Registrujte se</button>
+		<button type="button" class="btn btn-light btn-lg" data-bs-toggle="modal" data-bs-target="#myModal">Register</button>
 		<div class="modal fade" role="dialog" id="myModal">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
@@ -45,48 +45,67 @@ Vue.component("registration", {
           				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         			</div>
 					<div class="modal-body">
-						<h1 style="color: blue; text-align: center;">Registrujte se</h1>
+						<h1 style="color: black; text-align: center;">Register user</h1>
 						<form @submit.prevent="registerCustomer">
-							<table align="center">
-								<tr>
-									<td style="font-weight: bold;">Korisnicko ime</td>
-									<td><input type="text" name="username" v-model="username" required></td>
-								</tr>
-								<tr>
-									<td style="font-weight: bold;">Lozinka</td>
-									<td><input type="password" name="password" v-model="password" required></td>
-								</tr>
-								<tr>
-									<td style="font-weight: bold;">Ime</td>
-									<td><input type="text" name="name" v-model="name" required></td>
-								</tr>
-								<tr>
-									<td style="font-weight: bold;">Prezime</td>
-									<td><input type="text" name="surname" v-model="surname" required></td>
-								</tr>
-								<tr>
-									<td style="font-weight: bold;">Pol</td>
-									<td>
-										<select name="pol" v-model="gender" required>
-											<option value="MALE">Musko</option>
-											<option value="FEMALE">Zensko</option>
-											<option value="OTHER">Ostalo</option>
+							<div class="row mb-3">
+								<div class="col">
+									<div class="form-floating">
+										<input type="text" class="form-control" id="floatingUsername" v-model="username" required>
+										<label for="floatingUsername">Username*</label>
+									</div>		
+								</div>
+							</div>
+							<div class="row mb-3">
+								<div class="col">
+									<div class="form-floating">
+										<input type="password" class="form-control" id="floatingPassword" v-model="password" required>
+										<label for="floatingPassword">Password*</label>
+									</div>		
+								</div>
+							</div>
+							<div class="row mb-3">
+								<div class="col">
+									<div class="form-floating">
+										<input type="text" class="form-control" id="floatingName" v-model="name" required>
+										<label for="floatingName">Name*</label>
+									</div>		
+								</div>
+							</div>
+							<div class="row mb-3">
+								<div class="col">
+									<div class="form-floating">
+										<input type="text" class="form-control" id="floatingSurname" v-model="surname" required>
+										<label for="floatingSurname">Last name*</label>
+									</div>		
+								</div>
+							</div>
+							<div class="row mb-3">
+								<div class="col">
+									<div class="form-floating">
+										<select class="form-select" id="floatingGender" v-model="gender" required>
+											<option value="MALE">Male</option>
+											<option value="FEMALE">Female</option>
+											<option value="OTHER">Other</option>
 										</select>
-									</td>
-								</tr>
-								<tr>
-									<td style="font-weight: bold;">Datum rodjenja</td>
-									<td><input type="date" name="dateOfBirth" v-model="dateOfBirth" required="required">
-									</td>
-								</tr>
-								<tr>
-									<td colspan="2" align="center">
-										<button type="submit" class="btn btn-primary" style="margin-top: 10%;" id="register">
-											Registruj se
-										</button>
-									</td>
-								</tr>
-							</table>
+										<label for="floatingGender">Gender*</label>
+									</div>		
+								</div>
+							</div>
+							<div class="row mb-3">
+								<div class="col">
+									<div class="form-floating">
+										<input type="date" class="form-control" id="floatingDate" v-model="dateOfBirth" required="required">
+										<label for="floatingDate">Date of birth*</label>
+									</div>		
+								</div>
+							</div>
+							<div class="row align-content-center">
+								<div class="col d-flex justify-content-center">
+									<button type="submit" class="btn btn-primary btn-lg">
+										Register
+									</button>
+								</div>
+							</div>
 						</form>
 					</div>
 				</div>

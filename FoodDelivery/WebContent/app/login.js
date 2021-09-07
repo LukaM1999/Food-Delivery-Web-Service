@@ -45,40 +45,77 @@ Vue.component("login", {
 	async getAllComments() {
 		const comments = await axios.get('rest/comment/getAllComments')
 		this.$root.$data.comments = comments.data
-	}
+	},
+	viewRestaurants() {
+		if (this.$refs.restaurantsRef) {
+			this.$refs.restaurantsRef.$data.singleRestaurant = false
+			this.$refs.restaurantsRef.$data.allRestaurants = true
+		}
+		this.$nextTick(() => this.$root.initializeRating())
+		document.documentElement.scrollTop = document.body.scrollTop = 0
+	},
 },
 
 	template: `
 	<div>
-	<restaurants></restaurants>
-	<registration></registration>
-		<button type="button" class="btn btn-info btn-lg" style="position: absolute; top: 8px; right: 250px;" data-bs-toggle="modal" data-bs-target="#loginModal">Prijavi se</button>
+		<div class="row">
+			<div class="col-md-12">
+				<nav class="navbar my-navbar navbar-expand-lg navbar-light fixed-top">
+					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bs-example-navbar-collapse-1">
+						<span class="fa fa-3x fa-bars"></span>
+					</button> 
+					<div class="navbar-brand" style="padding-left:1%; cursor:pointer;" @click="viewRestaurants"><img src="images/logo.png" width="80" height="80"></div>
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="padding-right:1%;">
+						<ul class="navbar-nav">	
+							<li class="nav-item active" style="padding: 5px;">
+								<button type="button" class="btn btn-dark btn-lg" @click="viewRestaurants">Restaurants</button>
+							</li>					
+						</ul>
+						<ul class="navbar-nav ms-auto">
+							<li class="nav-item" style="padding: 5px;">
+								<button type="button" class="btn btn-dark btn-lg" data-bs-toggle="modal" data-bs-target="#loginModal">Log in</button>
+							</li>	
+							<li class="nav-item" style="padding: 5px;">
+								<registration></registration>
+							</li>												
+						</ul>
+					</div>
+				</nav>
+			</div>
+		</div>
+		<restaurants ref="restaurantsRef"></restaurants>
 		<div class="modal fade" role="dialog" id="loginModal">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
 					<div class="modal-header">
-          				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        			</div>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+					</div>
 					<div class="modal-body">
-						<h1 style="color: blue; text-align: center;">Prijavi se</h1>
+						<h1 style="color: black; text-align: center;">Log in</h1>
 						<form @submit.prevent="userLogin">
-							<table align="center">
-								<tr>
-									<td style="font-weight: bold;">Korisnicko ime</td>
-									<td><input type="text" name="username" v-model="usernameLogin" required></td>
-								</tr>
-								<tr>
-									<td style="font-weight: bold;">Lozinka</td>
-									<td><input type="password" name="password" v-model="passwordLogin" required></td>
-								</tr>
-								<tr>
-									<td colspan="2" align="center">
-										<button type="submit" class="btn btn-primary" data-bs-dismiss="modal" style="margin-top: 10%;" :disabled="!usernameLogin || !passwordLogin" id="login">
-											Prijavi se
-										</button>
-									</td>
-								</tr>
-							</table>
+							<div class="row mb-3">
+								<div class="col">
+									<div class="form-floating">
+										<input type="text" class="form-control" id="floatingUsername" v-model="usernameLogin" required>
+										<label for="floatingNameManager">Username*</label>
+									</div>		
+								</div>
+							</div>
+							<div class="row mb-3">
+								<div class="col">
+									<div class="form-floating">
+										<input type="password" class="form-control" id="floatingPassword" v-model="passwordLogin" required>
+										<label for="floatingPassword">Password*</label>
+									</div>		
+								</div>
+							</div>
+							<div class="row align-content-center">
+								<div class="col d-flex justify-content-center">
+									<button type="submit" class="btn btn-primary btn-lg" data-bs-dismiss="modal" :disabled="!usernameLogin || !passwordLogin" id="login">
+										Log in
+									</button>
+								</div>
+							</div>
 						</form>
 					</div>
 				</div>

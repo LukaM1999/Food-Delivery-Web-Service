@@ -202,7 +202,8 @@ Vue.component("users", {
 
 	template: `
 	<div>
-		<div class="row mb-5 mt-5 justify-content-center" style="padding-top: 3%;">
+		<h1 class="text-center" style="color:white; padding-top:5%;">Users</h1>
+		<div class="row mb-5 mt-5 justify-content-center">
 			<div class="col-md-4">
 				<div class="form-floating">
 					<input type="text" class="form-control" id="userSearch" v-model="searchFilters">

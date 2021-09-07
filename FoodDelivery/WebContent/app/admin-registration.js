@@ -68,7 +68,7 @@ Vue.component("adminRegistration", {
 
 	template: `
 	<div>
-		<button v-if="!isManagerAssigning" type="button" class="btn btn-secondary btn-lg" data-bs-toggle="modal" data-bs-target="#myModal">Register user</button>
+		<button v-if="!isManagerAssigning" type="button" class="btn btn-dark btn-lg" data-bs-toggle="modal" data-bs-target="#myModal">Register user</button>
 		<div v-if="!isManagerAssigning" class="modal fade" role="dialog" id="myModal">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">

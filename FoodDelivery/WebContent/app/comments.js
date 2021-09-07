@@ -18,7 +18,8 @@ Vue.component("comments", {
 
 	methods: {
 		getRestaurantComments() {
-			if (this.$root.$data.user?.role === 'CUSTOMER' || this.$root.$data.user?.role === 'DELIVERER' || this.$root.$data.user === null)
+			if (this.$root.$data.user?.role === 'CUSTOMER' || this.$root.$data.user?.role === 'DELIVERER' 
+				|| this.$root.$data.user === null || (this.$root.$data.user?.role === 'MANAGER' && this.singleRestaurant !== this.$root.user?.restaurant?.name))
 				this.comments = this.$root.$data.comments.filter(c => c.approval === 'APPROVED' && c.restaurant === this.singleRestaurant)
 			else
 				this.comments = this.$root.$data.comments.filter(c => c.restaurant === this.singleRestaurant)
@@ -53,9 +54,10 @@ Vue.component("comments", {
 						<div class="row">
 							<div v-for="c in comments" class="col-md-4 mb-4">
 								<div class="card text-center h-100 my-shadow" style="width: 20rem;">
-									<i v-show="c.approval === 'APPROVED' && ($root.$data.user?.role === 'MANAGER' || $root.$data.user?.role === 'ADMIN')" 
-										class="fa fa-3x fa-check position-absolute top-0 start-100 translate-middle" style="z-index: 10; color:lightgreen;"></i>
-									<i v-show="c.approval === 'REJECTED' && ($root.$data.user?.role === 'MANAGER' || $root.$data.user?.role === 'ADMIN')" 
+									<i v-show="c.approval === 'APPROVED' && (($root.$data.user?.role === 'MANAGER' && singleRestaurant === $root.user?.restaurant?.name) 
+										|| $root.$data.user?.role === 'ADMIN')" class="fa fa-3x fa-check position-absolute top-0 start-100 translate-middle" 
+										style="z-index: 10; color:lightgreen;"></i>
+									<i v-show="c.approval === 'REJECTED' && ($root.$data.user?.role === 'MANAGER' || $root.$data.user?.role === 'ADMIN')"
 										class="fa fa-3x fa-times position-absolute top-0 start-100 translate-middle" style="z-index: 10; color:red;"></i>  
 									<div class="card-body">
 										<h3 class="card-title">{{c.poster}}</h3>

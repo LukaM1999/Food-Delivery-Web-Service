@@ -117,7 +117,7 @@ Vue.component("restaurantCreation", {
 
 	template: `
 	<div>
-		<button type="button" class="btn btn-secondary btn-lg" data-bs-toggle="modal"
+		<button type="button" class="btn btn-dark btn-lg" data-bs-toggle="modal"
 			data-bs-target="#restaurantModal">Create restaurant</button>
 		<div class="modal fade" role="dialog" id="restaurantModal">
 			<div class="modal-dialog modal-dialog-centered modal-lg" style="width: auto;">
