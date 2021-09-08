@@ -66,11 +66,11 @@ Vue.component('commentForm', {
             <div class="modal fade" role="dialog" id="commentModal">
                 <div class="modal-dialog modal-dialog-centered" style="width: auto;">
                     <div class="modal-content">
-                        <div class="modal-header" style="background-color: #f72585;">
+                        <div class="modal-header">
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
-                        <div class="modal-body" style="background-color: #b23cfd;">
-                            <h1 style="color: white; text-align: center;">Post a comment</h1>
+                        <div class="modal-body">
+                            <h1 style="text-align: center;">Post a comment</h1>
                             <form @submit.prevent="postComment">
                                 <div class="row mb-3">
                                     <div class="col">
@@ -80,7 +80,7 @@ Vue.component('commentForm', {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row mb-3">
                                     <div class="col">
                                         <label for="rating" class="control-label">Rating*</label>
                                         <input id="rating" name="rating" class="rating rating-loading" data-min="0" data-max="5" data-step="1" required>
@@ -88,8 +88,8 @@ Vue.component('commentForm', {
                                 </div>
                                 <div class="row align-content-center">
                                     <div class="col d-flex justify-content-center">
-                                        <button type="submit" class="btn btn-primary btn-lg" style="background-color: #f72585 !important;">
-                                            Comment
+                                        <button type="submit" class="btn btn-dark btn-lg">
+                                            Submit
                                         </button>
                                     </div>
                                 </div>

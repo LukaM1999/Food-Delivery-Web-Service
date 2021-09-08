@@ -100,16 +100,16 @@ Vue.component('customerPage', {
 			<div class="modal fade" role="dialog" id="cartModal">
 				<div class="modal-dialog modal-sm modal-dialog-centered" style="width: auto;">
 					<div class="modal-content">
-						<div class="modal-header" style="background-color: #f72585;">
+						<div class="modal-header">
 							<button type="button" class="btn-close" data-bs-dismiss="modal" @click="dismissCartModal"></button>
 						</div>
-						<div class="modal-body" style="background-color: #b23cfd;">
-							<h1 style="color: white; text-align: center;">Confirm cart reset</h1>
+						<div class="modal-body">
+							<h1 style="text-align: center;">Confirm cart reset</h1>
 							<p>If you leave this page, your shopping cart will be emptied!</p>
 						</div>
-						<div class="modal-footer">	
+						<div class="modal-footer justify-content-center">	
 							<form @submit.prevent="confirmCartReset">						
-								<button type="submit" class="btn btn-primary" style="background-color: #f72585 !important;">
+								<button type="submit" class="btn btn-primary">
 									Confirm
 								</button>					
 								<button type="button" @click="dismissCartModal" class="btn btn-danger" >

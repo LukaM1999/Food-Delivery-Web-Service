@@ -113,7 +113,7 @@ Vue.component("login", {
 							</div>
 							<div class="row align-content-center">
 								<div class="col d-flex justify-content-center">
-									<button type="submit" class="btn btn-primary btn-lg" data-bs-dismiss="modal" :disabled="!usernameLogin || !passwordLogin" id="login">
+									<button type="submit" class="btn btn-dark btn-lg" data-bs-dismiss="modal" :disabled="!usernameLogin || !passwordLogin" id="login">
 										Log in
 									</button>
 								</div>

@@ -86,8 +86,12 @@ Vue.component("restaurantCreation", {
 		addManager(manager) {
 			this.managers.push(manager)
 			this.manager = this.managers[0]
+			this.$emit('manager-added', manager)
 			$('#managerCreation').prop('checked', false)
 			$('#managerAssign').removeClass('show')
+		},
+		removeManager(manager){
+			this.managers = this.managers.filter(m => manager.username !== m.username)
 		},
 		updateLocation(location) {
 			this.street = location.address.street
@@ -110,7 +114,7 @@ Vue.component("restaurantCreation", {
 						<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 					</div>
 					<div class="modal-body">
-						<h1 style="color: blue; text-align: center;">Create restaurant</h1>
+						<h1 style="text-align: center;">Create restaurant</h1>
 						<form @submit.prevent="createRestaurant">
 							<div class="row mb-3">
 								<div class="col">
@@ -200,12 +204,12 @@ Vue.component("restaurantCreation", {
 							</div>
 							<div class="row collapsed collapse mb-3" id="managerAssign">
 								<div class="col">
-									<adminRegistration is-manager-assigning v-on:manager-added="addManager"></adminRegistration>
+									<adminRegistration is-manager-assigning @manager-added="addManager"></adminRegistration>
 								</div>
 							</div>
 							<div class="row align-content-center">
 								<div class="col d-flex justify-content-center">
-									<button type="submit" class="btn btn-primary btn-lg">
+									<button type="submit" class="btn btn-dark btn-lg">
 										Create
 									</button>
 								</div>

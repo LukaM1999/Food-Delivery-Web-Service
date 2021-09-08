@@ -180,6 +180,7 @@ Vue.component("users", {
 						axios.delete(`rest/restaurant/removeRestaurant/${user.restaurant.name}`)
 					axios.delete('rest/user/removeUser', { data: u })
 					this.managers = this.managers.filter((u) => u.username !== user.username)
+					this.$emit('manager-removed', u)
 					break
 				default:
 					break

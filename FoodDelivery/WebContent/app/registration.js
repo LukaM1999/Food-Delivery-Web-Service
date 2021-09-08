@@ -101,7 +101,7 @@ Vue.component("registration", {
 							</div>
 							<div class="row align-content-center">
 								<div class="col d-flex justify-content-center">
-									<button type="submit" class="btn btn-primary btn-lg">
+									<button type="submit" class="btn btn-dark btn-lg">
 										Register
 									</button>
 								</div>

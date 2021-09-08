@@ -45,6 +45,14 @@ Vue.component("adminPage", {
 			this.usersKey += 1
 			this.$refs.restaurantCreation.addManager(manager)
 		},
+		addUser(manager) {
+			this.managers.push(manager)
+			this.usersKey += 1
+		},
+		removeManager(manager){
+			this.managers = this.managers.filter(m => manager.username !== m.username)
+			this.$refs.restaurantCreation.removeManager(manager)
+		},
 		addDeliverer(deliverer) {
 			this.deliverers.push(deliverer)
 			this.usersKey += 1
@@ -105,7 +113,7 @@ Vue.component("adminPage", {
 								<admin-registration :is-manager-assigning="false" ref="adminRegistration" @manager-added="addManager" @deliverer-added="addDeliverer"></admin-registration>
 							</li>						
 							<li class="nav-item active" style="padding: 5px;">
-								<restaurantCreation ref="restaurantCreation" @restaurant-created="addRestaurant"></restaurantCreation>
+								<restaurantCreation ref="restaurantCreation" @manager-added="addUser" @restaurant-created="addRestaurant"></restaurantCreation>
 							</li>		
 							<li class="nav-item active" style="padding: 5px;">
 								<button type="button" class="btn btn-dark btn-lg" @click="viewRestaurants">Restaurants</button>
@@ -124,7 +132,7 @@ Vue.component("adminPage", {
 			</div>
 		</div>
 		<div class="row">
-			<users v-if="showUsers" :key="usersKey"></users>
+			<users @manager-removed="removeManager" v-if="showUsers" :key="usersKey"></users>
 			<restaurants v-if="showRestaurants" ref="restaurantsRef"></restaurants>
 			<userProfile v-if="profileView"></userProfile>
 		</div>
