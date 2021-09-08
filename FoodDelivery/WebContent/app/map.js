@@ -31,7 +31,6 @@ Vue.component("googleMap", {
 			geocoder.geocode({ 'latLng': latlng }, function (results, status) {
 				if (status == google.maps.GeocoderStatus.OK) {
 					if (results[1]) {
-						alert("Location: " + results[1].formatted_address + "\r\nLatitude: " + event.latLng.lat() + "\r\nLongitude: " + event.latLng.lng());
 						let street, streetNumber, city, zipCode;
 						results[1].address_components.forEach(element => {
 							switch (element.types[0]) {
@@ -71,10 +70,6 @@ Vue.component("googleMap", {
 						axios
 							.post('rest/restaurant/setLocation', this.loc)
 							.then(response => {
-								/* self.$parent.$data.street = this.loc.address.street
-								self.$parent.$data.streetNumber = this.loc.address.streetNumber
-								self.$parent.$data.city = this.loc.address.city
-								self.$parent.$data.zipCode = this.loc.address.zipCode */
 								self.$parent.$emit('location-selected', this.loc)
 							});
 					}

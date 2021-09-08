@@ -5,8 +5,6 @@ Vue.component("articleEdit", {
 			oldArticle: {},
 			article: {},
 			hasListeners: false,
-
-			alert: '',
 		}
 	},
 
@@ -23,7 +21,7 @@ Vue.component("articleEdit", {
 
 	filters: {
 		trimWhitespaces: function (value) {
-			return value?.replace(/\s/g, "").toLowerCase();
+			return value?.replace(/\s/g, "").toLowerCase()
 		}
 	},
 
@@ -35,7 +33,7 @@ Vue.component("articleEdit", {
 			articleModal.addEventListener('hidden.bs.modal', function (event) {
 				self.article = Object.assign({}, self.oldArticle)
 			})
-			this.hasListeners = true;
+			this.hasListeners = true
 		},
 
 		async editArticle() {

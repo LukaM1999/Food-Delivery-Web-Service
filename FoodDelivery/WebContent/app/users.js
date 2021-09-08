@@ -191,7 +191,8 @@ Vue.component("users", {
 			axios.put('rest/user/setStatus', {
 				username: user.username, role: user.role, status: 'BLOCKED'
 		   })
-		   this.$root.showAlert(`Successfully blocked user with username: ${user.username}.`)
+		   this.$root.showAlert(`Successfully blocked ${user.name} ${user.surname}`)
+		   if (user.role === 'MANAGER') this.$emit('manager-blocked', user)
 		},
 	},
 
@@ -289,7 +290,7 @@ Vue.component("users", {
 					</thead>
 					<tbody>
 						<tr v-for="u in filteredUsers" 
-						:style="[u.status === 'BLACKLISTED' ? {'background': 'darkgray'} : u.status === 'BLOCKED' ? {'background': 'indianred'} : {}]"
+						:style="[u.status === 'BLACKLISTED' ? {'background': 'darkgray'} : u.status === 'BLOCKED' ? {'background': 'indianred', 'color': 'white'} : {}]"
 						data-bs-toggle="tooltip" data-bs-placement="top" :title="u.status | roleFormat">
 							<td>{{u.username}}</td>
 							<td>{{u.name}}</td>

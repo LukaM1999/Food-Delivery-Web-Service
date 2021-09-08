@@ -8,10 +8,6 @@ Vue.component("staticMap", {
 		}
 	},
 
-	props: {
-		//restaurant: {}
-	},
-
 	mounted() {
 		let self = this;
 		axios

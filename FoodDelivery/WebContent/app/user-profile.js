@@ -7,7 +7,6 @@ Vue.component("userProfile", {
 			oldPassword: '',
 			progress: 0,
 			progressColor: '#FF5733',
-			alert: '',
 		}
 	},
 
@@ -42,25 +41,20 @@ Vue.component("userProfile", {
 			}
 		},
 		async editProfile() {
-			const { type, points, orders, dateOfBirth, cart, restaurant, ...editedProfile } = this.profile
-			axios
-				.put('rest/user/editProfile', { ...editedProfile, oldUsername: this.oldProfile.username, oldPassword: this.oldProfile.password })
-				.then(response => {
-					let oldUsername = this.oldProfile.username
-					if (response.data) {
-						this.oldProfile = response.data
-						this.$root.$data.user = this.oldProfile
-						if (response.data.username !== oldUsername) this.$router.replace(`/${response.data.username}`)
-						this.alert = "Successfully edited profile information!";
-						$('#alert' + oldUsername).fadeIn(300).delay(5000).fadeOut(300);
-					}
-					else {
-						this.alert = "An error has occured.";
-						$('#alert' + oldUsername).fadeIn(300).delay(5000).fadeOut(300);
-					}
-					this.oldPassword = ''
-					this.profile.password = ''
-				})
+			const { type, points, orders, dateOfBirth, cart, restaurant, status, ...editedProfile } = this.profile
+			const response = await axios.put('rest/user/editProfile',
+				{ ...editedProfile, oldUsername: this.oldProfile.username, oldPassword: this.oldProfile.password })
+			let oldUsername = this.oldProfile.username
+			if (response.data) {
+				this.oldProfile = response.data
+				this.$root.$data.user = this.oldProfile
+				if (response.data.username !== oldUsername) this.$router.replace(`/${response.data.username}`)
+				this.$root.showAlert('Successfully edited profile information!')
+			}
+			else
+				this.$root.showAlert('An error has occured')
+			this.oldPassword = ''
+			this.profile.password = ''
 		},
 
 	},
@@ -77,7 +71,7 @@ Vue.component("userProfile", {
 						<h5 style="color:navajowhite;">{{oldProfile.points.toFixed(2)}} points</h5>
 						<h5 style="color:navajowhite;" v-if="oldProfile.points < 3000">{{(3000 - oldProfile.points).toFixed(2)}} points to Silver tier</h5>
 						<h5 style="color:navajowhite;" v-if="oldProfile.points >= 3000 && oldProfile.points < 7000">{{(7000 - oldProfile.points).toFixed(2)}} points to Gold tier</h5>
-						<div class="row justify-content-center">
+						<div class="row mb-3 justify-content-center">
 							<div class="col-md-4">
 								<div class="progress" style="height: 20px; border-radius: 10px;">
 									<div class="progress-bar" role="progressbar" :style="{width: progress + '%', backgroundColor: progressColor}"></div>
@@ -89,6 +83,14 @@ Vue.component("userProfile", {
 			</div>
 		</div>
 		<form @submit.prevent="editProfile">
+			<div class="row mb-3 justify-content-center">
+				<div class="col-md-3">
+					<div class="form-floating">
+						<input type="text" class="form-control" id="floatingProfileUsername" v-model="profile.username" readonly>
+						<label for="floatingProfileUsername">Username</label>
+					</div>
+				</div>
+			</div>
 			<div class="row mb-3 justify-content-center">
 				<div class="col-md-3">
 					<div class="form-floating">
@@ -142,15 +144,6 @@ Vue.component("userProfile", {
 					</div>
 				</div>
 			</div>
-			<div class="row mb-3 justify-content-center">
-				<div class="col-md-6">
-					<div class="form-floating">
-						<input type="text" class="form-control" id="floatingProfileUsername" v-model="profile.username"
-						:readonly="oldProfile.password !== oldPassword">
-						<label for="floatingProfileUsername">Username</label>
-					</div>
-				</div>
-			</div>
 			<div class="row mb-5 justify-content-center">
 				<div class="col-md d-flex justify-content-center">
 					<button type="submit" class="btn btn-lg btn-primary" :disabled="oldProfile.password !== oldPassword">
@@ -160,10 +153,6 @@ Vue.component("userProfile", {
 			</div>
 		</form>
 		<orders inside-profile v-if="oldProfile.role === 'CUSTOMER' || oldProfile.role === 'DELIVERER' "></orders>
-		<div class="alert alert-warning fixed-bottom" style="display:none; z-index: 10000;" role="alert"
-			:id="'alert' + oldProfile.username">
-			<p>{{alert}}</p>
-		</div>
 	</div>
 	`
 });

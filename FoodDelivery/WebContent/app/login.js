@@ -4,8 +4,6 @@ Vue.component("login", {
 		return {
 			usernameLogin: '',
 			passwordLogin: '',
-
-			alertLogin: '',
 		}
 	},
 
@@ -16,7 +14,7 @@ Vue.component("login", {
 		var self = this
 		$('.modal').on('show.bs.modal', async function () {
 			let backdrop = await self.getBackdrop()
-			backdrop[0].parentNode?.removeChild(backdrop[0])
+			backdrop[0]?.parentNode?.removeChild(backdrop[0])
 		})
 		await this.getAllComments()
 	},
@@ -122,9 +120,6 @@ Vue.component("login", {
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="alert alert-warning fixed-bottom" style="display:none; z-index: 10000;" role="alert" id="loginAlert">
-			<p>{{alertLogin}}</p>
 		</div>
 	</div>
 	`

@@ -38,12 +38,12 @@ Vue.component("restaurantCreation", {
 					var mngrs = response.data
 					this.managers = []
 					mngrs.forEach(element => {
-						if (element.restaurant === null) {
+						if (element.restaurant === null && element.status != 'BLOCKED') {
 							this.managers.push(element)
 						}
 					})
 					this.manager = this.managers[0]
-				});
+				})
 		},
 		async createRestaurant() {
 			this.loc.address = {

@@ -6,7 +6,6 @@ Vue.component('delivererPage', {
 			ordersView: true,
 			restaurantsView: false,
 			profileView: false,
-			alert: '',
             orders: undefined,
 		}
 	},

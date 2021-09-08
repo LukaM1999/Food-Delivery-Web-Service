@@ -11,15 +11,8 @@ Vue.component('managerPage', {
 			ordersView: false,
 			requestsView: false,
 			profileView: false,
-			alert: '',
 		}
 	},
-
-
-	mounted() {
-
-	},
-
 
 	methods: {
 		viewRestaurant() {

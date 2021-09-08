@@ -7,10 +7,8 @@ Vue.component("adminRegistration", {
 			name: '',
 			surname: '',
 			gender: 'MALE',
-			dateOfBirth: Date.now,
+			dateOfBirth: 'dd.mm.yyyy.',
 			role: 'DELIVERER',
-
-			alert: '',
 		}
 	},
 
@@ -24,45 +22,43 @@ Vue.component("adminRegistration", {
 	mounted() {
 		if (this.isManagerAssigning) this.role = 'MANAGER'
 		$('#restaurantModal').on('hidden.bs.modal', function () {
-			$(this).find('form').trigger('reset');
-		});
+			$(this).find('form').trigger('reset')
+		})
+		$('.my-date').each(function () {
+			$(this).datepicker({ format: 'dd.mm.yyyy.' })
+		})
 	},
 
 	methods: {
-		registerCustomer: function () {
-			var user = {
+		async registerCustomer() {
+			if (!moment(this.dateOfBirth, 'DD.MM.YYYY.', true).isValid()) {
+				this.$root.showAlert(`${this.dateOfBirth} is not a valid date!`)
+				return
+			}
+			const user = {
 				username: this.username,
 				password: this.password,
 				name: this.name,
 				surname: this.surname,
 				gender: this.gender,
-				dateOfBirth: new Date(this.dateOfBirth).format("dd.mm.yyyy."),
+				dateOfBirth: new Date(moment(this.dateOfBirth, 'DD.MM.YYYY.')).format("dd.mm.yyyy."),
 				role: this.role
 			}
 			if (this.role === "DELIVERER") {
-				axios
-					.post('rest/user/registerDeliverer', user)
-					.then(response => {
-						if (response.data) {
-							this.alert = this.name + " " + this.surname + " successfully registered!";
-							this.$emit('deliverer-added', response.data)
-						}
-						else this.alert = `A user with the username ${this.username} already exists.`
-						this.$root.showAlert(this.alert)
-					})
+				const response = await axios.post('rest/user/registerDeliverer', user)
+				if (response.data) {
+					if (response.data) this.$root.showAlert(`${this.name} ${this.surname} successfully registered!`)
+					this.$emit('deliverer-added', response.data)
+				}
+				else this.$root.showAlert(`A user with the username ${this.username} already exists`)
+				return
 			}
-			else {
-				axios
-					.post('rest/user/registerManager', user)
-					.then(response => {
-						if (response.data) {
-							this.alert = this.name + " " + this.surname + " successfully registered!"
-							this.$emit('manager-added', response.data);
-						}
-						else this.alert = `A user with the username ${this.username} already exists.`
-						this.$root.showAlert(this.alert)
-					})
+			axios.post('rest/user/registerManager', user)
+			if (response.data) {
+				if (response.data) this.$root.showAlert(`${this.name} ${this.surname} successfully registered!`)
+				this.$emit('manager-added', response.data)
 			}
+			else this.$root.showAlert(`A user with the username ${this.username} already exists`)
 		},
 	},
 
@@ -82,7 +78,7 @@ Vue.component("adminRegistration", {
 								<div class="col">
 									<div class="form-floating">
 										<input type="text" autofocus class="form-control" id="floatingUsername" v-model="username" required>
-										<label for="floatingUsername">Manager username*</label>
+										<label for="floatingUsername">Username*</label>
 									</div>
 								</div>
 							</div>
@@ -113,7 +109,7 @@ Vue.component("adminRegistration", {
 							<div class="row mb-3">
 								<div class="col">
 									<div class="form-floating">
-										<input class="form-control" type="date" id="floatingDate" v-model="dateOfBirth" required>
+										<input class="form-control my-date" type="text" id="floatingDate" v-model="dateOfBirth" required>
 										<label for="floatingDate">Date of birth*</label>
 									</div>
 								</div>
@@ -187,7 +183,7 @@ Vue.component("adminRegistration", {
 			<div class="row mb-3">
 				<div class="col">
 					<div class="form-floating">
-						<input class="form-control" type="date" id="floatingDate" v-model="dateOfBirth" required>
+						<input class="form-control my-date" placeholder="dd.mm.yyyy." type="text" id="floatingDate" v-model="dateOfBirth" required>
 						<label for="floatingDate">Date of birth*</label>
 					</div>
 				</div>
@@ -208,10 +204,6 @@ Vue.component("adminRegistration", {
 				</div>
 			</div>
 		</form>
-		<div class="alert alert-warning fixed-bottom" style="display:none; z-index: 10000;" role="alert"
-			id="registrationAlert">
-			<p>{{alert}}</p>
-		</div>
 	</div>
 	`
 });

@@ -8,7 +8,6 @@ Vue.component('customerPage', {
 			profileView: false,
 			restaurantsView: true,
 			currentView: 'restaurantsView',
-			alert: '',
 		}
 	},
 	

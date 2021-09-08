@@ -8,8 +8,6 @@ Vue.component("articleCreation", {
 			quantity: 0,
 			description: '',
 			image: '',
-
-			alert: '',
 		}
 	},
 
@@ -21,8 +19,8 @@ Vue.component("articleCreation", {
 
 	mounted() {
 		$('#articleModal').on('hidden.bs.modal', function () {
-			$(this).find('form').trigger('reset');
-		});
+			$(this).find('form').trigger('reset')
+		})
 	},
 
 	methods: {

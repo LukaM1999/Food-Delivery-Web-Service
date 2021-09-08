@@ -1,37 +1,41 @@
 Vue.component("registration", {
-	
-	data: function(){
+
+	data: function () {
 		return {
 			username: '',
 			password: '',
 			name: '',
 			surname: '',
-			gender: '',
-			dateOfBirth: Date.now,
+			gender: 'MALE',
+			dateOfBirth: 'dd.mm.yyyy.',
 			role: 'CUSTOMER',
-
-			alert: '',
 		}
 	},
 
+	mounted() {
+		$('.my-date').each(function () {
+			$(this).datepicker({ format: 'dd.mm.yyyy.' })
+		})
+	},
+
 	methods: {
-		registerCustomer: function(){
-			var customer = {
+		async registerCustomer() {
+			if (!moment(this.dateOfBirth, 'DD.MM.YYYY.', true).isValid()) {
+				this.$root.showAlert(`${this.dateOfBirth} is not a valid date!`)
+				return
+			}
+			const customer = {
 				username: this.username,
 				password: this.password,
 				name: this.name,
 				surname: this.surname,
 				gender: this.gender,
-				dateOfBirth: new Date(this.dateOfBirth).format("dd.mm.yyyy."),
+				dateOfBirth: new Date(moment(this.dateOfBirth, 'DD.MM.YYYY.')).format("dd.mm.yyyy."),
 				role: this.role
 			}
-			axios
-			.post('rest/user/registerCustomer', customer)
-			.then(response => {
-				if (response.data) this.alert = this.name + " " + this.surname + " uspesno registrovan!";
-				else this.alert = "Vec postoji korisnik sa korisnickim imenom: " + this.username;
-				$('#registrationAlert').fadeIn(300).delay(5000).fadeOut(300);
-			})
+			const response = await axios.post('rest/user/registerCustomer', customer)
+			if (response.data) this.$root.showAlert(`${this.name} ${this.surname} successfully registered!`)
+			else this.$root.showAlert(`A user with the username ${this.username} already exists`)
 		},
 	},
 
@@ -94,7 +98,7 @@ Vue.component("registration", {
 							<div class="row mb-3">
 								<div class="col">
 									<div class="form-floating">
-										<input type="date" class="form-control" id="floatingDate" v-model="dateOfBirth" required="required">
+										<input type="text" class="form-control my-date" id="floatingDate" v-model="dateOfBirth" required="required">
 										<label for="floatingDate">Date of birth*</label>
 									</div>		
 								</div>
@@ -111,10 +115,6 @@ Vue.component("registration", {
 				</div>
 			</div>
 		</div>
-		<div class="alert alert-warning fixed-bottom" style="display:none; z-index: 10000;" role="alert"
-			id="registrationAlert">
-			<p>{{alert}}</p>
-		</div>
 	</div>
 	`
-});
+})

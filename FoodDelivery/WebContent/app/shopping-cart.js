@@ -7,10 +7,6 @@ Vue.component('shoppingCart', {
 		}
 	},
 
-	mounted() {
-
-	},
-
 	watch: {
 		'$root.$data.cart': function (newValue, oldValue) {
 			if (typeof (newValue) === 'undefined') return

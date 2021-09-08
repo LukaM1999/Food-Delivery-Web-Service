@@ -49,8 +49,11 @@ Vue.component("adminPage", {
 			this.managers.push(manager)
 			this.usersKey += 1
 		},
-		removeManager(manager){
+		removeManager(manager) {
 			this.managers = this.managers.filter(m => manager.username !== m.username)
+			this.$refs.restaurantCreation.removeManager(manager)
+		},
+		blockManager(manager) {
 			this.$refs.restaurantCreation.removeManager(manager)
 		},
 		addDeliverer(deliverer) {
@@ -66,8 +69,8 @@ Vue.component("adminPage", {
 				})
 			})
 		},
-		updateManagerSelect(manager){
-			if (typeof(manager) !== 'undefined')
+		updateManagerSelect(manager) {
+			if (typeof (manager) !== 'undefined')
 				this.$refs.restaurantCreation.addManager(manager)
 		},
 		viewRestaurants() {
@@ -132,7 +135,7 @@ Vue.component("adminPage", {
 			</div>
 		</div>
 		<div class="row">
-			<users @manager-removed="removeManager" v-if="showUsers" :key="usersKey"></users>
+			<users @manager-removed="removeManager" @manager-blocked="blockManager" v-if="showUsers" :key="usersKey"></users>
 			<restaurants v-if="showRestaurants" ref="restaurantsRef"></restaurants>
 			<userProfile v-if="profileView"></userProfile>
 		</div>
