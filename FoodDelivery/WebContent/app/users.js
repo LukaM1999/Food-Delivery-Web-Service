@@ -42,7 +42,6 @@ Vue.component("users", {
 				this.admins = response.data
 			});
 		this.initializeFilterDropdown()
-		this.initializeTooltips()
 	},
 
 	computed: {
@@ -155,12 +154,6 @@ Vue.component("users", {
 					e.stopPropagation()
 					this.closable = false
 				}
-			})
-		},
-		initializeTooltips() {
-			var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-			var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-				return new bootstrap.Tooltip(tooltipTriggerEl)
 			})
 		},
 		removeUser(user) {
@@ -291,7 +284,7 @@ Vue.component("users", {
 					<tbody>
 						<tr v-for="u in filteredUsers" 
 						:style="[u.status === 'BLACKLISTED' ? {'background': 'darkgray'} : u.status === 'BLOCKED' ? {'background': 'indianred', 'color': 'white'} : {}]"
-						data-bs-toggle="tooltip" data-bs-placement="top" :title="u.status | roleFormat">
+						:title="u.status | roleFormat">
 							<td>{{u.username}}</td>
 							<td>{{u.name}}</td>
 							<td>{{u.surname}}</td>

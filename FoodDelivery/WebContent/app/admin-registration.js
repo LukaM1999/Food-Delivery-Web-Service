@@ -35,6 +35,10 @@ Vue.component("adminRegistration", {
 				this.$root.showAlert(`${this.dateOfBirth} is not a valid date!`)
 				return
 			}
+			if(!this.$root.testRegex(this.$root.$data.usernamePattern, this.username, `${this.username} is not a valid username!`)) return
+			if(!this.$root.testRegex(this.$root.$data.passwordPattern, this.password, `Password is not valid`)) return
+			if(!this.$root.testRegex(this.$root.$data.namePattern, this.name, `${this.name} is not a valid name!`)) return
+			if(!this.$root.testRegex(this.$root.$data.namePattern, this.surname, `${this.surname} is not a valid last name!`)) return
 			const user = {
 				username: this.username,
 				password: this.password,
@@ -47,15 +51,15 @@ Vue.component("adminRegistration", {
 			if (this.role === "DELIVERER") {
 				const response = await axios.post('rest/user/registerDeliverer', user)
 				if (response.data) {
-					if (response.data) this.$root.showAlert(`${this.name} ${this.surname} successfully registered!`)
+					this.$root.showAlert(`${this.name} ${this.surname} successfully registered!`)
 					this.$emit('deliverer-added', response.data)
 				}
 				else this.$root.showAlert(`A user with the username ${this.username} already exists`)
 				return
 			}
-			axios.post('rest/user/registerManager', user)
+			const response = await axios.post('rest/user/registerManager', user)
 			if (response.data) {
-				if (response.data) this.$root.showAlert(`${this.name} ${this.surname} successfully registered!`)
+				this.$root.showAlert(`${this.name} ${this.surname} successfully registered!`)
 				this.$emit('manager-added', response.data)
 			}
 			else this.$root.showAlert(`A user with the username ${this.username} already exists`)
@@ -77,7 +81,10 @@ Vue.component("adminRegistration", {
 							<div class="row mb-3">
 								<div class="col">
 									<div class="form-floating">
-										<input type="text" autofocus class="form-control" id="floatingUsername" v-model="username" required>
+										<input type="text" autofocus class="form-control" id="floatingUsername"	v-model="username" required
+										:pattern="$root.$data.usernamePattern"
+										title= "1. At least 3 characters\n2. No leading or trailing dots"				
+										>
 										<label for="floatingUsername">Username*</label>
 									</div>
 								</div>
@@ -85,7 +92,10 @@ Vue.component("adminRegistration", {
 							<div class="row mb-3">
 								<div class="col">
 									<div class="form-floating">
-										<input type="password" class="form-control" id="floatingPassword" v-model="password" required>
+										<input type="password" class="form-control" id="floatingPassword" v-model="password" required
+										:pattern="$root.$data.passwordPattern"
+										title= "1. Minimum 8 characters\n2. At least one uppercase letter\n3. At least one lowercase letter\n4. At least one number"
+										>
 										<label for="floatingPassword">Password*</label>
 									</div>
 								</div>
@@ -93,7 +103,9 @@ Vue.component("adminRegistration", {
 							<div class="row mb-3">
 								<div class="col">
 									<div class="form-floating">
-										<input type="text" class="form-control" id="floatingName" v-model="name" required>
+										<input type="text" class="form-control" id="floatingName" v-model="name" required
+										:pattern="$root.$data.namePattern"
+										title="1. No numbers\n2. No special characters, except - and '">
 										<label for="floatingName">First name*</label>
 									</div>
 								</div>
@@ -101,7 +113,9 @@ Vue.component("adminRegistration", {
 							<div class="row mb-3">
 								<div class="col">
 									<div class="form-floating">
-										<input type="text" class="form-control" id="floatingSurname" v-model="surname" required>
+										<input type="text" class="form-control" id="floatingSurname" v-model="surname" required
+										:pattern="$root.$data.namePattern"
+										title="1. No numbers\n2. No special characters, except - and '">
 										<label for="floatingSurname">Last name*</label>
 									</div>
 								</div>
@@ -151,7 +165,9 @@ Vue.component("adminRegistration", {
 			<div class="row mb-3">
 				<div class="col">
 					<div class="form-floating">
-						<input type="text" class="form-control" id="floatingUsername" v-model="username" required>
+						<input type="text" class="form-control" id="floatingUsername" v-model="username" required
+							:pattern="$root.$data.usernamePattern"
+							title= "1. At least 3 characters\n2. No leading or trailing dots">
 						<label for="floatingUsername">Manager username*</label>
 					</div>
 				</div>
@@ -159,7 +175,10 @@ Vue.component("adminRegistration", {
 			<div class="row mb-3">
 				<div class="col">
 					<div class="form-floating">
-						<input type="password" class="form-control" id="floatingPassword" v-model="password" required>
+						<input type="password" class="form-control" id="floatingPassword" v-model="password" required
+							:pattern="$root.$data.passwordPattern"
+							title= "1. Minimum 8 characters\n2. At least one uppercase letter\n3. At least one lowercase letter\n4. At least one number"
+							>
 						<label for="floatingPassword">Password*</label>
 					</div>
 				</div>
@@ -167,7 +186,9 @@ Vue.component("adminRegistration", {
 			<div class="row mb-3">
 				<div class="col">
 					<div class="form-floating">
-						<input type="text" class="form-control" id="floatingName" v-model="name" required>
+						<input type="text" class="form-control" id="floatingName" v-model="name" required
+							:pattern="$root.$data.namePattern"
+							title="1. No numbers\n2. No special characters, except - and '">
 						<label for="floatingName">First name*</label>
 					</div>
 				</div>
@@ -175,7 +196,9 @@ Vue.component("adminRegistration", {
 			<div class="row mb-3">
 				<div class="col">
 					<div class="form-floating">
-						<input type="text" class="form-control" id="floatingSurname" v-model="surname" required>
+						<input type="text" class="form-control" id="floatingSurname" v-model="surname" required
+							:pattern="$root.$data.namePattern"
+							title="1. No numbers\n2. No special characters, except - and '">
 						<label for="floatingSurname">Last name*</label>
 					</div>
 				</div>

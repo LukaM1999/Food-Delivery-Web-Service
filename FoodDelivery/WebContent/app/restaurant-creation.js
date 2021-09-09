@@ -46,6 +46,9 @@ Vue.component("restaurantCreation", {
 				})
 		},
 		async createRestaurant() {
+			if(!this.$root.testRegex(this.$root.$data.usernamePattern, this.name, `${this.name} is not a valid restaurant name!`)) return
+			if(!this.$root.testRegex(this.$root.$data.namePattern, this.type, `${this.type} is not a valid type name!`)) return
+			if(!this.$root.testRegex(this.$root.$data.addressPattern, `${this.street},${this.streetNumber},${this.city},${this.zipCode}`, `Address is not valid!`)) return
 			this.loc.address = {
 				street: this.street,
 				streetNumber: this.streetNumber,
@@ -71,6 +74,8 @@ Vue.component("restaurantCreation", {
 				restaurant: restaurant,
 				manager: this.manager
 			}
+			delete dto.manager.points
+			delete dto.manager.type
 			const response = await axios.post('rest/restaurant/createRestaurant', dto)
 			if (response.data) {
 				this.$root.showAlert(`Successfully created restaurant ${restaurant.name}!`)
@@ -120,7 +125,9 @@ Vue.component("restaurantCreation", {
 								<div class="col">
 									<div class="form-floating">
 										<input type="text" class="form-control" id="floatingNameManager" v-model="name"
-											required autofocus>
+											required autofocus
+											:pattern="$root.$data.usernamePattern"
+											title= "1. At least 3 characters\n2. No leading or trailing dots">
 										<label for="floatingNameManager">Restaurant name*</label>
 									</div>
 								</div>
@@ -129,7 +136,9 @@ Vue.component("restaurantCreation", {
 								<div class="col">
 									<div class="form-floating">
 										<input type="text" class="form-control" id="floatingType" v-model="type"
-											required>
+											required
+											:pattern="$root.$data.namePattern"
+											title="1. No numbers\n2. No special characters, except - and '">
 										<label for="floatingType">Restaurant type*</label>
 									</div>
 								</div>
@@ -138,28 +147,28 @@ Vue.component("restaurantCreation", {
 								<div class="col-md-4">
 									<div class="form-floating">
 										<input type="text" class="form-control" v-model="street"
-											id="floatingStreet" required>
+											id="floatingStreet" required title="Only words and -">
 										<label for="floatingStreet">Street address*</label>
 									</div>
 								</div>
 								<div class="col-md-2">
 									<div class="form-floating">
-										<input type="text" class="form-control" v-model="streetNumber"
-											id="floatingStreetNum" required>
+										<input type="number" class="form-control" v-model="streetNumber"
+											id="floatingStreetNum" required title="Only numbers">
 										<label for="floatingStreetNum">Number*</label>
 									</div>
 								</div>
 								<div class="col-md-2">
 									<div class="form-floating">
 										<input type="text" class="form-control" v-model="city" id="floatingCity"
-											required>
+											required title="Only words">
 										<label for="floatingCity">City*</label>
 									</div>
 								</div>
 								<div class="col-md-2">
 									<div class="form-floating">
 										<input type="number" class="form-control" v-model="zipCode"
-											id="floatingZip" required>
+											id="floatingZip" required title="Only numbers">
 										<label for="floatingZip">Zipcode*</label>
 									</div>
 								</div>

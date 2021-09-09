@@ -25,6 +25,7 @@ Vue.component("articleCreation", {
 
 	methods: {
 		async addArticle() {
+			if(!this.$root.testRegex(this.$root.$data.usernamePattern, this.name, `${this.name} is not a valid article name!`)) return
 			var fileInput = document.getElementById('imageFile')
 			if (fileInput.files.length === 0 ) return
 			const filename = fileInput.files[0].name;
@@ -65,7 +66,9 @@ Vue.component("articleCreation", {
 								<div class="col">
 									<div class="form-floating">
 										<input type="text" class="form-control" id="floatingNameArticle" v-model="name"
-											required autofocus>
+											required autofocus
+											:pattern="$root.$data.usernamePattern"
+											title= "1. At least 3 characters\n2. No leading or trailing dots">
 										<label for="floatingNameArticle">Article name*</label>
 									</div>
 								</div>

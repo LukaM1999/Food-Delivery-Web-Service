@@ -53,7 +53,7 @@ function scroll() {
 }
 
 $('.modal').on('shown.bs.modal', function () {
-    $(this).find('[autofocus]').focus()
+	$(this).find('[autofocus]').focus()
 })
 
 var app = new Vue({
@@ -69,6 +69,10 @@ var app = new Vue({
 		orders: [],
 		deliveryRequests: [],
 		comments: [],
+		usernamePattern: "^(?!.*\\.\\.)(?!.*\\.$)[^\\W][\\w.]{2,19}$",
+		passwordPattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$",
+		namePattern: "^[^0-9_!¡?÷?¿/\\\\+=@#$%ˆ&*(){}|~<>;:[\\]]{1,}$",
+		addressPattern: "[a-zA-Z\\s-]+[,]{1}[0-9]+[,]{1}[a-zA-z-\\s]+[,]{1}[0-9]+",
 	},
 	methods: {
 		showAlert(alert) {
@@ -78,12 +82,12 @@ var app = new Vue({
 		addOrder(order) {
 			this.orders.push(order)
 		},
-		initializeRating(){
+		initializeRating() {
 			$('.rating').each(function () {
 				$(this).rating({ showCaption: false, displayOnly: true, step: 0.1 })
 			})
 		},
-		logOut(){
+		logOut() {
 			this.user = null
 			this.orders = []
 			this.deliveryRequests = []
@@ -94,5 +98,14 @@ var app = new Vue({
 			}
 			this.$router.push('/')
 		},
+		testRegex(pattern, test, alert) {
+			if (test.match(pattern)) return true
+			if(!this.isEmptyOrSpaces(test))
+				this.showAlert(alert)
+			return false
+		},
+		isEmptyOrSpaces(str){
+			return str === null || str.match(/^\s*$/) !== null;
+		}
 	}
 });

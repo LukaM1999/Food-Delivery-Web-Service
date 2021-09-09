@@ -24,6 +24,11 @@ Vue.component("registration", {
 				this.$root.showAlert(`${this.dateOfBirth} is not a valid date!`)
 				return
 			}
+			if(!this.$root.testRegex(this.$root.$data.usernamePattern, this.username, `${this.username} is not a valid username!`)) return
+			if(!this.$root.testRegex(this.$root.$data.passwordPattern, this.password, `Password is not valid`)) return
+			if(!this.$root.testRegex(this.$root.$data.namePattern, this.name, `${this.name} is not a valid name!`)) return
+			if(!this.$root.testRegex(this.$root.$data.namePattern, this.surname, `${this.surname} is not a valid last name!`)) return
+			
 			const customer = {
 				username: this.username,
 				password: this.password,
@@ -54,7 +59,9 @@ Vue.component("registration", {
 							<div class="row mb-3">
 								<div class="col">
 									<div class="form-floating">
-										<input type="text" class="form-control" id="floatingUsername" v-model="username" required autofocus>
+										<input type="text" class="form-control" id="floatingUsername" :pattern="$root.$data.usernamePattern" 
+											title= "1. At least 3 characters\n2. No leading or trailing dots"
+											v-model="username" required autofocus style="white-space: pre-line;">
 										<label for="floatingUsername">Username*</label>
 									</div>		
 								</div>
@@ -62,7 +69,9 @@ Vue.component("registration", {
 							<div class="row mb-3">
 								<div class="col">
 									<div class="form-floating">
-										<input type="password" class="form-control" id="floatingPassword" v-model="password" required>
+										<input type="password" class="form-control" id="floatingPassword" :pattern="$root.$data.passwordPattern"
+											title= "1. Minimum 8 characters\n2. At least one uppercase letter\n3. At least one lowercase letter\n4. At least one number" 
+											v-model="password" required style="white-space: pre-line;">
 										<label for="floatingPassword">Password*</label>
 									</div>		
 								</div>
@@ -70,7 +79,9 @@ Vue.component("registration", {
 							<div class="row mb-3">
 								<div class="col">
 									<div class="form-floating">
-										<input type="text" class="form-control" id="floatingName" v-model="name" required>
+										<input type="text" class="form-control" id="floatingName" :pattern="$root.$data.namePattern"
+										title="1. No numbers\n2. No special characters, except - and '"
+										v-model="name" required>
 										<label for="floatingName">Name*</label>
 									</div>		
 								</div>
@@ -78,7 +89,9 @@ Vue.component("registration", {
 							<div class="row mb-3">
 								<div class="col">
 									<div class="form-floating">
-										<input type="text" class="form-control" id="floatingSurname" v-model="surname" required>
+										<input type="text" class="form-control" id="floatingSurname" :pattern="$root.$data.namePattern"
+										title="1. No numbers\n2. No special characters, except - and '"
+										v-model="surname" required>
 										<label for="floatingSurname">Last name*</label>
 									</div>		
 								</div>

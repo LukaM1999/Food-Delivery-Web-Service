@@ -41,6 +41,10 @@ Vue.component("userProfile", {
 			}
 		},
 		async editProfile() {
+			if(!this.$root.isEmptyOrSpaces(this.profile.password) && 
+				!this.$root.testRegex(this.$root.$data.passwordPattern, this.profile.password, `Password is not valid`)) return	
+			if(!this.$root.testRegex(this.$root.$data.namePattern, this.profile.name, `${this.profile.name} is not a valid name!`)) return
+			if(!this.$root.testRegex(this.$root.$data.namePattern, this.profile.surname, `${this.profile.surname} is not a valid last name!`)) return
 			const { type, points, orders, dateOfBirth, cart, restaurant, status, ...editedProfile } = this.profile
 			const response = await axios.put('rest/user/editProfile',
 				{ ...editedProfile, oldUsername: this.oldProfile.username, oldPassword: this.oldProfile.password })
@@ -56,7 +60,6 @@ Vue.component("userProfile", {
 			this.oldPassword = ''
 			this.profile.password = ''
 		},
-
 	},
 
 
@@ -104,7 +107,9 @@ Vue.component("userProfile", {
 					<div class="form-floating">
 						<input type="password" class="form-control" id="floatingProfilePassword" 
 						:readonly="oldProfile.password !== oldPassword" v-model="profile.password"
-						pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+						:pattern="$root.$data.passwordPattern"
+						title= "1. Minimum 8 characters\n2. At least one uppercase letter\n3. At least one lowercase letter\n4. At least one number"
+						style="white-space: pre-line;">
 						<label for="floatingProfilePassword">New password</label>
 					</div>
 				</div>
@@ -113,14 +118,20 @@ Vue.component("userProfile", {
 				<div class="col-md-3">
 					<div class="form-floating">
 						<input type="text" class="form-control" id="floatingProfileName" v-model="profile.name" 
-						:readonly="oldProfile.password !== oldPassword" required>
+						:readonly="oldProfile.password !== oldPassword" required
+						:pattern="$root.$data.namePattern"
+						title="1. No numbers\n2. No special characters, except - and '"
+						style="white-space: pre-line;">
 						<label for="floatingProfileName">Name</label>
 					</div>
 				</div>
 				<div class="col-md-3">
 					<div class="form-floating">
 						<input type="text" class="form-control" id="floatingProfileSurname" v-model="profile.surname" 
-						:readonly="oldProfile.password !== oldPassword" required>
+						:readonly="oldProfile.password !== oldPassword" required
+						:pattern="$root.$data.namePattern"
+						title="1. No numbers\n2. No special characters, except - and '"
+						style="white-space: pre-line;">
 						<label for="floatingProfileSurname">Surname</label>
 					</div>
 				</div>

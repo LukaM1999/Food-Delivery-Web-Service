@@ -37,6 +37,7 @@ Vue.component("articleEdit", {
 		},
 
 		async editArticle() {
+			if(!this.$root.testRegex(this.$root.$data.usernamePattern, this.article.name, `${this.article.name} is not a valid article name!`)) return
 			var fileInput = document.getElementById(`${this.oldArticle.name}-image`)
 			if (fileInput.files.length === 0 && this.oldArticle.image == '') return
 			this.article.image = fileInput.files[0]?.name || this.oldArticle.image
@@ -68,13 +69,15 @@ Vue.component("articleEdit", {
 						<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 					</div>
 					<div class="modal-body">
-						<h1 style="color: blue; text-align: center;">Edit {{oldArticle.name}}</h1>
+						<h1 text-align: center;">Edit {{oldArticle.name}}</h1>
 						<form @submit.prevent="editArticle">
 							<div class="row mb-3">
 								<div class="col">
 									<div class="form-floating">
 										<input type="text" class="form-control" id="floatingNameArticle" v-model="article.name"
-											required>
+											required
+											:pattern="$root.$data.usernamePattern"
+											title= "1. At least 3 characters\n2. No leading or trailing dots">
 										<label for="floatingNameArticle">Article name*</label>
 									</div>
 								</div>
@@ -128,7 +131,7 @@ Vue.component("articleEdit", {
 							</div>
 							<div class="row align-content-center">
 								<div class="col d-flex justify-content-center">
-									<button type="submit" class="btn btn-primary" style="margin-top: 10%;">
+									<button type="submit" class="btn btn-dark" style="margin-top: 10%;">
 										Save
 									</button>
 								</div>
