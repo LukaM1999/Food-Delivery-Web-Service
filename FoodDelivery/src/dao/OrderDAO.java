@@ -16,6 +16,7 @@ import beans.Order;
 import beans.OrderStatus;
 import dto.DeliveryRequestDTO;
 import dto.OrderDTO;
+import services.UserService;
 
 public class OrderDAO {
 	private final String path = "json/orders.json";
@@ -29,12 +30,13 @@ public class OrderDAO {
 	public ArrayList<Order> deserialize() throws IOException {
 		CollectionType typeReference = TypeFactory.defaultInstance().constructCollectionType(ArrayList.class,
 				Order.class);
-		orders = new ObjectMapper().readValue(new String(Files.readAllBytes(Paths.get(path))), typeReference);
+		orders = new ObjectMapper().readValue(new String(Files.readAllBytes
+				(Paths.get((getClass().getClassLoader().getResource("../").getPath()).replace("/C:", "") + path))), typeReference);
 		return orders;
 	}
 
 	public void serialize() throws JsonGenerationException, JsonMappingException, IOException {
-		new ObjectMapper().writeValue(new File(path), orders);
+		new ObjectMapper().writeValue(new File((getClass().getClassLoader().getResource("../").getPath()).replace("/C:", "") + path), orders);
 	}
 	
 	public ArrayList<Order> getAllOrders(){

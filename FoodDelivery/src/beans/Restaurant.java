@@ -88,7 +88,7 @@ public class Restaurant {
 	}
 	
 	public void removeArticle(Article article) {
-		articles.remove(article);
+		articles.remove(getArticle(article.getName()));
 	}
 
 	public double getRating() {

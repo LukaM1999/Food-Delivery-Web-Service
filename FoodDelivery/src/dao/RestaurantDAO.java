@@ -16,6 +16,7 @@ import beans.Article;
 import beans.Restaurant;
 import dto.ArticleDTO;
 import dto.RatingDTO;
+import services.UserService;
 
 public class RestaurantDAO {
 
@@ -30,12 +31,13 @@ public class RestaurantDAO {
 	public ArrayList<Restaurant> deserialize() throws IOException {
 		CollectionType typeReference = TypeFactory.defaultInstance().constructCollectionType(ArrayList.class,
 				Restaurant.class);
-		restaurants = new ObjectMapper().readValue(new String(Files.readAllBytes(Paths.get(path))), typeReference);
+		restaurants = new ObjectMapper().readValue(new String(Files.readAllBytes
+				(Paths.get((getClass().getClassLoader().getResource("../").getPath()).replace("/C:", "") + path))), typeReference);
 		return restaurants;
 	}
 
 	public void serialize() throws JsonGenerationException, JsonMappingException, IOException {
-		new ObjectMapper().writeValue(new File(path), restaurants);
+		new ObjectMapper().writeValue(new File((getClass().getClassLoader().getResource("../").getPath()).replace("/C:", "") + path), restaurants);
 	}
 
 	public boolean alreadyCreated(Restaurant restaurant) {
@@ -114,8 +116,8 @@ public class RestaurantDAO {
 		serialize();
 	}
 	
-	public void updateArticles(ArrayList<Article> articles) throws JsonGenerationException, JsonMappingException, IOException {
-		getRestaurantById(articles.get(0).getRestaurant()).setArticles(articles);
+	public void removeArticle(Article article) throws JsonGenerationException, JsonMappingException, IOException {
+		getRestaurantById(article.getRestaurant()).removeArticle(article);
 		serialize();
 	}
 }

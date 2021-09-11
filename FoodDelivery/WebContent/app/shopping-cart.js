@@ -71,6 +71,7 @@ Vue.component('shoppingCart', {
 					articles: []
 				}
 				this.setTotalPrice()
+				$('#offcanvasRight .btn-close').click()
 				return
 			}
 			this.$root.showAlert(`An order with the same ID already exists, try ordering again.`)
@@ -117,7 +118,7 @@ Vue.component('shoppingCart', {
 									</div>
 								</div>
 								<div class="col-md-4 h-100">
-									<img :src="'data:image/png;base64,' + a.image" class="w-100 h-100" alt="Image">
+									<img :src="'http://localhost:8080/FoodDelivery/images/' + a.image" class="w-100 h-100" alt="Image">
 								</div>
 							</div>
 						</div>

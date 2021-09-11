@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import beans.User;
 import dto.ProfileDTO;
+import services.UserService;
 
 public class AdminDAO {
 	
@@ -32,12 +33,13 @@ public class AdminDAO {
 	public ArrayList<User> deserialize() throws IOException {
 		CollectionType typeReference = TypeFactory.defaultInstance().constructCollectionType(ArrayList.class,
 				User.class);
-		admins = new ObjectMapper().readValue(new String(Files.readAllBytes(Paths.get(path))), typeReference);
+		admins = new ObjectMapper().readValue(new String(Files.readAllBytes
+				(Paths.get((getClass().getClassLoader().getResource("../").getPath()).replace("/C:", "") + path))), typeReference);
 		return admins;
 	}
 	
 	public void serialize() throws JsonGenerationException, JsonMappingException, IOException {
-		new ObjectMapper().writeValue(new File(path), admins);
+		new ObjectMapper().writeValue(new File((getClass().getClassLoader().getResource("../").getPath()).replace("/C:", "") + path), admins);
 	}
 	
 	public User getUserById(String id) {

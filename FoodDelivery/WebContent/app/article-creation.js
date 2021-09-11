@@ -18,14 +18,19 @@ Vue.component("articleCreation", {
 	},
 
 	mounted() {
+		let self = this
 		$('#articleModal').on('hidden.bs.modal', function () {
-			$(this).find('form').trigger('reset')
+			self.name = ''
+			self.price = 0
+			self.type = 'FOOD'
+			self.quantity = 0
+			self.description = ''
+			self.image = ''
 		})
 	},
 
 	methods: {
 		async addArticle() {
-			if(!this.$root.testRegex(this.$root.$data.usernamePattern, this.name, `${this.name} is not a valid article name!`)) return
 			var fileInput = document.getElementById('imageFile')
 			if (fileInput.files.length === 0 ) return
 			const filename = fileInput.files[0].name;
@@ -66,9 +71,7 @@ Vue.component("articleCreation", {
 								<div class="col">
 									<div class="form-floating">
 										<input type="text" class="form-control" id="floatingNameArticle" v-model="name"
-											required autofocus
-											:pattern="$root.$data.usernamePattern"
-											title= "1. At least 3 characters\n2. No leading or trailing dots">
+											required autofocus>
 										<label for="floatingNameArticle">Article name*</label>
 									</div>
 								</div>

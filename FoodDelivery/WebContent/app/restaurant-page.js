@@ -120,7 +120,7 @@ Vue.component("restaurantPage", {
 										</div>
 										<div class="row justify-content-center">
 											<div class="col-md-12 align-self-center">
-												<h6 style="color:gray;" >{{restaurant.location | locationFormat}}</h6>
+												<h6 style="color:white;" >{{restaurant.location | locationFormat}}</h6>
 											</div>
 										</div>	
 										<div class="row justify-content-center">

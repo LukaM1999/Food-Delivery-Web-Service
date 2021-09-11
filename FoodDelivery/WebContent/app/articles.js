@@ -57,13 +57,9 @@ Vue.component("articles", {
 			}
 		},
 		async removeArticle(article) {
-			const { amount, ...a} = article
-			const articles = this.articles.flatMap(a => {
-				const { amount, ...formattedArticle } = a
-				return a.name !== article.name ? formattedArticle : []
-			})
+			const { amount, ...a } = article
 			this.articles = this.articles.filter(a => a.name !== article.name)
-			await axios.put('rest/restaurant/updateArticles', articles)
+			await axios.delete('rest/restaurant/removeArticle', { data: a })
 			this.$root.showAlert(`Successfully removed article ${article.name}!`)
 		}
 	},

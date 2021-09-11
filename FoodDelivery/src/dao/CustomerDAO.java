@@ -21,6 +21,7 @@ import dto.CustomerPointsDTO;
 import dto.LoginDTO;
 import dto.ProfileDTO;
 import dto.UserStatusDTO;
+import services.UserService;
 
 public class CustomerDAO {
 
@@ -39,12 +40,13 @@ public class CustomerDAO {
 	public ArrayList<Customer> deserialize() throws IOException {
 		CollectionType typeReference = TypeFactory.defaultInstance().constructCollectionType(ArrayList.class,
 				Customer.class);
-		customers = new ObjectMapper().readValue(new String(Files.readAllBytes(Paths.get(path))), typeReference);
+		customers = new ObjectMapper().readValue(new String(Files.readAllBytes
+				(Paths.get((getClass().getClassLoader().getResource("../").getPath()).replace("/C:", "") + path))), typeReference);
 		return customers;
 	}
 
 	public void serialize() throws JsonGenerationException, JsonMappingException, IOException {
-		new ObjectMapper().writeValue(new File(path), customers);
+		new ObjectMapper().writeValue(new File((getClass().getClassLoader().getResource("../").getPath()).replace("/C:", "") + path), customers);
 	}
 
 	public boolean addCustomer(User customer) throws JsonGenerationException, JsonMappingException, IOException {

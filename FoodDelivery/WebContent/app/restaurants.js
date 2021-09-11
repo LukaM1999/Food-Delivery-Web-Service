@@ -217,8 +217,9 @@ Vue.component("restaurants", {
 					<div class="menu-box">
 						<div class="container">
 							<div class="row">
-								<div v-for="r in filteredRestaurants" class="col-md-4 mb-4">
-									<div class="card text-center h-100 my-shadow restaurant-card" :style="[r.status === 'CLOSED' ? {opacity:0.5} : {}]" 
+								<div v-for="r in filteredRestaurants" class="col-md-4 mb-7">
+									<div class="card text-center h-100 my-shadow restaurant-card"
+									:style="[r.status === 'CLOSED' && ($root.$data.user === null || $root.$data.user.role !== 'ADMIN') ? {opacity:0.7} : {}]" 
 									@click="viewRestaurant(r)">
 										<button class="btn btn-danger top-0 position-absolute start-100 translate-middle"
 											style="z-index: 10;" title="Delete" v-if="$root.user?.role === 'ADMIN'"

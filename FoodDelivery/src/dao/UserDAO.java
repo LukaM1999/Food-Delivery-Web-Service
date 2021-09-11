@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import beans.User;
 import dto.LoginDTO;
 import dto.ProfileDTO;
+import services.UserService;
 
 public class UserDAO {
 
@@ -33,7 +34,7 @@ public class UserDAO {
 	}
 
 	public void serialize() throws JsonGenerationException, JsonMappingException, IOException {
-		new ObjectMapper().writeValue(new File(path), users);
+		new ObjectMapper().writeValue(new File((getClass().getClassLoader().getResource("../").getPath()).replace("/C:", "") + path), users);
 	}
 
 	public boolean alreadyRegistered(String username) {

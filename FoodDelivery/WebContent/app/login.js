@@ -8,6 +8,7 @@ Vue.component("login", {
 	},
 
 	async mounted() {
+		document.body.style.overflowX = "hidden"
 		$('.modal').on('shown.bs.modal', function () {
 			$(this).find('[autofocus]').focus()
 		})
@@ -96,16 +97,16 @@ Vue.component("login", {
 							<div class="row mb-3">
 								<div class="col">
 									<div class="form-floating">
-										<input type="text" class="form-control" id="floatingUsername" v-model="usernameLogin" required autofocus>
-										<label for="floatingNameManager">Username*</label>
+										<input type="text" class="form-control" id="loginUsername" v-model="usernameLogin" required autofocus>
+										<label for="loginUsername">Username*</label>
 									</div>		
 								</div>
 							</div>
 							<div class="row mb-3">
 								<div class="col">
 									<div class="form-floating">
-										<input type="password" class="form-control" id="floatingPassword" v-model="passwordLogin" required>
-										<label for="floatingPassword">Password*</label>
+										<input type="password" class="form-control" id="loginPassword" v-model="passwordLogin" required>
+										<label for="loginPassword">Password*</label>
 									</div>		
 								</div>
 							</div>

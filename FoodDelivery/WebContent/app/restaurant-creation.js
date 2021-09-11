@@ -18,9 +18,16 @@ Vue.component("restaurantCreation", {
 	},
 
 	mounted() {
+		let self = this
 		this.setFreeManagers()
 		$('#restaurantModal').on('hidden.bs.modal', function () {
-			$(this).find('form').trigger('reset');
+			self.name = ''
+			self.type = ''
+			self.loc = {}
+			self.street = ''
+			self.streetNumber = ''
+			self.city = ''
+			self.zipCode = ''
 			$('#managerAssign').removeClass('show')
 			$('#googleMap').removeClass('show')
 		})
@@ -46,7 +53,6 @@ Vue.component("restaurantCreation", {
 				})
 		},
 		async createRestaurant() {
-			if(!this.$root.testRegex(this.$root.$data.usernamePattern, this.name, `${this.name} is not a valid restaurant name!`)) return
 			if(!this.$root.testRegex(this.$root.$data.namePattern, this.type, `${this.type} is not a valid type name!`)) return
 			if(!this.$root.testRegex(this.$root.$data.addressPattern, `${this.street},${this.streetNumber},${this.city},${this.zipCode}`, `Address is not valid!`)) return
 			this.loc.address = {
@@ -125,9 +131,7 @@ Vue.component("restaurantCreation", {
 								<div class="col">
 									<div class="form-floating">
 										<input type="text" class="form-control" id="floatingNameManager" v-model="name"
-											required autofocus
-											:pattern="$root.$data.usernamePattern"
-											title= "1. At least 3 characters\n2. No leading or trailing dots">
+											required autofocus>
 										<label for="floatingNameManager">Restaurant name*</label>
 									</div>
 								</div>

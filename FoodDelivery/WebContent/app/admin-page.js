@@ -61,7 +61,7 @@ Vue.component("adminPage", {
 			this.usersKey += 1
 		},
 		addRestaurant(restaurantDto) {
-			this.$refs.restaurantsRef.$data.restaurants.push(restaurantDto.restaurant)
+			this.$refs.restaurantsRef?.$data.restaurants.push(restaurantDto.restaurant)
 			this.managers.find(m => m.username === restaurantDto.manager.username).restaurant = restaurantDto.restaurant
 			this.$nextTick(() => {
 				$('.rating').each(function () {

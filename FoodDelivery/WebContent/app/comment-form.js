@@ -3,7 +3,6 @@ Vue.component('commentForm', {
         return {
             content: '',
             rating: 0,
-
         }
     },
 
@@ -29,6 +28,11 @@ Vue.component('commentForm', {
         $('.modal').on('shown.bs.modal', function () {
 			$(this).find('[autofocus]').focus()
 		})
+        $('#commentModal').on('hidden.bs.modal', function () {
+            self.content = ''
+            self.rating = 0
+            $('#rating').rating('update', 0)
+        })
     },
 
     methods: {

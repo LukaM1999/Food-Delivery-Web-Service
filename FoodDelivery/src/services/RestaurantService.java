@@ -45,15 +45,11 @@ public class RestaurantService {
 
 	@PostConstruct
 	public void init() throws IOException {
-		//System.out.println(new File(".").getCanonicalPath());
 		if (ctx.getAttribute("restaurants") == null) {
 			ctx.setAttribute("restaurants", new RestaurantDAO());
 		}
 		if (ctx.getAttribute("managers") == null) {
 			ctx.setAttribute("managers", new ManagerDAO());
-		}
-		if (ctx.getAttribute("logo") == null) {
-			ctx.setAttribute("logo", "");
 		}
 		if (ctx.getAttribute("location") == null) {
 			ctx.setAttribute("location", new Location());
@@ -96,7 +92,6 @@ public class RestaurantService {
 	@Path("/getLocation")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Location getLocation() {
-		System.out.println(((Location) ctx.getAttribute("location")).getAddress());
 		return (Location) ctx.getAttribute("location");
 	}
 	
@@ -169,12 +164,12 @@ public class RestaurantService {
 		ctx.setAttribute("managers", managerDao);
 	}
 	
-	@PUT
-	@Path("/updateArticles")
+	@DELETE
+	@Path("/removeArticle")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void updateArticles(ArrayList<Article> articles) throws JsonGenerationException, JsonMappingException, IOException {
+	public void updateArticles(Article article) throws JsonGenerationException, JsonMappingException, IOException {
 		RestaurantDAO restaurantDao = (RestaurantDAO) ctx.getAttribute("restaurants");
-		restaurantDao.updateArticles(articles);
+		restaurantDao.removeArticle(article);
 		ctx.setAttribute("restaurants", restaurantDao);
 	}
 	

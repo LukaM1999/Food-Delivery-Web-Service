@@ -20,9 +20,14 @@ Vue.component("adminRegistration", {
 	},
 
 	mounted() {
+		let self = this
 		if (this.isManagerAssigning) this.role = 'MANAGER'
-		$('#restaurantModal').on('hidden.bs.modal', function () {
-			$(this).find('form').trigger('reset')
+		$('#myModal').on('hidden.bs.modal', function () {
+			self.username = ''
+			self.password = ''
+			self.name = ''
+			self.surname = ''
+			self.dateOfBirth = 'dd.mm.yyyy.'
 		})
 		$('.my-date').each(function () {
 			$(this).datepicker({ format: 'dd.mm.yyyy.' })
@@ -53,12 +58,14 @@ Vue.component("adminRegistration", {
 				if (response.data) {
 					this.$root.showAlert(`${this.name} ${this.surname} successfully registered!`)
 					this.$emit('deliverer-added', response.data)
+					if (!this.isManagerAssigning) $("#myModal .btn-close").click()
 				}
 				else this.$root.showAlert(`A user with the username ${this.username} already exists`)
 				return
 			}
 			const response = await axios.post('rest/user/registerManager', user)
 			if (response.data) {
+				$("#myModal .btn-close").click()
 				this.$root.showAlert(`${this.name} ${this.surname} successfully registered!`)
 				this.$emit('manager-added', response.data)
 			}
@@ -77,7 +84,7 @@ Vue.component("adminRegistration", {
         			</div>
 					<div class="modal-body">
 						<h1 style="text-align: center;">Register user</h1>
-						<form @submit.prevent="registerCustomer">
+						<form @submit.prevent="registerCustomer" id="userRegisterForm">
 							<div class="row mb-3">
 								<div class="col">
 									<div class="form-floating">
@@ -165,61 +172,61 @@ Vue.component("adminRegistration", {
 			<div class="row mb-3">
 				<div class="col">
 					<div class="form-floating">
-						<input type="text" class="form-control" id="floatingUsername" v-model="username" required
+						<input type="text" class="form-control" id="mngrUsername" v-model="username" required
 							:pattern="$root.$data.usernamePattern"
 							title= "1. At least 3 characters\n2. No leading or trailing dots">
-						<label for="floatingUsername">Manager username*</label>
+						<label for="mngrUsername">Manager username*</label>
 					</div>
 				</div>
 			</div>
 			<div class="row mb-3">
 				<div class="col">
 					<div class="form-floating">
-						<input type="password" class="form-control" id="floatingPassword" v-model="password" required
+						<input type="password" class="form-control" id="mngrPassword" v-model="password" required
 							:pattern="$root.$data.passwordPattern"
 							title= "1. Minimum 8 characters\n2. At least one uppercase letter\n3. At least one lowercase letter\n4. At least one number"
 							>
-						<label for="floatingPassword">Password*</label>
+						<label for="mngrPassword">Password*</label>
 					</div>
 				</div>
 			</div>
 			<div class="row mb-3">
 				<div class="col">
 					<div class="form-floating">
-						<input type="text" class="form-control" id="floatingName" v-model="name" required
+						<input type="text" class="form-control" id="mngrName" v-model="name" required
 							:pattern="$root.$data.namePattern"
 							title="1. No numbers\n2. No special characters, except - and '">
-						<label for="floatingName">First name*</label>
+						<label for="mngrName">First name*</label>
 					</div>
 				</div>
 			</div>
 			<div class="row mb-3">
 				<div class="col">
 					<div class="form-floating">
-						<input type="text" class="form-control" id="floatingSurname" v-model="surname" required
+						<input type="text" class="form-control" id="mngrSurname" v-model="surname" required
 							:pattern="$root.$data.namePattern"
 							title="1. No numbers\n2. No special characters, except - and '">
-						<label for="floatingSurname">Last name*</label>
+						<label for="mngrSurname">Last name*</label>
 					</div>
 				</div>
 			</div>
 			<div class="row mb-3">
 				<div class="col">
 					<div class="form-floating">
-						<input class="form-control my-date" placeholder="dd.mm.yyyy." type="text" id="floatingDate" v-model="dateOfBirth" required>
-						<label for="floatingDate">Date of birth*</label>
+						<input class="form-control my-date" type="text" id="mngrDate" v-model="dateOfBirth" required>
+						<label for="mngrDate">Date of birth*</label>
 					</div>
 				</div>
 			</div>
 			<div class="row mb-3">
 				<div class="col-md-4">
 					<div class="form-floating">
-						<select class="form-select" id="floatingGender" v-model="gender" required>
+						<select class="form-select" id="mngrGender" v-model="gender" required>
 							<option selected value="MALE">Male</option>
 							<option value="FEMALE">Female</option>
 							<option value="OTHER">Other</option>
 						</select>	
-						<label for="floatingGender">Gender*</label>
+						<label for="mngrGender">Gender*</label>
 					</div>
 				</div>
 				<div class="col-md-2 align-self-center">

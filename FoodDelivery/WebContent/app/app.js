@@ -1,14 +1,12 @@
 const login = {
 	template: '<login></login>',
 	beforeRouteUpdate(to, from, next) {
-		if (to.name !== 'login' && this.$root.$data.user.username !== to.params.username) next(false)
-		next();
-
+		if (to.name !== 'login' && this.$root.$data.user?.username !== to.params.username) next(false)
+		next()
 	},
 }
 const registration = { template: '<registration></registration>' }
 const userPage = { template: '<userPage></userPage>' }
-const mainPage = { template: '<mainPage></mainPage>' }
 const restaurantPage = { template: '<restaurantPage></restaurantPage>' }
 const restaurants = { template: '<restaurants></restaurants>' }
 const users = { template: '<users></users>' }
@@ -69,10 +67,10 @@ var app = new Vue({
 		orders: [],
 		deliveryRequests: [],
 		comments: [],
-		usernamePattern: "^(?!.*\\.\\.)(?!.*\\.$)[^\\W][\\w.]{2,19}$",
-		passwordPattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$",
-		namePattern: "^[^0-9_!¡?÷?¿/\\\\+=@#$%ˆ&*(){}|~<>;:[\\]]{1,}$",
-		addressPattern: "[a-zA-Z\\s-]+[,]{1}[0-9]+[,]{1}[a-zA-z-\\s]+[,]{1}[0-9]+",
+		usernamePattern: String.raw`^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{2,19}$`,
+		passwordPattern: String.raw`^(?=.*[\p{Ll}])(?=.*[\p{Lu}])(?=.*\d)[\p{L}\d]{8,}$`,
+		namePattern: String.raw`^[^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{1,}$`,
+		addressPattern: String.raw`[\p{Ll}\p{Lu}s-]+[,]{1}[0-9]+[,]{1}[\p{Ll}\p{Lu}-\s]+[,]{1}[0-9]+`,
 	},
 	methods: {
 		showAlert(alert) {
@@ -99,13 +97,13 @@ var app = new Vue({
 			this.$router.push('/')
 		},
 		testRegex(pattern, test, alert) {
-			if (test.match(pattern)) return true
-			if(!this.isEmptyOrSpaces(test))
+			if (XRegExp.match(test, XRegExp(pattern))) return true
+			if (!this.isEmptyOrSpaces(test))
 				this.showAlert(alert)
 			return false
 		},
-		isEmptyOrSpaces(str){
-			return str === null || str.match(/^\s*$/) !== null;
+		isEmptyOrSpaces(str) {
+			return str === null || str.match(/^\s*$/) !== null
 		}
-	}
-});
+	},
+})

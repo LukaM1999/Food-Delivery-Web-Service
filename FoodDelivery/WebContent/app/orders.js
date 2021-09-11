@@ -45,7 +45,6 @@ Vue.component('orders', {
 
         if (this.user.role === 'DELIVERER') {
             await this.getRestaurantTypes()
-            console.log(this.insideProfile)
             if (this.insideProfile)
                 this.orders = this.$root.$data.orders.filter((order) => order.delivererUsername === this.user.username)
             else
@@ -95,7 +94,7 @@ Vue.component('orders', {
             this.$root.$data.user.type = updatedCustomerType.data
             if (totalPoints < 0) totalPoints = 0
             this.$root.$data.user.points = totalPoints
-            this.$root.showAlert(`Successfully cancelled order. You lost ${pointsSubtracted} points.`)
+            this.$root.showAlert(`Successfully cancelled order. You lost ${pointsSubtracted.toFixed(2)} points.`)
             this.$parent.updateProgress()
         },
         updateOrderStatus(order, newStatus) {
@@ -264,7 +263,7 @@ Vue.component('orders', {
     <div :style="[insideProfile ? {} : {'paddingTop': '70px'}]">
         <div class="row mb-3">
             <div class="col d-flex justify-content-center">
-                <h2 style="color:white;">Orders</h2>
+                <h1 style="color:white;">Orders</h1>
             </div>
         </div>
         <div class="row mb-3 justify-content-center">
@@ -366,7 +365,7 @@ Vue.component('orders', {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="o in filteredOrders">
+                        <tr v-for="o in filteredOrders" :style="[o.status === 'CANCELLED' ? {'color': 'white', 'background': 'indianred'} : {}]">
                             <td v-if="user.role !== 'MANAGER'">{{o.restaurant}}</td>
                             <td v-if="user.role !== 'MANAGER' && typesReady">{{restaurantTypes.get(o.restaurant)}}</td>
                             <td>{{o.price}}</td>

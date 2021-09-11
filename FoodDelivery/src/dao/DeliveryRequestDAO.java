@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import beans.DeliveryRequest;
+import services.UserService;
 
 public class DeliveryRequestDAO {
 	private final String path = "json/requests.json";
@@ -27,12 +28,13 @@ public class DeliveryRequestDAO {
 	public ArrayList<DeliveryRequest> deserialize() throws IOException {
 		CollectionType typeReference = TypeFactory.defaultInstance().constructCollectionType(ArrayList.class,
 				DeliveryRequest.class);
-		requests = new ObjectMapper().readValue(new String(Files.readAllBytes(Paths.get(path))), typeReference);
+		requests = new ObjectMapper().readValue(new String(Files.readAllBytes
+				(Paths.get((getClass().getClassLoader().getResource("../").getPath()).replace("/C:", "") + path))), typeReference);
 		return requests;
 	}
 
 	public void serialize() throws JsonGenerationException, JsonMappingException, IOException {
-		new ObjectMapper().writeValue(new File(path), requests);
+		new ObjectMapper().writeValue(new File((getClass().getClassLoader().getResource("../").getPath()).replace("/C:", "") + path), requests);
 	}
 	
 	public ArrayList<DeliveryRequest> getAllRequests(){

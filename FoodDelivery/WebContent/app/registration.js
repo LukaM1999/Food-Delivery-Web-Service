@@ -13,9 +13,18 @@ Vue.component("registration", {
 	},
 
 	mounted() {
+		let self = this
 		$('.my-date').each(function () {
 			$(this).datepicker({ format: 'dd.mm.yyyy.' })
 		})
+		$('#myModal').on('hidden.bs.modal', function () {
+			self.username = ''
+			self.password = ''
+			self.name = ''
+			self.surname = ''
+			self.dateOfBirth = 'dd.mm.yyyy.'
+		})
+
 	},
 
 	methods: {
@@ -24,11 +33,11 @@ Vue.component("registration", {
 				this.$root.showAlert(`${this.dateOfBirth} is not a valid date!`)
 				return
 			}
-			if(!this.$root.testRegex(this.$root.$data.usernamePattern, this.username, `${this.username} is not a valid username!`)) return
-			if(!this.$root.testRegex(this.$root.$data.passwordPattern, this.password, `Password is not valid`)) return
-			if(!this.$root.testRegex(this.$root.$data.namePattern, this.name, `${this.name} is not a valid name!`)) return
-			if(!this.$root.testRegex(this.$root.$data.namePattern, this.surname, `${this.surname} is not a valid last name!`)) return
-			
+			if (!this.$root.testRegex(this.$root.$data.usernamePattern, this.username, `${this.username} is not a valid username!`)) return
+			if (!this.$root.testRegex(this.$root.$data.passwordPattern, this.password, `Password is not valid`)) return
+			if (!this.$root.testRegex(this.$root.$data.namePattern, this.name, `${this.name} is not a valid name!`)) return
+			if (!this.$root.testRegex(this.$root.$data.namePattern, this.surname, `${this.surname} is not a valid last name!`)) return
+
 			const customer = {
 				username: this.username,
 				password: this.password,
@@ -39,7 +48,10 @@ Vue.component("registration", {
 				role: this.role
 			}
 			const response = await axios.post('rest/user/registerCustomer', customer)
-			if (response.data) this.$root.showAlert(`${this.name} ${this.surname} successfully registered!`)
+			if (response.data) {
+				$("#myModal .btn-close").click()
+				this.$root.showAlert(`${this.name} ${this.surname} successfully registered!`)
+			}
 			else this.$root.showAlert(`A user with the username ${this.username} already exists`)
 		},
 	},

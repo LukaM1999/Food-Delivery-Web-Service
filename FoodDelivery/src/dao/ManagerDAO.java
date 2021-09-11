@@ -20,6 +20,7 @@ import beans.UserStatus;
 import dto.LoginDTO;
 import dto.ProfileDTO;
 import dto.UserStatusDTO;
+import services.UserService;
 
 public class ManagerDAO {
 
@@ -38,12 +39,13 @@ public class ManagerDAO {
 	public ArrayList<Manager> deserialize() throws IOException {
 		CollectionType typeReference = TypeFactory.defaultInstance().constructCollectionType(ArrayList.class,
 				Manager.class);
-		managers = new ObjectMapper().readValue(new String(Files.readAllBytes(Paths.get(path))), typeReference);
+		managers = new ObjectMapper().readValue(new String(Files.readAllBytes
+				(Paths.get((getClass().getClassLoader().getResource("../").getPath()).replace("/C:", "") + path))), typeReference);
 		return managers;
 	}
 
 	public void serialize() throws JsonGenerationException, JsonMappingException, IOException {
-		new ObjectMapper().writeValue(new File(path), managers);
+		new ObjectMapper().writeValue(new File((getClass().getClassLoader().getResource("../").getPath()).replace("/C:", "") + path), managers);
 	}
 
 	public boolean addManager(User manager) throws JsonGenerationException, JsonMappingException, IOException {

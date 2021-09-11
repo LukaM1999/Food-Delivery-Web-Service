@@ -19,6 +19,7 @@ import beans.UserStatus;
 import dto.LoginDTO;
 import dto.ProfileDTO;
 import dto.UserStatusDTO;
+import services.UserService;
 
 public class DelivererDAO {
 
@@ -37,12 +38,13 @@ public class DelivererDAO {
 	public ArrayList<Deliverer> deserialize() throws IOException {
 		CollectionType typeReference = TypeFactory.defaultInstance().constructCollectionType(ArrayList.class,
 				Deliverer.class);
-		deliverers = new ObjectMapper().readValue(new String(Files.readAllBytes(Paths.get(path))), typeReference);
+		deliverers = new ObjectMapper().readValue(new String(Files.readAllBytes
+				(Paths.get((getClass().getClassLoader().getResource("../").getPath()).replace("/C:", "") + path))), typeReference);
 		return deliverers;
 	}
 	
 	public void serialize() throws JsonGenerationException, JsonMappingException, IOException {
-		new ObjectMapper().writeValue(new File(path), deliverers);
+		new ObjectMapper().writeValue(new File((getClass().getClassLoader().getResource("../").getPath()).replace("/C:", "") + path), deliverers);
 	}
 	
 	public boolean addDeliverer(User deliverer) throws JsonGenerationException, JsonMappingException, IOException {

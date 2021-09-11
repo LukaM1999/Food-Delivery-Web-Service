@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import beans.Comment;
 import beans.CommentApproval;
+import services.UserService;
 
 public class CommentDAO {
 	
@@ -28,12 +29,13 @@ public class CommentDAO {
 	public ArrayList<Comment> deserialize() throws IOException {
 		CollectionType typeReference = TypeFactory.defaultInstance().constructCollectionType(ArrayList.class,
 				Comment.class);
-		comments = new ObjectMapper().readValue(new String(Files.readAllBytes(Paths.get(path))), typeReference);
+		comments = new ObjectMapper().readValue(new String(Files.readAllBytes
+				(Paths.get((getClass().getClassLoader().getResource("../").getPath()).replace("/C:", "") + path))), typeReference);
 		return comments;
 	}
 
 	public void serialize() throws JsonGenerationException, JsonMappingException, IOException {
-		new ObjectMapper().writeValue(new File(path), comments);
+		new ObjectMapper().writeValue(new File((getClass().getClassLoader().getResource("../").getPath()).replace("/C:", "") + path), comments);
 	}
 
 	public void addComment(Comment newComment)

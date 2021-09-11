@@ -184,7 +184,6 @@ Vue.component("users", {
 			axios.put('rest/user/setStatus', {
 				username: user.username, role: user.role, status: 'BLOCKED'
 		   })
-		   this.$root.showAlert(`Successfully blocked ${user.name} ${user.surname}`)
 		   if (user.role === 'MANAGER') this.$emit('manager-blocked', user)
 		},
 	},
